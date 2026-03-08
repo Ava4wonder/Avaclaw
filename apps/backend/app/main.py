@@ -2,35 +2,32 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 from .config import settings
-from .store import InMemoryStore
+from .store import PostgresStore
 from .context import AppContext
 from .services.agent_manager import AgentManager
 from .services.execution_logger import ExecutionLogger
 from .services.task_queue import TaskQueue
 from .services.llm_executor import LlmExecutor
-from .services.tool_registry import ToolRegistry
 from .services.agent_runtime import AgentRuntime
-from .skills.registry import SkillRegistry
-from .skills.init import init_skills
+from .plugins.registry import PluginRegistry
+from .plugins.init import init_plugins
 from .api.routes import agents, tasks, logs, queue, skills
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    store = InMemoryStore()
+    store = PostgresStore(settings.postgres_dsn)
     agent_manager = AgentManager(store)
     execution_logger = ExecutionLogger(store)
-    tool_registry = ToolRegistry()
-    skill_registry = SkillRegistry()
-    init_skills(skill_registry)
-    task_queue = TaskQueue()
+    plugin_registry = PluginRegistry()
+    init_plugins(plugin_registry)
+    task_queue = TaskQueue(settings.redis_url)
     llm_executor = LlmExecutor()
     agent_runtime = AgentRuntime(
         store=store,
         agent_manager=agent_manager,
         execution_logger=execution_logger,
-        tool_registry=tool_registry,
-        skill_registry=skill_registry,
+        plugin_registry=plugin_registry,
         task_queue=task_queue,
         llm_executor=llm_executor
     )
@@ -38,8 +35,7 @@ async def lifespan(app: FastAPI):
         store=store,
         agent_manager=agent_manager,
         execution_logger=execution_logger,
-        tool_registry=tool_registry,
-        skill_registry=skill_registry,
+        plugin_registry=plugin_registry,
         task_queue=task_queue,
         llm_executor=llm_executor,
         agent_runtime=agent_runtime

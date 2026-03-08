@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException, Request
-from ...schemas import TaskCreate, TaskOut, ExecutionStepOut
+from ...schemas import TaskCreate, TaskOut, ExecutionStepOut, ExecutionSpanOut
 from ...context import AppContext
 
 
@@ -31,3 +31,8 @@ def get_task(task_id: str, ctx: AppContext = Depends(get_ctx)):
 @router.get("/{task_id}/steps", response_model=list[ExecutionStepOut])
 def get_steps(task_id: str, ctx: AppContext = Depends(get_ctx)):
     return ctx.execution_logger.list_steps(task_id)
+
+
+@router.get("/{task_id}/trace", response_model=list[ExecutionSpanOut])
+def get_trace(task_id: str, ctx: AppContext = Depends(get_ctx)):
+    return ctx.execution_logger.list_spans(task_id)

@@ -1,0 +1,108 @@
+# Define networks (isolates services from host)
+networks:
+  avaclaw_network:
+    driver: bridge
+
+# Define volumes (persists data across container restarts)
+volumes:
+  postgres_data:        # For Postgres database files
+  redis_data:           # For Redis persistence (RDB/AOF)
+  pgadmin_data:         # For pgAdmin settings
+  redisinsight_data:    # For RedisInsight data
+
+services:
+  # Postgres Database (for agent state, tool metadata, tracing)
+  postgres:
+    image: postgres:15-alpine  # Alpine = smaller image, better for local dev
+    container_name: avaclaw_postgres
+    restart: unless-stopped   # Auto-restart if crashes
+    environment:
+      POSTGRES_USER: avaclaw_user       # Non-root user (security best practice)
+      POSTGRES_PASSWORD: avaclaw_pw     # Use .env file in production!
+      POSTGRES_DB: avaclaw_db           # Default database for your agent
+      POSTGRES_INITDB_ARGS: "--encoding=UTF8 --lc-collate=C --lc-ctype=C"  # Unicode support
+    ports:
+      - "5432:5432"  # Map host port 5432 to container port 5432
+    volumes:
+      - postgres_data:/var/lib/postgresql/data  # Persist data
+      # Optional: Initialize DB with schema on first run
+      # - ./init-scripts:/docker-entrypoint-initdb.d
+    networks:
+      - avaclaw_network
+    healthcheck:  # Verify Postgres is ready before other services
+      test: ["CMD-SHELL", "pg_isready -U avaclaw_user -d avaclaw_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # Redis (for task queues, caching, temporary agent state)
+  redis:
+    image: redis:7-alpine
+    container_name: avaclaw_redis
+    restart: unless-stopped
+    command:
+      - redis-server
+      - --appendonly
+      - "yes"
+      - --requirepass
+      - avaclaw_redis_pw
+      - --maxmemory
+      - 256mb
+      - --maxmemory-policy
+      - allkeys-lru
+    ports:
+      - "56379:6379"  # Using uncommon port 56379 to avoid conflicts
+    volumes:
+      - redis_data:/data  # Persist AOF/RDB files
+    networks:
+      - avaclaw_network
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli -a avaclaw_redis_pw ping | grep PONG"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # Jaeger (Tracing Visualization)
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    container_name: avaclaw_jaeger
+    restart: unless-stopped
+    environment:
+      COLLECTOR_OTLP_ENABLED: "true"  # Enable OTLP ingestion (for OpenTelemetry)
+    ports:
+      - "16686:16686"  # Jaeger UI
+      - "4317:4317"     # OTLP gRPC port (for tracing data)
+    networks:
+      - avaclaw_network
+
+  # pgAdmin (Postgres GUI)
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: avaclaw_pgadmin
+    restart: unless-stopped
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@avaclaw.local
+      PGADMIN_DEFAULT_PASSWORD: avaclaw_pgadmin_pw
+      PGADMIN_CONFIG_SERVER_MODE: "False"  # Disable server mode (local dev)
+    ports:
+      - "5050:80"
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin  # Persist pgAdmin settings
+    depends_on:
+      - postgres  # Start after Postgres
+    networks:
+      - avaclaw_network
+
+  # RedisInsight (Redis GUI)
+  redisinsight:
+    image: redis/redisinsight:latest
+    container_name: avaclaw_redisinsight
+    restart: unless-stopped
+    ports:
+      - "58001:5540"  # Using uncommon port 58001 to avoid conflicts
+    volumes:
+      - redisinsight_data:/data  # Persist RedisInsight data
+    depends_on:
+      - redis
+    networks:
+      - avaclaw_network

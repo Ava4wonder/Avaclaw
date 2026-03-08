@@ -1,4 +1,4 @@
-from typing import Literal, Optional
+from typing import Any, Literal, Optional
 from pydantic import BaseModel, Field
 
 
@@ -57,10 +57,29 @@ class ExecutionStepOut(BaseModel):
     timestamp: str
 
 
+class ExecutionSpanOut(BaseModel):
+    id: str
+    task_id: str
+    trace_id: str
+    parent_span_id: Optional[str] = None
+    name: str
+    span_type: Literal["task", "llm", "tool"]
+    start_time: str
+    end_time: str
+    duration_ms: int
+    status: Literal["ok", "error"]
+    error: Optional[str] = None
+    model: Optional[str] = None
+    tokens_total: Optional[int] = None
+    tool_args: Any = None
+    tool_result: Any = None
+
+
 class SkillSummary(BaseModel):
     id: str
     name: str
     description: str
+    origin: Optional[str] = None
 
 
 class EnableRequest(BaseModel):

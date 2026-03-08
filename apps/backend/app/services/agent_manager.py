@@ -1,10 +1,10 @@
 from typing import Any
 from ..schemas import AgentOut
-from ..store import InMemoryStore
+from ..store import PostgresStore
 
 
 class AgentManager:
-    def __init__(self, store: InMemoryStore) -> None:
+    def __init__(self, store: PostgresStore) -> None:
         self.store = store
 
     def list_agents(self) -> list[AgentOut]:

@@ -13,6 +13,6 @@ def get_ctx(request: Request) -> AppContext:
 @router.get("/", response_model=list[SkillSummary])
 def list_skills(ctx: AppContext = Depends(get_ctx)):
     return [
-        SkillSummary(id=s.id, name=s.name, description=s.description)
-        for s in ctx.skill_registry.list()
+        SkillSummary(id=s.id, name=s.name, description=s.description, origin=s.origin)
+        for s in ctx.plugin_registry.list()
     ]
