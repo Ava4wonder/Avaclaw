@@ -3,6 +3,7 @@ export type Agent = {
   name: string;
   system_prompt: string;
   tools: string[];
+  skills: string[];
   model: string;
   enabled: boolean;
 };
@@ -19,6 +20,13 @@ export type Task = {
   created_at: string;
   started_at: string | null;
   completed_at: string | null;
+  run_id?: string | null;
+  session_id?: string | null;
+  parent_task_id?: string | null;
+  retry_count?: number | null;
+  retry_state?: string | null;
+  replay_key?: string | null;
+  replay_metadata?: unknown;
 };
 
 export type ExecutionStep = {
@@ -79,9 +87,23 @@ export const api = {
       body: JSON.stringify({ enabled })
     }),
   listTasks: () => request<Task[]>("/api/tasks"),
-  createTask: (agentId: string, input: string) =>
-    request<Task>("/api/tasks", { method: "POST", body: JSON.stringify({ agent_id: agentId, input }) }),
+  createTask: (agentId: string, input: string, meta?: Partial<Task>) =>
+    request<Task>("/api/tasks", {
+      method: "POST",
+      body: JSON.stringify({
+        agent_id: agentId,
+        input,
+        run_id: meta?.run_id,
+        session_id: meta?.session_id,
+        parent_task_id: meta?.parent_task_id,
+        retry_count: meta?.retry_count,
+        retry_state: meta?.retry_state,
+        replay_key: meta?.replay_key,
+        replay_metadata: meta?.replay_metadata
+      })
+    }),
   getTaskSteps: (taskId: string) => request<ExecutionStep[]>(`/api/tasks/${taskId}/steps`),
   getTaskTrace: (taskId: string) => request<ExecutionSpan[]>(`/api/tasks/${taskId}/trace`),
-  getQueue: () => request<{ depth: number; running: string[] }>("/api/queue")
+  getQueue: () => request<{ depth: number; running: string[] }>("/api/queue"),
+  listTools: () => request<{ id: string; name: string; description: string; origin?: string }[]>(`/api/tools`)
 };

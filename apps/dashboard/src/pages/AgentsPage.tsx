@@ -30,9 +30,12 @@ export default function AgentsPage() {
         <div className="card">
           <h2>Create Agent</h2>
           <AgentEditor
-            onSubmit={(payload) =>
+            onSubmit={(payload, runPrompt) =>
               api
                 .createAgent(payload)
+                .then((agent) =>
+                  runPrompt ? api.createTask(agent.id, runPrompt).then(() => agent) : agent
+                )
                 .then(() => loadAgents())
                 .catch((err) => setError(err.message))
             }

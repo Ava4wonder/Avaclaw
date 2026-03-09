@@ -17,7 +17,7 @@ def list_tasks(ctx: AppContext = Depends(get_ctx)):
 
 @router.post("/", response_model=TaskOut, status_code=201)
 async def create_task(payload: TaskCreate, ctx: AppContext = Depends(get_ctx)):
-    return await ctx.agent_runtime.enqueue_task(payload.agent_id, payload.input)
+    return await ctx.agent_runtime.enqueue_task(payload)
 
 
 @router.get("/{task_id}", response_model=TaskOut)

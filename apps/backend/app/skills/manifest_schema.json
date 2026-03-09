@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "AvaClaw Skill Manifest",
+  "type": "object",
+  "required": ["id", "name", "description"],
+  "properties": {
+    "id": { "type": "string", "minLength": 1 },
+    "name": { "type": "string", "minLength": 1 },
+    "description": { "type": "string", "minLength": 1 },
+    "prompt": { "type": "string" },
+    "tools": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "origin": { "type": "string" },
+    "policy": {
+      "type": "object",
+      "properties": {
+        "timeout_ms": { "type": "integer", "minimum": 1 },
+        "max_retries": { "type": "integer", "minimum": 0 },
+        "rate_limit_per_min": { "type": "integer", "minimum": 1 },
+        "redact": {
+          "type": "object",
+          "properties": {
+            "keys": { "type": "array", "items": { "type": "string" } },
+            "paths": { "type": "array", "items": { "type": "string" } },
+            "mask": { "type": "string" }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "tool": {
+      "type": "object",
+      "required": ["handler", "parameters"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "name": { "type": "string" },
+        "description": { "type": "string" },
+        "handler": { "type": "string", "minLength": 1 },
+        "parameters": { "type": "object" },
+        "policy": {
+          "type": "object",
+          "properties": {
+            "timeout_ms": { "type": "integer", "minimum": 1 },
+            "max_retries": { "type": "integer", "minimum": 0 },
+            "rate_limit_per_min": { "type": "integer", "minimum": 1 },
+            "redact": {
+              "type": "object",
+              "properties": {
+                "keys": { "type": "array", "items": { "type": "string" } },
+                "paths": { "type": "array", "items": { "type": "string" } },
+                "mask": { "type": "string" }
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

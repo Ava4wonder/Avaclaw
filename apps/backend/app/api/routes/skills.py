@@ -14,5 +14,5 @@ def get_ctx(request: Request) -> AppContext:
 def list_skills(ctx: AppContext = Depends(get_ctx)):
     return [
         SkillSummary(id=s.id, name=s.name, description=s.description, origin=s.origin)
-        for s in ctx.plugin_registry.list()
+        for s in ctx.skill_registry.list()
     ]

@@ -35,6 +35,7 @@ class AgentManager:
             name=row["name"],
             system_prompt=row["system_prompt"],
             tools=row["tools"],
+            skills=row.get("skills") or [],
             model=row["model"],
             enabled=bool(row["enabled"])
         )

@@ -15,7 +15,7 @@ class Settings(BaseModel):
     ollama_base_url: str = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
     ollama_model: str = os.getenv("OLLAMA_MODEL", "qwen3-coder")
     qdrant_port: int = int(os.getenv("QDRANT_PORT", "6333"))
-    semantic_scholar_base: str = "https://api.semanticscholar.org"
+    openalex_base: str = "https://api.openalex.org"
 
 
 settings = Settings()

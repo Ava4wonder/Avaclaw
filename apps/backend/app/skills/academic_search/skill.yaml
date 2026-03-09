@@ -1,0 +1,21 @@
+id: academic_search
+name: Academic Search
+description: Search academic papers using Semantic Scholar API.
+tool:
+  handler: app.tools.academic_search:academic_search
+  parameters:
+    type: object
+    properties:
+      query:
+        type: string
+      limit:
+        type: integer
+        minimum: 1
+        maximum: 20
+    required:
+      - query
+    additionalProperties: false
+  policy:
+    timeout_ms: 30000
+    max_retries: 1
+    rate_limit_per_min: 60

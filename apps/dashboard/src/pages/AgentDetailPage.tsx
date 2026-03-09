@@ -42,7 +42,17 @@ export default function AgentDetailPage() {
           <AgentEditor
             initial={agent}
             submitLabel="Update"
-            onSubmit={(payload) => api.updateAgent(agent.id, payload).then(setAgent)}
+            onSubmit={(payload, runPrompt) =>
+              api
+                .updateAgent(agent.id, payload)
+                .then((updated) =>
+                  runPrompt ? api.createTask(updated.id, runPrompt).then(() => updated) : updated
+                )
+                .then((updated) => {
+                  setAgent(updated);
+                  loadAll();
+                })
+            }
           />
         </div>
         <div className="card">

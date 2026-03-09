@@ -35,7 +35,7 @@ export default function SkillSelector({ value, onChange }: SkillSelectorProps) {
       options={options}
       value={selected}
       onChange={(next: MultiValue<Option>) => onChange(next.map((item) => item.value))}
-      placeholder="Select skills"
+      placeholder="Select skill overlays"
       formatOptionLabel={(option) => (
         <div>
           <div style={{ fontWeight: 600 }}>{option.label}</div>

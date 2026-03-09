@@ -6,6 +6,8 @@ from .services.task_queue import TaskQueue
 from .services.llm_executor import LlmExecutor
 from .services.agent_runtime import AgentRuntime
 from .plugins.registry import PluginRegistry
+from .skills.registry import SkillRegistry
+from .services.registry_manager import RegistryManager
 
 
 @dataclass
@@ -14,6 +16,8 @@ class AppContext:
     agent_manager: AgentManager
     execution_logger: ExecutionLogger
     plugin_registry: PluginRegistry
+    skill_registry: SkillRegistry
+    registry_manager: RegistryManager
     task_queue: TaskQueue
     llm_executor: LlmExecutor
     agent_runtime: AgentRuntime

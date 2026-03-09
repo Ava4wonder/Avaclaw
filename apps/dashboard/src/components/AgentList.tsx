@@ -14,7 +14,8 @@ export default function AgentList({ agents, onDelete, onToggle }: AgentListProps
         <tr>
           <th>Name</th>
           <th>Model</th>
-          <th>Skills</th>
+          <th>Tools</th>
+          <th>Skill overlays</th>
           <th>Status</th>
           <th></th>
         </tr>
@@ -27,6 +28,7 @@ export default function AgentList({ agents, onDelete, onToggle }: AgentListProps
             </td>
             <td>{agent.model}</td>
             <td>{agent.tools.join(", ") || "-"}</td>
+            <td>{agent.skills.join(", ") || "-"}</td>
             <td>
               <span className="badge">{agent.enabled ? "Enabled" : "Disabled"}</span>
             </td>

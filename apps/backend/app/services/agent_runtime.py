@@ -4,13 +4,15 @@ import time
 from datetime import datetime, timezone
 from typing import Any
 from uuid import uuid4
-from ..schemas import TaskOut
+from ..schemas import TaskOut, TaskCreate
 from .agent_manager import AgentManager
 from .execution_logger import ExecutionLogger
 from .task_queue import TaskQueue
 from .llm_executor import LlmExecutor, LlmMessage, LlmResponse
 from ..plugins.registry import PluginRegistry
+from ..skills.registry import SkillRegistry
 from ..store import PostgresStore
+from ..utils.redaction import redact_payload
 
 
 def _now() -> datetime:
@@ -28,6 +30,7 @@ class AgentRuntime:
         agent_manager: AgentManager,
         execution_logger: ExecutionLogger,
         plugin_registry: PluginRegistry,
+        skill_registry: SkillRegistry,
         task_queue: TaskQueue,
         llm_executor: LlmExecutor
     ) -> None:
@@ -35,12 +38,13 @@ class AgentRuntime:
         self.agent_manager = agent_manager
         self.execution_logger = execution_logger
         self.plugin_registry = plugin_registry
+        self.skill_registry = skill_registry
         self.task_queue = task_queue
         self.llm_executor = llm_executor
         self._processing_lock = asyncio.Lock()
 
-    async def enqueue_task(self, agent_id: str, input_text: str) -> TaskOut:
-        record = self.store.create_task(agent_id, input_text)
+    async def enqueue_task(self, payload: TaskCreate) -> TaskOut:
+        record = self.store.create_task(payload.model_dump())
         task_id = record["id"]
         self.task_queue.enqueue(task_id)
         asyncio.create_task(self._process_queue())
@@ -124,10 +128,27 @@ class AgentRuntime:
 
     async def _execute(self, agent, task, trace_id: str, parent_span_id: str) -> str:
         step_index = 0
-        tool_list = f"Available tools: {', '.join(agent.tools)}." if agent.tools else ""
-        tool_specs = self.plugin_registry.tool_specs(agent.tools)
+        skill_prompts = []
+        skill_tool_ids: list[str] = []
+        for skill_id in agent.skills:
+            skill = self.skill_registry.get(skill_id)
+            if not skill:
+                continue
+            if skill.prompt:
+                skill_prompts.append(skill.prompt)
+            for tool_id in skill.tools:
+                if tool_id not in skill_tool_ids:
+                    skill_tool_ids.append(tool_id)
+
+        allowed_tools = [
+            tool_id for tool_id in dict.fromkeys([*agent.tools, *skill_tool_ids]) if self.plugin_registry.has(tool_id)
+        ]
+        tool_list = f"Available tools: {', '.join(allowed_tools)}." if allowed_tools else ""
+        tool_specs = self.plugin_registry.tool_specs(allowed_tools)
+        prompt_parts = [agent.system_prompt, *skill_prompts]
+        base_prompt = "\n\n".join(part for part in prompt_parts if part)
         system_prompt = (
-            f"{agent.system_prompt}\n\nIf you need a tool, use the tool-calling interface. "
+            f"{base_prompt}\n\nIf you need a tool, use the tool-calling interface. "
             f"If tool calls are unavailable, respond ONLY with a JSON object: "
             f"{{\"tool\":\"<name>\",\"input\":{{...}}}}. {tool_list}"
         )
@@ -137,6 +158,7 @@ class AgentRuntime:
             LlmMessage(role="user", content=task.input)
         ]
 
+        tool_result_redactions: list[str] = []
         for _ in range(4):
             llm_start = _now()
             llm_start_perf = time.perf_counter()
@@ -170,12 +192,20 @@ class AgentRuntime:
                 )
                 raise RuntimeError(llm_error or "LLM call failed")
 
+            logged_messages = []
+            redaction_index = 0
+            for message in messages:
+                content = message.content
+                if content.startswith("Tool result:") and redaction_index < len(tool_result_redactions):
+                    content = tool_result_redactions[redaction_index]
+                    redaction_index += 1
+                logged_messages.append({"role": message.role, "content": content})
             self.execution_logger.log_step(
                 {
                     "task_id": task.id,
                     "step_index": step_index,
                     "type": "llm",
-                    "input": json.dumps([m.__dict__ for m in messages]),
+                    "input": json.dumps(logged_messages),
                     "output": json.dumps({"content": llm.content, "raw": llm.raw}),
                     "tokens_used": llm.tokens_used
                 }
@@ -204,7 +234,7 @@ class AgentRuntime:
             if not tool_call:
                 return llm.content
 
-            if tool_call["tool"] not in agent.tools:
+            if tool_call["tool"] not in allowed_tools:
                 return f"Tool not allowed: {tool_call['tool']}"
 
             tool_start = _now()
@@ -217,6 +247,10 @@ class AgentRuntime:
                 tool_error = str(exc)
             tool_end = _now()
             tool_duration = int((time.perf_counter() - tool_start_perf) * 1000)
+            policy = self.plugin_registry.get_policy(tool_call["tool"])
+            redaction = policy.redaction if policy else None
+            redacted_args = redact_payload(tool_call.get("input"), redaction)
+            redacted_result = redact_payload(tool_result, redaction)
 
             self.execution_logger.log_span(
                 {
@@ -232,8 +266,8 @@ class AgentRuntime:
                     "error": tool_error,
                     "model": None,
                     "tokens_total": 0,
-                    "tool_args": tool_call.get("input"),
-                    "tool_result": tool_result
+                    "tool_args": redacted_args,
+                    "tool_result": redacted_result
                 }
             )
             if tool_error:
@@ -244,8 +278,8 @@ class AgentRuntime:
                     "task_id": task.id,
                     "step_index": step_index,
                     "type": "tool",
-                    "input": json.dumps(tool_call),
-                    "output": json.dumps(tool_result),
+                    "input": json.dumps({**tool_call, "input": redacted_args}),
+                    "output": json.dumps(redacted_result),
                     "tokens_used": 0
                 }
             )
@@ -253,6 +287,7 @@ class AgentRuntime:
 
             messages.append(LlmMessage(role="assistant", content=llm.content))
             messages.append(LlmMessage(role="user", content=f"Tool result: {json.dumps(tool_result)}"))
+            tool_result_redactions.append(f"Tool result: {json.dumps(redacted_result)}")
 
         return "Max steps reached without final answer."
 

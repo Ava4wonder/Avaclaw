@@ -2,13 +2,12 @@ from __future__ import annotations
 
 from datetime import datetime, timezone
 
-from .registry import PluginRegistry, Plugin
-from ..skills.academic_search.skill import academic_search_plugin
+from .registry import PluginRegistry, Tool
 
 
 def init_plugins(registry: PluginRegistry) -> None:
-    registry.register(
-        Plugin(
+    registry.register_tool(
+        Tool(
             id="echo",
             name="Echo",
             description="Echo back the provided payload value.",
@@ -18,13 +17,14 @@ def init_plugins(registry: PluginRegistry) -> None:
                 "required": ["value"],
                 "additionalProperties": True
             },
-            handler=lambda payload: payload.get("value"),
-            origin="builtin"
-        )
+            handler=lambda payload: payload.get("value")
+        ),
+        origin="builtin",
+        source="init"
     )
 
-    registry.register(
-        Plugin(
+    registry.register_tool(
+        Tool(
             id="time",
             name="Current Time",
             description="Get the current UTC time.",
@@ -33,9 +33,8 @@ def init_plugins(registry: PluginRegistry) -> None:
                 "properties": {},
                 "additionalProperties": False
             },
-            handler=lambda _: {"now": datetime.now(timezone.utc).isoformat()},
-            origin="builtin"
-        )
+            handler=lambda _: {"now": datetime.now(timezone.utc).isoformat()}
+        ),
+        origin="builtin",
+        source="init"
     )
-
-    registry.register(academic_search_plugin)

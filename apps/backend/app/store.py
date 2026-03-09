@@ -16,6 +16,7 @@ CREATE TABLE IF NOT EXISTS agents (
   name TEXT NOT NULL,
   system_prompt TEXT NOT NULL,
   tools JSONB NOT NULL,
+  skills JSONB NOT NULL,
   model TEXT NOT NULL,
   enabled BOOLEAN NOT NULL,
   created_at TIMESTAMPTZ NOT NULL,
@@ -31,7 +32,14 @@ CREATE TABLE IF NOT EXISTS tasks (
   error TEXT,
   created_at TIMESTAMPTZ NOT NULL,
   started_at TIMESTAMPTZ,
-  completed_at TIMESTAMPTZ
+  completed_at TIMESTAMPTZ,
+  run_id TEXT,
+  session_id TEXT,
+  parent_task_id TEXT,
+  retry_count INTEGER,
+  retry_state TEXT,
+  replay_key TEXT,
+  replay_metadata JSONB
 );
 
 CREATE TABLE IF NOT EXISTS execution_steps (
@@ -62,6 +70,16 @@ CREATE TABLE IF NOT EXISTS execution_spans (
   tool_args JSONB,
   tool_result JSONB
 );
+
+ALTER TABLE agents ADD COLUMN IF NOT EXISTS skills JSONB;
+
+ALTER TABLE tasks ADD COLUMN IF NOT EXISTS run_id TEXT;
+ALTER TABLE tasks ADD COLUMN IF NOT EXISTS session_id TEXT;
+ALTER TABLE tasks ADD COLUMN IF NOT EXISTS parent_task_id TEXT;
+ALTER TABLE tasks ADD COLUMN IF NOT EXISTS retry_count INTEGER;
+ALTER TABLE tasks ADD COLUMN IF NOT EXISTS retry_state TEXT;
+ALTER TABLE tasks ADD COLUMN IF NOT EXISTS replay_key TEXT;
+ALTER TABLE tasks ADD COLUMN IF NOT EXISTS replay_metadata JSONB;
 """
 
 
@@ -105,6 +123,7 @@ class PostgresStore:
             "name": payload["name"],
             "system_prompt": payload["system_prompt"],
             "tools": list(payload.get("tools", [])),
+            "skills": list(payload.get("skills", [])),
             "model": payload["model"],
             "enabled": bool(payload.get("enabled", True)),
             "created_at": created_at,
@@ -113,8 +132,8 @@ class PostgresStore:
         with self._lock, self._conn.cursor() as cur:
             cur.execute(
                 """
-                INSERT INTO agents (id, name, system_prompt, tools, model, enabled, created_at, updated_at)
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+                INSERT INTO agents (id, name, system_prompt, tools, skills, model, enabled, created_at, updated_at)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
                 RETURNING *
                 """,
                 (
@@ -122,6 +141,7 @@ class PostgresStore:
                     record["name"],
                     record["system_prompt"],
                     Jsonb(record["tools"]),
+                    Jsonb(record["skills"]),
                     record["model"],
                     record["enabled"],
                     record["created_at"],
@@ -139,6 +159,7 @@ class PostgresStore:
             "name": payload.get("name", current["name"]),
             "system_prompt": payload.get("system_prompt", current["system_prompt"]),
             "tools": payload.get("tools", current["tools"]),
+            "skills": payload.get("skills", current.get("skills") or []),
             "model": payload.get("model", current["model"]),
             "enabled": payload.get("enabled", current["enabled"]),
             "updated_at": _now()
@@ -147,7 +168,7 @@ class PostgresStore:
             cur.execute(
                 """
                 UPDATE agents
-                SET name = %s, system_prompt = %s, tools = %s, model = %s, enabled = %s, updated_at = %s
+                SET name = %s, system_prompt = %s, tools = %s, skills = %s, model = %s, enabled = %s, updated_at = %s
                 WHERE id = %s
                 RETURNING *
                 """,
@@ -155,6 +176,7 @@ class PostgresStore:
                     updated["name"],
                     updated["system_prompt"],
                     Jsonb(updated["tools"]),
+                    Jsonb(updated["skills"]),
                     updated["model"],
                     updated["enabled"],
                     updated["updated_at"],
@@ -190,17 +212,39 @@ class PostgresStore:
         record["completed_at"] = _iso(record["completed_at"])
         return record
 
-    def create_task(self, agent_id: str, input_text: str) -> dict[str, Any]:
+    def create_task(self, payload: dict[str, Any]) -> dict[str, Any]:
         task_id = str(uuid4())
+        run_id = payload.get("run_id") or task_id
+        session_id = payload.get("session_id") or run_id
         created_at = _now()
         with self._lock, self._conn.cursor() as cur:
             cur.execute(
                 """
-                INSERT INTO tasks (id, agent_id, input, status, result, error, created_at, started_at, completed_at)
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+                INSERT INTO tasks (
+                    id, agent_id, input, status, result, error, created_at, started_at, completed_at,
+                    run_id, session_id, parent_task_id, retry_count, retry_state, replay_key, replay_metadata
+                )
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
                 RETURNING *
                 """,
-                (task_id, agent_id, input_text, "queued", None, None, created_at, None, None)
+                (
+                    task_id,
+                    payload["agent_id"],
+                    payload["input"],
+                    "queued",
+                    None,
+                    None,
+                    created_at,
+                    None,
+                    None,
+                    run_id,
+                    session_id,
+                    payload.get("parent_task_id"),
+                    payload.get("retry_count"),
+                    payload.get("retry_state"),
+                    payload.get("replay_key"),
+                    Jsonb(payload.get("replay_metadata")) if payload.get("replay_metadata") is not None else None
+                )
             )
             row = cur.fetchone()
         record = dict(row)

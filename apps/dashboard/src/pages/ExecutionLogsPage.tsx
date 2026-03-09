@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { api, ExecutionStep, Task } from "../api/client";
+import { api, ExecutionSpan, ExecutionStep, Task } from "../api/client";
 import TaskList from "../components/TaskList";
 import ExecutionTraceViewer from "../components/ExecutionTraceViewer";
 import TokenUsageChart from "../components/TokenUsageChart";
@@ -8,6 +8,7 @@ export default function ExecutionLogsPage() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [steps, setSteps] = useState<ExecutionStep[]>([]);
+  const [spans, setSpans] = useState<ExecutionSpan[]>([]);
 
   const loadTasks = () => api.listTasks().then(setTasks);
 
@@ -18,6 +19,7 @@ export default function ExecutionLogsPage() {
   useEffect(() => {
     if (!selectedId) return;
     api.getTaskSteps(selectedId).then(setSteps);
+    api.getTaskTrace(selectedId).then(setSpans);
   }, [selectedId]);
 
   return (
@@ -37,7 +39,7 @@ export default function ExecutionLogsPage() {
       </div>
       <div className="card">
         <h2>Execution Trace</h2>
-        {selectedId ? <ExecutionTraceViewer steps={steps} /> : <div>Select a task.</div>}
+        {selectedId ? <ExecutionTraceViewer spans={spans} /> : <div>Select a task.</div>}
       </div>
     </div>
   );
