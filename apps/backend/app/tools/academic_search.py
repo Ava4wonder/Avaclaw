@@ -102,3 +102,144 @@ async def academic_search(args: dict[str, Any]) -> dict:
         )
 
     return {"papers": papers}
+
+
+def _coerce_bulk_num(raw_value: Any, default: int = 5) -> int:
+    try:
+        value = int(raw_value)
+    except Exception:
+        value = default
+    return max(1, min(value, 20))
+
+
+def _format_bulk_abstracts(papers: list[dict[str, Any]]) -> str:
+    lines: list[str] = []
+    for index, paper in enumerate(papers, start=1):
+        title = str(paper.get("title", "")).strip()
+        abstract = str(paper.get("abstract", "")).strip()
+        lines.append(f'{index}. This is the Abstract of paper "{title}": {abstract}')
+    return "\n".join(lines)
+
+import requests
+async def _ollama_chat(
+    client: httpx.AsyncClient,
+    messages: list[dict[str, str]],
+    model: str | None
+) -> str:
+    payload = {
+        "model": settings.ollama_model,
+        "messages": messages,
+        "stream": False,
+        "options": {"temperature": 0}
+    }
+    url = f"{settings.ollama_base_url}/api/chat"
+    # res = await client.post(url, json=payload)
+    res = requests.post(url, json=payload, timeout=1200.0)
+    print(f"LLM response status: {res.status_code}")  # Debug print for status code
+    if res.status_code >= 400:
+        raise RuntimeError(f"LLM error {res.status_code}: {res.text}")
+    data = res.json()
+    message = data.get("message") or {}
+    return message.get("content", "")
+
+
+async def bulk_abstract_llm_inference(
+    client: httpx.AsyncClient,
+    abstracts_text: str,
+    model: str | None
+) -> str:
+    messages = [
+        {
+            "role": "system",
+            "content": (
+                "You are a research analyst. Extract structured summaries from paper abstracts. "
+                "Return one JSON object per paper as JSONL. Do not add markdown or extra text."
+            ),
+        },
+        {
+            "role": "user",
+            "content": (
+                "Given the following paper abstracts, produce JSONL with one line per paper. "
+                "Each JSON object must include the fields: "
+                "title, challenge, angle, solution, evaluation. "
+                "Use concise phrases. If a field is missing, use null.\n\n"
+                f"Abstracts:\n{abstracts_text}"
+            ),
+        },
+    ]
+    return (await _ollama_chat(client, messages, model)).strip()
+
+
+async def final_abstract_llm_inference(
+    client: httpx.AsyncClient,
+    temp_answer: str,
+    model: str | None
+) -> str:
+    messages = [
+        {
+            "role": "system",
+            "content": (
+                "You are a research analyst. Compare and synthesize across multiple papers. "
+                "Output only a markdown code block in jsonl format."
+            ),
+        },
+        {
+            "role": "user",
+            "content": (
+                "You will receive JSONL lines, each describing a paper with fields "
+                "title, challenge, angle, solution, evaluation.\n"
+                "Tasks:\n"
+                "1. Deduplicate or merge near-duplicate papers by title.\n"
+                "2. Output a markdown code block in jsonl format.\n\n"
+                "Within the code block:\n"
+                "- One JSONL line per paper with fields: "
+                'type="paper_summary", title, challenge, angle, solution, evaluation, metrics.\n'
+                "- One final JSONL line with fields: "
+                'type="overall_summary", common_challenges, common_angles, common_solutions, common_metrics.\n'
+                "Metrics should be an array of strings derived from evaluations.\n\n"
+                f"Input JSONL:\n{temp_answer}"
+            ),
+        },
+    ]
+    return (await _ollama_chat(client, messages, model)).strip()
+
+
+async def read_bulk_abstract(args: dict[str, Any]) -> dict:
+    payload = args or {}
+    papers = payload.get("papers") or []
+    if not isinstance(papers, list):
+        raise ValueError("papers must be a list")
+
+    bulk_num = _coerce_bulk_num(payload.get("bulk_num", 10))
+    model = payload.get("model")
+
+    if not papers:
+        return {
+            "papers_processed": 0,
+            "bulk_num": bulk_num,
+            "chunks": 0,
+            "temp_answer": "",
+            "final_answer": ""
+        }
+
+    temp_parts: list[str] = []
+    async with httpx.AsyncClient(timeout=60) as client:
+        for start in range(0, len(papers), bulk_num):
+            print(f"Processing papers {start + 1} to {min(start + bulk_num, len(papers))}...")  # Debug print for progress
+            chunk = papers[start:start + bulk_num]
+            abstracts_text = _format_bulk_abstracts(chunk)
+            chunk_answer = await bulk_abstract_llm_inference(client, abstracts_text, model)
+            print(chunk_answer)  # Debug print for each chunk's answer
+            if chunk_answer:
+                temp_parts.append(chunk_answer)
+
+        temp_answer = "\n".join(temp_parts).strip()
+        final_answer = await final_abstract_llm_inference(client, temp_answer, model)
+
+    return {
+        "papers_processed": len(papers),
+        "bulk_num": bulk_num,
+        "chunks": len(temp_parts),
+        "temp_answer": temp_answer,
+        "final_answer": final_answer
+    }

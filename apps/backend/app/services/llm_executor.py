@@ -32,13 +32,15 @@ class LlmExecutor:
         payload = {
             "model": model or settings.ollama_model,
             "messages": [{"role": m.role, "content": m.content} for m in messages],
-            "stream": False
+            "stream": False,
+            "options": {"temperature": 0}
         }
         if tools:
             payload["tools"] = tools
             payload["tool_choice"] = tool_choice or "auto"
         url = f"{settings.ollama_base_url}/api/chat"
-        res = await self._client.post(url, json=payload)
+        res = await self._client.post(url, json=payload, timeout=120.0)
+        res = requests.post(url, json=payload, timeout=120.0)
         if res.status_code >= 400:
             raise RuntimeError(f"LLM error {res.status_code}: {res.text}")
         data = res.json()

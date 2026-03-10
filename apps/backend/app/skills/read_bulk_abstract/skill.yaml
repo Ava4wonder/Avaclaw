@@ -1,0 +1,26 @@
+id: read_bulk_abstract
+name: Read Bulk Abstract
+description: Compare and summarize paper abstracts in batches.
+tool:
+  handler: app.tools.academic_search:read_bulk_abstract
+  parameters:
+    type: object
+    properties:
+      papers:
+        type: array
+        items:
+          type: object
+          additionalProperties: true
+      bulk_num:
+        type: integer
+        minimum: 1
+        maximum: 20
+      model:
+        type: string
+    required:
+      - papers
+    additionalProperties: false
+  policy:
+    timeout_ms: 600000
+    max_retries: 1
+    rate_limit_per_min: 30
