@@ -11,7 +11,7 @@ tool:
       limit:
         type: integer
         minimum: 1
-        maximum: 20
+        maximum: 30
     required:
       - query
     additionalProperties: false

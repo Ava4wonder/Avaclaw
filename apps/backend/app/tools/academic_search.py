@@ -15,7 +15,7 @@ async def academic_search(args: dict[str, Any]) -> dict:
         limit = int(limit_raw)
     except Exception:
         limit = 5
-    limit = max(1, min(limit, 20))
+    limit = max(1, min(limit, 30))
 
     from_year = args.get("from_year")
     to_year = args.get("to_year")
@@ -67,6 +67,25 @@ async def academic_search(args: dict[str, Any]) -> dict:
         primary_location = paper.get("primary_location") or {}
         pdf_url = primary_location.get("pdf_url") or ""
         landing_page_url = primary_location.get("landing_page_url") or ""
+        
+        # safely extract arxiv id
+        arxiv_id = ""
+        # 1. try from ids.arxiv
+        arxiv_url = paper.get("ids", {}).get("arxiv")
+        if arxiv_url:
+            arxiv_id = arxiv_url.split("/")[-1]
+        # 2. try from locations
+        if not arxiv_id:
+            for loc in paper.get("locations", []) or []:
+                if not loc: continue
+                l_url = loc.get("landing_page_url") or ""
+                p_url = loc.get("pdf_url") or ""
+                if "arxiv.org/abs/" in l_url:
+                    arxiv_id = l_url.split("arxiv.org/abs/")[-1]
+                    break
+                elif "arxiv.org/pdf/" in p_url:
+                    arxiv_id = p_url.split("arxiv.org/pdf/")[-1].replace(".pdf", "")
+                    break
 
         papers.append(
             {
@@ -75,7 +94,10 @@ async def academic_search(args: dict[str, Any]) -> dict:
                 "year": paper.get("publication_year"),
                 "citationCount": paper.get("cited_by_count", 0),
                 "abstract": abstract,
-                "url": pdf_url or landing_page_url or paper.get("id", "")
+                "url": pdf_url or landing_page_url or paper.get("id", ""),
+                "arxiv_id": arxiv_id,
+                "type": paper.get("type", ""),
+                "related_works": paper.get("related_works", [])
             }
         )
 
