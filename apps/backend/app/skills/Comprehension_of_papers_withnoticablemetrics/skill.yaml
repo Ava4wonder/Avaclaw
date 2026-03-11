@@ -1,0 +1,20 @@
+id: Comprehension_of_papers_withnoticablemetrics
+name: Comprehension_of_papers_withnoticablemetrics
+description: Filter papers by quantitative evaluation, fetch arXiv HTML, chunk + embed into Qdrant, and run progressive QA.
+tool:
+  handler: app.tools.academic_search:Comprehension_of_papers_withnoticablemetrics
+  parameters:
+    type: object
+    properties:
+      papers:
+        type: array
+        items:
+          type: object
+          additionalProperties: true
+    required:
+      - papers
+    additionalProperties: false
+  policy:
+    timeout_ms: 900000
+    max_retries: 1
+    rate_limit_per_min: 10
