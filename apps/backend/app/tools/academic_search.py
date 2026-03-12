@@ -551,25 +551,78 @@ async def _rag_answer(
     return (await _ollama_chat(client, messages, model)).strip()
 
 
-def _parse_planner_output(raw: str) -> dict[str, Any]:
+def _extract_json_from_text(raw: str) -> Any | None:
     raw = raw.strip()
-    try:
-        data = json.loads(raw)
-        if isinstance(data, dict):
-            return data
-    except Exception:
-        pass
-    questions: list[str] = []
-    toc_items: list[str] = []
-    for line in raw.splitlines():
-        cleaned = line.strip().lstrip("-").strip()
-        if not cleaned:
+    if not raw:
+        return None
+    decoder = json.JSONDecoder()
+    for index, ch in enumerate(raw):
+        if ch not in {"{", "["}:
             continue
-        if cleaned.lower().startswith("toc:"):
-            toc_items.append(cleaned.split(":", 1)[-1].strip())
-        else:
-            questions.append(cleaned)
-    return {"questions": questions, "toc_page_index": toc_items}
+        try:
+            obj, _ = decoder.raw_decode(raw[index:])
+            return obj
+        except Exception:
+            continue
+    return None
+
+
+def _coerce_str_list(value: Any) -> list[str]:
+    if isinstance(value, list):
+        return [str(item).strip() for item in value if str(item).strip()]
+    if isinstance(value, str) and value.strip():
+        return [value.strip()]
+    return []
+
+
+def _normalize_plan_item(item: Any, fallback_id: str) -> dict[str, Any] | None:
+    if not isinstance(item, dict):
+        return None
+    question = str(item.get("question", "")).strip()
+    if not question:
+        return None
+    question_id = str(item.get("question_id") or fallback_id).strip()
+    question_type = str(item.get("question_type") or "analysis").strip()
+    toc_page_index = _coerce_str_list(item.get("toc_page_index"))
+    why_this_matters = str(item.get("why_this_matters") or "").strip()
+    return {
+        "question_id": question_id,
+        "question": question,
+        "question_type": question_type,
+        "toc_page_index": toc_page_index,
+        "why_this_matters": why_this_matters
+    }
+
+
+def _parse_root_plan(raw: str) -> list[dict[str, Any]]:
+    obj = _extract_json_from_text(raw)
+    if isinstance(obj, dict) and isinstance(obj.get("plan"), list):
+        plan_items = []
+        for idx, item in enumerate(obj["plan"], start=1):
+            normalized = _normalize_plan_item(item, f"q_root_{idx}")
+            if normalized:
+                plan_items.append(normalized)
+        return plan_items
+    return []
+
+
+def _parse_followup_plan(raw: str, depth: int) -> tuple[list[dict[str, Any]], bool, str]:
+    obj = _extract_json_from_text(raw)
+    followups: list[dict[str, Any]] = []
+    should_continue = False
+    stop_reason = ""
+    if isinstance(obj, dict):
+        should_continue = bool(obj.get("should_continue", False))
+        stop_reason = str(obj.get("stop_reason") or "")
+        raw_followups = obj.get("followups")
+        if isinstance(raw_followups, list):
+            for idx, item in enumerate(raw_followups, start=1):
+                normalized = _normalize_plan_item(item, f"q_followup_{depth}_{idx}")
+                if normalized:
+                    normalized["depth"] = depth
+                    normalized["parent_question_id"] = str(item.get("parent_question_id") or "")
+                    followups.append(normalized)
+    return followups, should_continue, stop_reason
 
 
 async def comprehension_progressive_qa(
@@ -578,13 +631,28 @@ async def comprehension_progressive_qa(
     collection_name: str,
     text_toc: str
 ) -> dict[str, Any]:
+    max_depth_raw = os.getenv("COMPREHENSION_MAX_DEPTH", "1")
+    try:
+        max_depth = max(1, int(max_depth_raw))
+    except Exception:
+        max_depth = 1
+    retrieval_top_k = 5
+    search_k = 25
+
+    output_dir = os.path.join(os.path.dirname(__file__), "outputs")
+    os.makedirs(output_dir, exist_ok=True)
+    filename = f"comprehension_{collection_name}.jsonl"
+    output_path = os.path.join(output_dir, filename)
+
     planner_messages = [
         {
             "role": "system",
             "content": (
                 "You are an expert computer science researcher with 20+ years of engineering experience. "
-                "Generate an in-depth reading plan. Output JSON only with keys: "
-                "questions (array of strings), toc_page_index (array of strings)."
+                "Generate an in-depth reading plan rooted in the abstract and TOC. "
+                "Output strict JSON with shape: {\"plan\": ["
+                "{\"question_id\":\"q_root_1\",\"question\":\"...\",\"question_type\":\"...\","
+                "\"toc_page_index\":[\"Heading\"],\"why_this_matters\":\"...\"}]}"
             )
         },
         {
@@ -592,46 +660,159 @@ async def comprehension_progressive_qa(
             "content": (
                 "Use the paper abstract as the anchor. Propose deep technical questions that dissect "
                 "problem definition, assumptions, method design, module roles, evaluation design, results, "
-                "and hidden concerns. For toc_page_index, list the heading paths from the provided TOC "
-                "that are most relevant.\n\n"
+                "and hidden concerns. toc_page_index must be per-question and match the TOC headings.\n\n"
                 f"Abstract:\n{paper.get('abstract', '')}\n\nTOC:\n{text_toc}"
             )
         }
     ]
     planner_raw = await _ollama_chat(client, planner_messages, settings.ollama_code_model)
-    plan = _parse_planner_output(planner_raw)
-    questions = plan.get("questions") or []
-    toc_page_index = plan.get("toc_page_index") or []
+    root_plan = _parse_root_plan(planner_raw)
 
-    output_dir = os.path.join(os.path.dirname(__file__), "outputs")
-    os.makedirs(output_dir, exist_ok=True)
-    filename = f"comprehension_{collection_name}.jsonl"
-    output_path = os.path.join(output_dir, filename)
+    total_records = 0
+    for root_index, root_item in enumerate(root_plan, start=1):
+        insufficiency_count = 0
+        root_id = root_item["question_id"] or f"q_root_{root_index}"
+        root_question = root_item["question"]
+        root_toc = root_item.get("toc_page_index", [])
+        root_type = root_item.get("question_type", "analysis")
 
-    results: list[dict[str, Any]] = []
-    for question in questions:
-        filtered_hits = _retrieve_chunks(collection_name, question, top_k=5, search_k=25, filter_headings=toc_page_index)
+        filtered_hits = _retrieve_chunks(
+            collection_name,
+            root_question,
+            top_k=retrieval_top_k,
+            search_k=search_k,
+            filter_headings=root_toc
+        )
+        if not filtered_hits:
+            insufficiency_count += 1
+        print(f"Answering Root question '{root_question}' >> root_toc: {root_toc}")  # Debug print for retrieval results
+        filtered_answer = await _rag_answer(client, root_question, filtered_hits, settings.ollama_model)
 
-        filtered_answer = await _rag_answer(client, question, filtered_hits, settings.ollama_model)
-
-        record = {
+        root_record = {
             "type": "paper_qa",
             "paper_title": paper.get("title", ""),
             "arxiv_id": paper.get("arxiv_id", ""),
             "collection_name": collection_name,
-            "question": question,
-            "toc_page_index": toc_page_index,
-            "filtered_answer": filtered_answer
+            "question_id": root_id,
+            "parent_question_id": None,
+            "root_question_id": root_id,
+            "depth": 0,
+            "question_type": root_type,
+            "question": root_question,
+            "toc_page_index": root_toc,
+            "filtered_answer": filtered_answer,
+            "retrieval_top_k": retrieval_top_k,
+            "why_this_matters": root_item.get("why_this_matters", "")
         }
-        results.append(record)
+        total_records += 1
         with open(output_path, "a", encoding="utf-8") as handle:
-            handle.write(json.dumps(record, ensure_ascii=True) + "\n")
+            handle.write(json.dumps(root_record, ensure_ascii=True) + "\n")
+
+        current_frontier = [
+            {
+                "question_id": root_id,
+                "root_question_id": root_id,
+                "question": root_question,
+                "answer": filtered_answer,
+                "toc_page_index": root_toc,
+                "question_type": root_type
+            }
+        ]
+
+        for depth in range(1, max_depth + 1):
+            if insufficiency_count >= 2:
+                break
+            next_frontier: list[dict[str, Any]] = []
+            for parent_node in current_frontier:
+                followup_messages = [
+                    {
+                        "role": "system",
+                        "content": (
+                            "You are an expert researcher. Based on the previous answer, propose "
+                            "deeper follow-up questions. Output strict JSON: "
+                            "{\"followups\":[{\"question_id\":\"q_root_1_d1_f1\","
+                            "\"parent_question_id\":\"q_root_1\",\"question\":\"...\","
+                            "\"question_type\":\"...\",\"toc_page_index\":[\"Heading\"],"
+                            "\"why_this_matters\":\"...\",\"depth\":1}],"
+                            "\"should_continue\":true,\"stop_reason\":\"\"}"
+                        )
+                    },
+                    {
+                        "role": "user",
+                        "content": (
+                            "Generate deeper follow-up questions conditioned on the root question, "
+                            "current question, previous answer, and TOC. Focus on unclear or under-"
+                            "justified areas.\n\n"
+                            f"Root Question: {root_question}\n\n"
+                            f"Current Question: {parent_node['question']}\n\n"
+                            f"Previous Answer: {parent_node['answer']}\n\n"
+                            f"TOC:\n{text_toc}\n"
+                        )
+                    }
+                ]
+                followup_raw = await _ollama_chat(client, followup_messages, settings.ollama_code_model)
+                followups, should_continue, _ = _parse_followup_plan(followup_raw, depth)
+                if not should_continue or not followups:
+                    continue
+
+                for idx, followup in enumerate(followups, start=1):
+                    question_id = followup.get("question_id") or f"{root_id}_d{depth}_f{idx}"
+                    question = followup["question"]
+                    toc_page_index = followup.get("toc_page_index", [])
+                    question_type = followup.get("question_type", "analysis")
+
+                    hits = _retrieve_chunks(
+                        collection_name,
+                        question,
+                        top_k=retrieval_top_k,
+                        search_k=search_k,
+                        filter_headings=toc_page_index
+                    )
+                    if not hits:
+                        insufficiency_count += 1
+                    print(f"Answering Follow-up question '{question}' >> toc_page_index: {toc_page_index}")  # Debug print for retrieval results
+                    answer = await _rag_answer(client, question, hits, settings.ollama_model)
+
+                    record = {
+                        "type": "paper_qa",
+                        "paper_title": paper.get("title", ""),
+                        "arxiv_id": paper.get("arxiv_id", ""),
+                        "collection_name": collection_name,
+                        "question_id": question_id,
+                        "parent_question_id": parent_node["question_id"],
+                        "root_question_id": root_id,
+                        "depth": depth,
+                        "question_type": question_type,
+                        "question": question,
+                        "toc_page_index": toc_page_index,
+                        "filtered_answer": answer,
+                        "retrieval_top_k": retrieval_top_k,
+                        "why_this_matters": followup.get("why_this_matters", "")
+                    }
+                    total_records += 1
+                    with open(output_path, "a", encoding="utf-8") as handle:
+                        handle.write(json.dumps(record, ensure_ascii=True) + "\n")
+
+                    next_frontier.append(
+                        {
+                            "question_id": question_id,
+                            "root_question_id": root_id,
+                            "question": question,
+                            "answer": answer,
+                            "toc_page_index": toc_page_index,
+                            "question_type": question_type
+                        }
+                    )
+
+            if not next_frontier:
+                break
+            current_frontier = next_frontier
 
     return {
-        "questions": questions,
-        "toc_page_index": toc_page_index,
+        "root_questions": len(root_plan),
+        "total_records": total_records,
         "output_path": output_path,
-        "qa_count": len(results)
+        "max_depth_used": max_depth
     }
 
 

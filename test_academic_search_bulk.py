@@ -4,15 +4,18 @@ from apps.backend.app.tools.academic_search import academic_search, read_bulk_ab
 
 async def main():
     print("Testing academic_search + read_bulk_abstract pipeline...\n")
+
+    cur_query = "Convert academic research papers into HTML content"
+    cur_limit = 10
     
     # Step 1: Search for papers
     print("=" * 80)
-    print("Step 1: Searching for papers with query 'refine HTL progressively with AI agents for chip design' and limit 30")
+    print("Step 1: Searching for papers with query '{}' and limit {}".format(cur_query, cur_limit))
     print("=" * 80)
     try:
         search_result = await academic_search({
-            "query": "refine HTL progressively with AI agents for chip design",
-            "limit": 30,
+            "query": cur_query,
+            "limit": cur_limit,
             "from_year": 2024,
             "to_year": 2026,
         })

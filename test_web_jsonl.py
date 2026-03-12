@@ -80,6 +80,12 @@ def read_root():
     for idx, record in enumerate(records, start=1):
         question = record.get('question', 'N/A')
         toc = record.get('toc_page_index', [])
+        question_id = record.get('question_id', 'N/A')
+        parent_id = record.get('parent_question_id')
+        root_id = record.get('root_question_id', 'N/A')
+        depth = record.get('depth', 0)
+        q_type = record.get('question_type', 'N/A')
+        why_matters = record.get('why_this_matters', 'N/A')
         
         toc_html = ""
         if toc:
@@ -94,19 +100,29 @@ def read_root():
             """
             
         filtered_ans = record.get('filtered_answer', 'N/A').replace('\n', '<br>')
+        
+        # indent based on depth
+        margin_left = depth * 16
 
         html_content += f"""
-                <div class="bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden">
+                <div class="bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden" style="margin-left: {margin_left}px;">
                     <div class="bg-gray-50 p-5 border-b border-gray-200">
+                        <div class="text-xs text-gray-500 mb-2 font-mono">
+                            ID: {question_id} | Type: {q_type} | Depth: {depth}
+                            {f' | Parent: {parent_id}' if parent_id else ''}
+                        </div>
                         <h2 class="text-xl font-bold text-green-700 leading-snug">
                             <span class="text-green-900 border-r-2 border-green-300 pr-2 mr-2">Q{idx}</span>{question}
                         </h2>
                         {toc_html}
                     </div>
                     
-                    <div class="p-6 space-y-6">
+                    <div class="p-6 space-y-4">
+                        <div class="bg-blue-50 p-3 rounded text-sm text-blue-900 border border-blue-100">
+                            <strong>Why this matters:</strong> {why_matters}
+                        </div>
                         <div>
-                            <h3 class="text-sm font-bold text-cyan-600 uppercase tracking-widest mb-2 border-b border-cyan-100 pb-1">Filtered Answer</h3>
+                            <h3 class="text-sm font-bold text-cyan-600 uppercase tracking-widest mb-2 border-b border-cyan-100 pb-1">Answer</h3>
                             <div class="text-sm text-gray-700 markdown-content leading-relaxed">
                                 {filtered_ans}
                             </div>
