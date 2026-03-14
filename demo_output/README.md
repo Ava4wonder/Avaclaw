@@ -1,135 +1,152 @@
-# MAHL: Multi-Agent LLM-Guided Hierarchical Chiplet Design Demo Implementation
+# AlphaEvolve Demo Implementation
 
-## Overview
-
-This repository contains a **demo implementation** of the **MAHL (Multi-Agent LLM-Guided Hierarchical Chiplet Design)** system. The demo simulates the core concepts of hierarchical chiplet design generation using LLM agents, including:
-
-- Design description generation
-- RTL implementation
-- Validation
-- Design space exploration
-
-The system demonstrates how multiple specialized agents collaborate to generate chiplet designs from high-level specifications.
+**Paper**: *AlphaEvolve: A Coding Agent for Scientific and Algorithmic Discovery*  
+**Demo Implementation**: Modular architecture demonstrating evolutionary programming for scientific discovery.
 
 ---
 
-## Architecture
+## 📌 Overview
+
+This repository contains a **modular implementation** of the core components described in the paper *"AlphaEvolve: A Coding Agent for Scientific and Algorithmic Discovery"*. The system implements an evolutionary coding agent that discovers solutions to scientific and algorithmic problems through iterative generation, evaluation, and evolution.
+
+The architecture is built using **JAX/Flax**, enabling efficient numerical computation and scalable neural network training. It includes modules for task specification, prompt sampling, creative code generation, evaluation, and hyperparameter tuning — all orchestrated in a pipeline that supports scientific discovery workflows.
+
+---
+
+## 🏗️ Architecture
 
 ### Modules
 
-| Module Name                        | Purpose                                                                 | Complexity |
-|-----------------------------------|-------------------------------------------------------------------------|------------|
-| LLM Agent Manager                 | Coordinates specialized LLM agents for design tasks                     | Medium     |
-| Hierarchical Design Generator     | Breaks down specifications into modular chiplet components              | High       |
-| RTL Implementation Engine         | Converts hierarchical designs into RTL code using LLM-guided synthesis  | High       |
-| Design Space Explorer             | Explores design alternatives and optimizes configurations               | Medium     |
-| Validation and Debugging System   | Validates RTL and provides adaptive debugging assistance                | Medium     |
-| Specification Parser              | Interprets high-level specs into structured inputs                      | Low        |
-| Output Formatter                  | Formats and presents generated designs and results                      | Low        |
+| Module Name            | Purpose                                                                 | Complexity |
+|------------------------|-------------------------------------------------------------------------|------------|
+| `TaskSpecification`    | Defines problem space and constraints for scientific tasks              | Medium     |
+| `PromptSampling`       | Generates diverse prompts using sampling strategies                     | Medium     |
+| `CreativeGeneration`   | Core evolutionary algorithm for generating and mutating code solutions  | High       |
+| `EvaluationEngine`     | Evaluates generated code against benchmarks and correctness criteria    | Medium     |
+| `EvolutionPipeline`    | Coordinates evolution process (selection, crossover, mutation)          | High       |
+| `ResNetArchitecture`   | Implements ResNet-based models for image classification                 | Medium     |
+| `OptimizerConfig`      | Manages optimizer configurations like AdamW with weight decay           | Low        |
+| `HyperparameterSweep`  | Performs automated hyperparameter tuning using zipit                    | Medium     |
 
 ### Dependencies
 
-- `LLM Agent Manager` → `Hierarchical Design Generator`
-- `LLM Agent Manager` → `RTL Implementation Engine`
-- `LLM Agent Manager` → `Design Space Explorer`
-- `LLM Agent Manager` → `Validation and Debugging System`
-- `Hierarchical Design Generator` → `RTL Implementation Engine`
-- `RTL Implementation Engine` → `Validation and Debugging System`
-- `Design Space Explorer` → `Hierarchical Design Generator`
-- `Specification Parser` → `LLM Agent Manager`
-- `Validation and Debugging System` → `Output Formatter`
+- `CreativeGeneration` → `PromptSampling`
+- `CreativeGeneration` → `EvaluationEngine`
+- `EvolutionPipeline` → `CreativeGeneration`, `EvaluationEngine`
+- `ResNetArchitecture` → `OptimizerConfig`
+- `HyperparameterSweep` → `CreativeGeneration`
+- `EvaluationEngine` → `ResNetArchitecture`
 
 ---
 
-## Setup Instructions
+## 🛠️ Setup Instructions
 
 ### Prerequisites
 
-- Python 3.9+
-- Docker (optional, for containerization)
+Ensure you have Python 3.9 or higher installed.
+
+```bash
+python --version
+```
 
 ### Installation
 
-1. **Clone the repository:**
-
+1. Clone the repository:
    ```bash
-   git clone https://github.com/your-org/ma-hl-demo.git
-   cd ma-hl-demo
+   git clone https://github.com/your-org/alphaevolve-demo.git
+   cd alphaevolve-demo
    ```
 
-2. **Install dependencies:**
-
+2. Install dependencies:
    ```bash
    pip install -r requirements.txt
    ```
 
-3. **(Optional) Set up Docker containers for modules:**
-
-   ```bash
-   docker build -t ma-hl-modules .
-   ```
-
----
-
-## Usage
-
-### Running the Demo
-
-1. **Start the LLM Agent Manager:**
-
-   ```bash
-   python main.py
-   ```
-
-2. **Provide a high-level specification (e.g., in `spec.json`):**
-
-   ```json
-   {
-     "chiplet_name": "ExampleChiplet",
-     "description": "A simple chiplet for processing 32-bit data streams",
-     "performance_target": "100 MHz",
-     "constraints": ["low_power", "small_area"]
-   }
-   ```
-
-3. **View outputs in the `output/` directory:**
-
-   - `hierarchical_design.json`
-   - `rtl_code.v`
-   - `validation_report.json`
+> **Note**: The `requirements.txt` file should include:
+> ```
+> jax[cpu]  # or jax[cuda] for GPU support
+> flax
+> haiku
+> optax
+> pytree
+> tensorflow-datasets
+> zipit
+> ```
 
 ---
 
-## Notes on Placeholders
+## ▶️ Usage
 
-This demo implementation uses placeholders for:
+To run a basic demo of the system:
 
-- **LLM API Keys**: Replace with real keys or mock responses in `config.py`.
-- **RTL Code Generation**: Simulated with placeholder templates; actual LLM integration is not included.
-- **Design Space Exploration**: Mocked with sample configurations; real optimization logic is not implemented.
-- **Validation Logic**: Simulated with basic checks; full validation system is not included.
+```bash
+python main.py --task="mathematical_problem" --iterations=10
+```
 
-> ⚠️ **Note**: This is a **demonstration-only** implementation. Actual LLM integration, RTL synthesis, and full validation are not included in this version.
+### Example Commands
 
----
+- Run with default settings:
+  ```bash
+  python main.py
+  ```
 
-## Framework Suggestions
+- Specify a custom task and number of iterations:
+  ```bash
+  python main.py --task="algorithmic_challenge" --iterations=50
+  ```
 
-- **LLM Integration**: Use [LangChain](https://github.com/langchain-ai/langchain) or [LlamaIndex](https://github.com/run-llama/llama_index)
-- **ML Components**: [PyTorch](https://pytorch.org/) or [TensorFlow](https://www.tensorflow.org/)
-- **API Framework**: [FastAPI](https://fastapi.tiangolo.com/) or [Flask](https://flask.palletsprojects.com/)
-- **Containerization**: [Docker](https://www.docker.com/)
-- **Testing**: [pytest](https://docs.pytest.org/)
-- **Version Control**: [Git](https://git-scm.com/) with CI/CD pipeline
-
----
-
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+> 📝 **Note**: Placeholder values (e.g., `mathematical_problem`) are used in this demo. Replace them with actual configurations as needed.
 
 ---
 
-## Contact
+## ⚠️ Notes on Placeholders
 
-For questions or feedback, please open an issue or contact the maintainers.
+This implementation uses placeholder values for:
+
+- Task definitions (`mathematical_problem`, `algorithmic_challenge`)
+- Data paths and datasets
+- Model hyperparameters (learning rate, batch size, etc.)
+
+These placeholders are intended to be replaced with real-world configurations or data sources depending on the use case. For example:
+
+```python
+# Placeholder in code:
+TASK = "mathematical_problem"
+
+# Should be replaced with:
+TASK = "image_classification_cifar10"
+```
+
+Ensure all placeholders are updated before running full-scale experiments.
+
+---
+
+## 🧰 Framework Suggestions
+
+The following libraries are recommended for building upon this demo:
+
+- **JAX/Flax**: For numerical computing and neural network implementation
+- **Haiku (JAX)**: For functional module-based neural networks
+- **Optax**: For optimizer configuration and training utilities
+- **Pytree**: For handling nested data structures in a functional way
+- **TensorFlow Datasets**: For loading and preprocessing datasets
+
+---
+
+## 📚 References
+
+- Paper: *AlphaEvolve: A Coding Agent for Scientific and Algorithmic Discovery*
+- [JAX Documentation](https://jax.readthedocs.io/)
+- [Flax Documentation](https://flax.readthedocs.io/)
+- [Haiku Documentation](https://dm-haiku.readthedocs.io/)
+- [Optax Documentation](https://optax.readthedocs.io/)
+
+---
+
+## 📝 License
+
+This project is licensed under the MIT License. See `LICENSE` for more information.
+
+--- 
+
+*Built with ❤️ for scientific discovery and algorithmic innovation.*

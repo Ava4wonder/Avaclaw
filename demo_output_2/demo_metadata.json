@@ -1,0 +1,121 @@
+{
+  "paper_title": "Demo Paper Implementation",
+  "arxiv_id": "2508.14053",
+  "collection_name": "comprehesion_paperreading_20260312_120626_171c0568",
+  "architecture_plan": {
+    "title": "MAHL: Multi-Agent LLM-Guided Hierarchical Chiplet Design Demo Implementation",
+    "overview": "A modular demonstration architecture for Multi-Agent LLM-Guided Hierarchical Chiplet Design with Adaptive Debugging. This implementation simulates the core concepts of hierarchical chiplet design generation using LLM agents, including design description generation, RTL implementation, validation, and design space exploration. The system demonstrates how multiple specialized agents collaborate to generate chiplet designs from high-level specifications.",
+    "modules": [
+      {
+        "module_name": "LLM Agent Manager",
+        "purpose": "Coordinates multiple specialized LLM agents for different design tasks including hierarchical description generation, RTL code generation, and debugging assistance",
+        "complexity": "medium"
+      },
+      {
+        "module_name": "Hierarchical Design Generator",
+        "purpose": "Generates hierarchical chiplet designs by breaking down high-level specifications into modular components and defining their interconnections",
+        "complexity": "high"
+      },
+      {
+        "module_name": "RTL Implementation Engine",
+        "purpose": "Converts hierarchical design descriptions into Register Transfer Level (RTL) code using LLM-guided synthesis techniques",
+        "complexity": "high"
+      },
+      {
+        "module_name": "Design Space Explorer",
+        "purpose": "Performs automated exploration of design alternatives and optimization of chiplet configurations based on performance metrics",
+        "complexity": "medium"
+      },
+      {
+        "module_name": "Validation and Debugging System",
+        "purpose": "Validates generated RTL implementations and provides adaptive debugging assistance through LLM agents",
+        "complexity": "medium"
+      },
+      {
+        "module_name": "Specification Parser",
+        "purpose": "Interprets high-level design specifications and translates them into structured inputs for the LLM agents",
+        "complexity": "low"
+      },
+      {
+        "module_name": "Output Formatter",
+        "purpose": "Formats and presents generated chiplet designs, RTL code, and validation results in standardized formats",
+        "complexity": "low"
+      }
+    ],
+    "dependencies": [
+      {
+        "from": "LLM Agent Manager",
+        "to": "Hierarchical Design Generator"
+      },
+      {
+        "from": "LLM Agent Manager",
+        "to": "RTL Implementation Engine"
+      },
+      {
+        "from": "LLM Agent Manager",
+        "to": "Design Space Explorer"
+      },
+      {
+        "from": "LLM Agent Manager",
+        "to": "Validation and Debugging System"
+      },
+      {
+        "from": "Hierarchical Design Generator",
+        "to": "RTL Implementation Engine"
+      },
+      {
+        "from": "RTL Implementation Engine",
+        "to": "Validation and Debugging System"
+      },
+      {
+        "from": "Design Space Explorer",
+        "to": "Hierarchical Design Generator"
+      },
+      {
+        "from": "Specification Parser",
+        "to": "LLM Agent Manager"
+      },
+      {
+        "from": "Validation and Debugging System",
+        "to": "Output Formatter"
+      }
+    ],
+    "language": "python",
+    "framework_suggestions": [
+      "LangChain or LlamaIndex for LLM integration and agent management",
+      "PyTorch or TensorFlow for any ML components",
+      "FastAPI or Flask for REST API endpoints",
+      "Docker for containerization of modules",
+      "pytest for testing framework",
+      "Git for version control and CI/CD pipeline"
+    ]
+  },
+  "generated_at": "2026-03-12T12:30:24.731813+00:00",
+  "modules": [
+    {
+      "filename": "LLM Agent Manager.py",
+      "purpose": "Coordinates multiple specialized LLM agents for different design tasks including hierarchical description generation, RTL code generation, and debugging assistance",
+      "complexity": "medium"
+    },
+    {
+      "filename": "Hierarchical Design Generator.py",
+      "purpose": "Generates hierarchical chiplet designs by breaking down high-level specifications into modular components and defining their interconnections",
+      "complexity": "high"
+    },
+    {
+      "filename": "RTL Implementation Engine.py",
+      "purpose": "Converts hierarchical design descriptions into Register Transfer Level (RTL) code using LLM-guided synthesis techniques",
+      "complexity": "high"
+    },
+    {
+      "filename": "Design Space Explorer.py",
+      "purpose": "Performs automated exploration of design alternatives and optimization of chiplet configurations based on performance metrics",
+      "complexity": "medium"
+    },
+    {
+      "filename": "Validation and Debugging System.py",
+      "purpose": "Validates generated RTL implementations and provides adaptive debugging assistance through LLM agents",
+      "complexity": "medium"
+    }
+  ]
+}

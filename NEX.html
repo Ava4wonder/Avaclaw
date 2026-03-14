@@ -1,0 +1,1659 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <meta charset="UTF-8">
+    <title>NEX</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdn.mathpix.com/fonts/cmu.css"/>
+    <style>html,body {
+  width: 100%;
+  height: 100%;
+}
+*, *::before,*::after {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  color: #1E2029;
+  font-size: 14px;
+  line-height: normal;
+}
+hr {
+  box-sizing: content-box;
+  height: 0;
+  overflow: visible;
+}
+h1, h2, h3, h4, h5, h6 {
+  margin-top: 0;
+  margin-bottom: 0.5em;
+  color: rgba(0, 0, 0, 0.85);
+  font-weight: 500;
+}
+p {
+  margin-top: 0;
+  margin-bottom: 1em;
+}
+ol, ul, dl {
+  margin-top: 0;
+  margin-bottom: 1em;
+}
+ol ol, ul ul, ol ul, ul ol {
+  margin-bottom: 0;
+}
+dt {
+  font-weight: 500;
+}
+dd {
+  margin-bottom: 0.5em;
+  margin-left: 0;
+}
+blockquote {
+  margin: 0 0 1em;
+}
+dfn {
+  font-style: italic;
+}
+b, strong {
+  font-weight: bolder;
+}
+small {
+  font-size: 80%;
+}
+sub, sup {
+  position: relative;
+  font-size: 75%;
+  line-height: 0;
+  vertical-align: baseline;
+}
+sub {
+  bottom: -0.25em;
+}
+sup {
+  top: -0.5em;
+}
+a {
+  color: #0B93ff;
+  text-decoration: none;
+  background-color: transparent;
+  outline: none;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+a:hover {
+  color: #33aaff;
+}
+a:active {
+  color: #0070d9;
+}
+a:active, a:hover {
+  text-decoration: none;
+  outline: 0;
+}
+a[disabled] {
+  color: rgba(0, 0, 0, 0.25);
+  cursor: not-allowed;
+  pointer-events: none;
+}
+pre, code, kbd, samp {
+  font-size: 1em;
+}
+pre {
+  margin-top: 0;
+  margin-bottom: 1em;
+  overflow: auto;
+}
+figure {
+  margin: 0 0 1em;
+}
+img {
+  vertical-align: middle;
+  border-style: none;
+}
+svg:not(:root) {
+  overflow: hidden;
+}
+table {
+  border-collapse: collapse;
+}
+caption {
+  padding-top: 0.75em;
+  padding-bottom: 0.3em;
+  color: rgba(0, 0, 0, 0.45);
+  text-align: left;
+  caption-side: bottom;
+}
+th {
+  text-align: inherit;
+}
+mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+  min-height: 1px;
+  min-width: 1px;
+}
+
+mjx-container[jax="SVG"] > svg a {
+  fill: blue;
+  stroke: blue;
+}
+
+mjx-assistive-mml {
+  position: absolute !important;
+  top: 0px;
+  left: 0px;
+  clip: rect(1px, 1px, 1px, 1px);
+  padding: 1px 0px 0px 0px !important;
+  border: 0px !important;
+  display: block !important;
+  width: auto !important;
+  overflow: hidden !important;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+mjx-assistive-mml[display="block"] {
+  width: 100% !important;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][display="true"][width="full"] {
+  display: flex;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line], svg[data-table] > g > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame], svg[data-table] > g > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed, svg[data-table] > g > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted, svg[data-table] > g > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > g > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"] path[data-c], mjx-container[jax="SVG"] use[data-c] {
+  stroke-width: 3;
+}
+#setText > div {
+  justify-content: inherit;
+  margin-top: 0;
+  margin-bottom: 1em;
+  
+  
+}
+#setText div:last-child {
+  margin-bottom: 0 !important;
+}
+#setText > br, #preview-content br {
+  line-height: 1.2;
+}
+#preview-content > div {
+  margin-top: 0;
+  margin-bottom: 1em;
+  
+}
+.proof > div,
+#preview-content .proof > div, #setText .proof > div,
+.theorem > div,
+#preview-content .theorem > div, #setText .theorem > div {
+  margin-top: 1rem;
+}
+mjx-container {
+  text-indent: 0;
+  overflow-y: hidden;
+  overflow-x: auto;
+  padding-top: 1px;
+  padding-bottom: 1px;
+  
+}
+.math-inline mjx-container {
+  display: inline-block !important;
+  page-break-inside: avoid;
+  max-width: 100%;
+  padding: 0;
+  line-height: 0;
+}
+.math-inline[data-overflow="visible"] mjx-container {
+  overflow: visible;
+}
+.math-inline mjx-container mjx-assistive-mml {
+  max-width: 100%;
+}
+.math-block {
+  align-items: center;
+  page-break-after: auto;
+  page-break-inside: avoid;
+  margin: 0;
+  display: block;
+}
+.math-inline {
+  display: inline-flex;
+  max-width: 100%;
+}
+.math-block[data-width="full"] {
+  overflow-x: auto;
+  display: flex;
+}
+.math-block[data-width="full"] mjx-container[jax=SVG][display=true] {
+  display: flex;
+  flex: 1 1;
+  justify-content: center;
+}
+svg .math-inline {
+  display: initial;
+  max-width: initial;
+}
+svg .math-inline mjx-container {
+  max-width: initial;
+}
+svg mjx-container {
+  overflow: visible;
+  padding: 0;
+}
+svg .math-block[data-width="full"] {
+  overflow: visible;
+}
+.math-block, .math-inline {
+  --mmd-highlight-color: rgba(0, 147, 255, 0.25);
+  --mmd-highlight-text-color: #1e2029;
+}
+.math-block[data-highlight-color] mjx-container[jax="SVG"] > svg {
+  background-color: var(--mmd-highlight-color);
+}
+.math-block[data-highlight-text-color] mjx-container[jax="SVG"] > svg {
+  color: var(--mmd-highlight-text-color);
+}
+.math-inline[data-highlight-color] mjx-container[jax="SVG"] {
+  background-color: var(--mmd-highlight-color);
+}
+.math-inline[data-highlight-text-color] mjx-container[jax="SVG"] {
+  color: var(--mmd-highlight-text-color);
+}
+.math-block p {
+  flex-shrink: 1;
+}
+.math-block mjx-container {
+  margin: 0 !important;
+}
+.math-error {
+  background-color: yellow;
+  color: red;
+}
+#preview-content img, #setText img {
+  max-width: 100%;
+}
+#preview-content blockquote, #setText blockquote {
+  page-break-inside: avoid;
+  color: #666;
+  margin: 0 0 1em 0;
+  padding-left: 3em;
+  border-left: .5em solid #eee;
+}
+#preview-content pre, #setText pre {
+  border: none;
+  padding: 0;
+  overflow: auto;
+  font-size: 85%;
+  line-height: 1.45;
+  border-radius: 6px;
+  box-sizing: border-box;
+  background: #f8f8fa;
+}
+#preview-content pre code, #setText pre code {
+  padding: 1rem;
+  display: block;
+  overflow-x: auto;
+  line-height: 24px;
+}
+#preview-content table, #setText table {
+  display: table;
+  overflow: auto;
+  max-width: 100%;
+  border-collapse: collapse;
+  page-break-inside: avoid;
+  margin-bottom: 1em;
+}
+#preview-content table th, #setText table th {
+  text-align: center;
+  font-weight: bold;
+}
+#preview-content table td, #setText table td,
+#preview-content table th, #setText table th {
+  border: 1px solid #dfe2e5;
+  padding: 6px 13px;
+}
+#preview-content table tr, #setText table tr {
+  background-color: #fff;
+  border-top: 1px solid #c6cbd1;
+}
+#preview-content table tr:nth-child(2n), #setText table tr:nth-child(2n) {
+  background-color: #f6f8fa;
+}
+.main-title,
+#preview-content .main-title, #setText .main-title {
+  text-align: center;
+  line-height: 1.2;
+  margin: 0 auto 1em auto;
+}
+.author,
+#preview-content .author, #setText .author {
+  text-align: center;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.author p,
+#preview-content .author p, #setText .author p {
+  min-width: 30%;
+  max-width: 50%;
+  padding: 0 7px;
+}
+.author > p > span,
+#preview-content .author > p > span, #setText .author > p > span {
+  display: block;
+  text-align: center;
+}
+.section-title,
+#preview-content .section-title, #setText .section-title {
+  margin-top: 1.5em;
+}
+.abstract,
+#preview-content .abstract, #setText .abstract {
+  text-align: justify;
+  margin-bottom: 1em;
+}
+.abstract p,
+#preview-content .abstract p, #setText .abstract p {
+  margin-bottom: 0;
+}
+#preview-content sup, #setText sup {
+  top: -.5em;
+  position: relative;
+  font-size: 75%;
+  line-height: 0;
+  vertical-align: baseline;
+}
+.text-url,
+#preview-content .text-url, #setText .text-url {
+  color: #0B93ff;
+  cursor: text;
+  pointer-events: none;
+}
+.text-url a:hover,
+#preview-content .text-url a:hover, #setText .text-url a:hover {
+  color: #0B93ff;
+}
+mark,
+#preview-content mark, #setText mark {
+  background-color: #feffe6;
+}
+span[data-underline-type] mark,
+#preview-content span[data-underline-type] mark,
+#setText span[data-underline-type] mark {
+  background: inherit;
+  background-color: #feffe6;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+*[data-has-dotfill] {
+  position: relative;
+  overflow: hidden;
+}
+*[data-has-dotfill] .dotfill::after {
+  position: absolute;
+  padding-left: .25ch;
+  content: " . . . . . . . . . . . . . . . . . . . "
+      ". . . . . . . . . . . . . . . . . . . . . . . "
+      ". . . . . . . . . . . . . . . . . . . . . . . "
+      ". . . . . . . . . . . . . . . . . . . . . . . "
+      ". . . . . . . . . . . . . . . . . . . . . . . "
+      ". . . . . . . . . . . . . . . . . . . . . . . "
+      ". . . . . . . . . . . . . . . . . . . . . . . ";
+  text-align: right;
+}
+.smiles,
+#preview-content .smiles, #setText .smiles {
+  text-align: center;
+}
+div.svg-container,
+#preview-content > div.svg-container,
+#setText > div.svg-container {
+  display: flex;
+  justify-content: center;
+}
+@media print {
+  #preview {
+    font-size: 10pt !important;
+  }
+  .math-block svg, .math-inline svg {
+    shape-rendering: crispEdges;
+    margin-top: 1px;
+  }
+  #preview-content img, #setText img {
+    display: block;
+  }
+  #preview-content .figure_img img, #setText .figure_img img {
+    display: inline;
+  }
+  #preview-content h1, #preview-content h2, #preview-content h3,
+  #preview-content h4, #preview-content h5, #preview-content h6,
+  #setText h1, #setText h2, #setText h3,
+  #setText h4, #setText h5, #setText h6 {
+    page-break-inside: avoid;
+    position: relative;
+    border: 2px solid transparent;
+  }
+  #preview-content h1::after, #preview-content h2::after, #preview-content h3::after,
+  #preview-content h4::after, #preview-content h5::after, #preview-content h6::after,
+  #setText h1::after, #setText h2::after, #setText h3::after,
+  #setText h4::after, #setText h5::after, #setText h6::after {
+    content: "";
+    display: block;
+    height: 100px;
+    margin-bottom: -100px;
+    position: relative;
+  }
+}
+#preview-content code, #setText code {
+  font-family: Inconsolata;
+  font-size: inherit;
+  display: initial;
+  background: #f8f8fa;
+}
+#preview-content .mmd-highlight code, #setText .mmd-highlight code,
+#preview-content pre.mmd-highlight code, #setText pre.mmd-highlight code {
+  background-color: transparent;
+}
+#preview-content pre code, #setText pre code {
+  font-family: 'DM Mono', Inconsolata, monospace;
+  color: #333;
+  font-size: 15px;
+}
+.hljs-comment, .hljs-quote,
+#preview-content .hljs-comment, #setText .hljs-comment,
+#preview-content .hljs-quote, #setText .hljs-quote {
+  color: #998;
+  font-style: italic;
+}
+.hljs-command,
+#preview-content .hljs-command, #setText .hljs-command {
+  color: #005cc5;
+}
+.hljs-keyword, .hljs-selector-tag, .hljs-subst,
+#preview-content .hljs-keyword, #setText .hljs-keyword,
+#preview-content .hljs-selector-tag, #setText .hljs-selector-tag,
+#preview-content .hljs-subst, #setText .hljs-subst {
+  color: #d73a49;
+  font-weight: bold;
+}
+.hljs-number, .hljs-literal, .hljs-variable,
+.hljs-template-variable, .hljs-tag .hljs-attr,
+#preview-content .hljs-number, #setText .hljs-number,
+#preview-content .hljs-literal, #setText .hljs-literal,
+#preview-content .hljs-variable, #setText .hljs-variable,
+#preview-content .hljs-template-variable, #setText .hljs-template-variable,
+#preview-content .hljs-tag .hljs-attr, #setText .hljs-tag .hljs-attr {
+  color: #005cc5;
+}
+.hljs-string, .hljs-doctag,
+#preview-content .hljs-string, #setText .hljs-string,
+#preview-content .hljs-doctag, #setText .hljs-doctag {
+  color: #24292e;
+}
+.hljs-title, .hljs-section, .hljs-selector-id,
+#preview-content .hljs-title, #setText .hljs-title,
+#preview-content .hljs-section, #setText .hljs-section,
+#preview-content .hljs-selector-id, #setText .hljs-selector-id {
+  color: #6f42c1;
+  font-weight: bold;
+}
+.hljs-subst,
+#preview-content .hljs-subst, #setText .hljs-subst {
+  font-weight: normal;
+}
+.hljs-type, .hljs-class .hljs-title,
+#preview-content .hljs-type, #setText .hljs-type,
+#preview-content .hljs-class .hljs-title, #setText .hljs-class .hljs-title {
+  color: #458;
+  font-weight: bold;
+}
+.hljs-tag, .hljs-name, .hljs-attribute,
+#preview-content .hljs-tag, #setText .hljs-tag,
+#preview-content .hljs-name, #setText .hljs-name,
+#preview-content .hljs-attribute, #setText .hljs-attribute {
+  color: #000080;
+  font-weight: normal;
+}
+.hljs-regexp, .hljs-link,
+#preview-content .hljs-regexp, #setText .hljs-regexp,
+#preview-content .hljs-link, #setText .hljs-link {
+  color: #009926;
+}
+.hljs-symbol, .hljs-bullet,
+#preview-content .hljs-symbol, #setText .hljs-symbol,
+#preview-content .hljs-bullet, #setText .hljs-bullet {
+  color: #990073;
+}
+.hljs-built_in, .hljs-builtin-name,
+#preview-content .hljs-built_in, #setText .hljs-built_in,
+#preview-content .hljs-builtin-name, #setText .hljs-builtin-name {
+  color: #24292e;
+}
+.hljs-meta,
+#preview-content .hljs-meta, #setText .hljs-meta {
+  color: #999;
+  font-weight: bold;
+}
+.hljs-meta-keyword,
+#preview-content .hljs-meta-keyword, #setText .hljs-meta-keyword {
+  color: #d73a49;
+}
+.hljs-meta-string,
+#preview-content .hljs-meta-string, #setText .hljs-meta-string {
+  color: #032f62;
+}
+.hljs-deletion,
+#preview-content .hljs-deletion, #setText .hljs-deletion {
+  background: #fdd;
+}
+.hljs-addition,
+#preview-content .hljs-addition, #setText .hljs-addition {
+  background: #dfd;
+}
+.hljs-emphasis,
+#preview-content .hljs-emphasis, #setText .hljs-emphasis {
+  font-style: italic;
+}
+.hljs-strong,
+#preview-content .hljs-strong, #setText .hljs-strong {
+  font-weight: bold;
+}
+.table_tabular,
+#preview-content .table_tabular, #setText .table_tabular {
+  overflow-x: auto;
+  padding: 0 2px 0.5em 2px;
+}
+.tabular,
+#preview-content .tabular, #setText .tabular {
+  display: inline-table !important;
+  width: auto;
+  table-layout: auto;
+  border-collapse: collapse;
+  border-spacing: 0;
+  margin: 0 0 1em;
+  font-size: inherit;
+  height: fit-content;
+}
+.tabular th,
+#preview-content .tabular th, #setText .tabular th {
+  border: none !important;
+  padding: 6px 13px;
+  background-color: transparent;
+  font-weight: bold;
+}
+.tabular tr,
+#preview-content .tabular tr, #setText .tabular tr {
+  border-top: none !important;
+  border-bottom: none !important;
+  background-color: transparent;
+}
+.tabular td,
+#preview-content .tabular td, #setText .tabular td {
+  border-style: none !important;
+  background-color: #fff;
+  border-color: #000 !important;
+  word-break: keep-all;
+  padding: 0.1em 0.5em !important;
+}
+.tabular td > p,
+#preview-content .tabular td > p, #setText .tabular td > p {
+  margin-bottom: 0;
+  margin-top: 0;
+}
+.tabular td._empty,
+#preview-content .tabular td._empty, #setText .tabular td._empty {
+  height: 1.3em;
+}
+.tabular td .f,
+#preview-content .tabular td .f, #setText .tabular td .f {
+  opacity: 0;
+}
+#preview-content .sub-table table, #setText .sub-table table {
+  margin-bottom: 0;
+}
+html[data-theme="dark"] .tabular tr,
+html[data-theme="dark"] #preview-content .tabular tr, html[data-theme="dark"] #setText .tabular tr,
+html[data-theme="dark"] .tabular td,
+html[data-theme="dark"] #preview-content .tabular td, html[data-theme="dark"] #setText .tabular td {
+  background-color: #202226;
+  border-color: #fff !important;
+}
+.figure_img,
+#preview-content .figure_img, #setText .figure_img {
+  margin-bottom: 0.5em;
+  overflow-x: auto;
+}
+div.figure_img img,
+#preview-content div.figure_img img, #setText div.figure_img img {
+  display: inline;
+  margin: 0;
+}
+ol.enumerate, ul.itemize,
+#preview-content ol.enumerate, #setText ol.enumerate,
+#preview-content ul.itemize, #setText ul.itemize {
+  padding-inline-start: 40px;
+  margin: 0 0 1em 0;
+}
+li > ol.enumerate, li > ul.itemize,
+#preview-content li > ol.enumerate, #setText li > ol.enumerate,
+#preview-content li > ul.itemize, #setText li > ul.itemize {
+  margin: 0;
+}
+ul.itemize > li,
+#preview-content ul.itemize > li, #setText ul.itemize > li {
+  position: relative;
+  min-height: 1.4em;
+  margin-bottom: 0;
+}
+.enumerate > .li_enumerate,
+#preview-content .enumerate > .li_enumerate, #setText .enumerate > .li_enumerate {
+  margin-bottom: 0;
+}
+.itemize > li > span.li_level, .li_enumerate.not_number > span.li_level,
+#preview-content .itemize > li > span.li_level, #setText .itemize > li > span.li_level,
+#preview-content .li_enumerate.not_number > span.li_level, #setText .li_enumerate.not_number > span.li_level {
+  position: absolute;
+  right: 100%;
+  white-space: nowrap;
+  width: max-content;
+  display: flex;
+  justify-content: flex-end;
+  padding-right: 10px;
+  box-sizing: border-box;
+}
+.li_enumerate.not_number,
+#preview-content .li_enumerate.not_number, #setText .li_enumerate.not_number {
+  position: relative;
+  display: inline-block;
+  list-style-type: none;
+  min-height: 1.4em;
+}
+.itemize > li > span.li_level .math-inline,
+.enumerate > li > span.li_level .math-inline,
+#preview-content .itemize > li > span.li_level .math-inline,
+#setText .itemize > li > span.li_level .math-inline,
+#preview-content .enumerate > li > span.li_level .math-inline,
+#setText .enumerate > li > span.li_level .math-inline {
+  display: inline-block;
+}
+#preview {
+  font-family: 'CMU Serif', 'Georgia', Helvetica, Arial, sans-serif;
+  font-size: 17px;
+  visibility: visible;
+  word-break: break-word;
+  padding: 2.5em;
+  max-width: 800px;
+  margin: auto;
+  box-sizing: content-box;
+}
+#preview h1, #preview h2, #preview h3, #preview h4, #preview h5, #preview strong {
+  font-family: 'CMU Serif Bold', 'Georgia', Helvetica, Arial, sans-serif;
+}
+#preview i, #preview em {
+  font-family: 'CMU Serif Italic', 'Georgia', Helvetica, Arial, sans-serif;
+}
+.mmd-menu {
+  max-width: 320px;
+  position: absolute;
+  background-color: white;
+  color: black;
+  width: auto;
+  padding: 5px 0;
+  border: 1px solid #E5E6EB;
+  margin: 0;
+  cursor: default;
+  font: menu;
+  text-align: left;
+  text-indent: 0;
+  text-transform: none;
+  line-height: normal;
+  letter-spacing: normal;
+  word-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  float: none;
+  z-index: 201;
+  border-radius: 5px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -khtml-border-radius: 5px;
+  box-shadow: 0 10px 20px #808080;
+  -webkit-box-shadow: 0 10px 20px #808080;
+  -moz-box-shadow: 0 10px 20px #808080;
+  -khtml-box-shadow: 0 10px 20px #808080;
+}
+.mmd-menu:focus { outline: none; }
+.mmd-menu.mmd-menu-sm {
+  max-width: 100vw;
+  padding-bottom: 34px;
+  border-radius: 0;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  -khtml-border-radius: 0;
+}
+.mmd-menu-item-icon {
+  color: #1E2029;
+  margin-left: auto;
+  align-items: center;
+  display: none;
+  flex-shrink: 0;
+}
+.mmd-menu-item {
+  padding: 8px 1.25rem;
+  display: flex;
+  background: transparent;
+  height: 52px;
+  max-height: 52px;
+}
+.mmd-menu-item:focus { outline: none; }
+.mmd-menu-item.active {
+  background-color: #e1e0e5;
+}
+.mmd-menu-item.active .mmd-menu-item-icon {
+  display: flex;
+}
+.mmd-menu-item-container {
+  overflow: hidden;
+}
+.mmd-menu-item-title {
+  color: #1E2029;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  font-size: 14px;
+  line-height: 20px;
+}
+.mmd-menu-item-value {
+  color: #7d829c;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  font-size: 12px;
+  line-height: 16px;
+}
+html[data-theme="dark"] .mmd-menu-item-title {
+  color: #ebefe7;
+}
+html[data-theme="dark"] .mmd-menu-item.active .mmd-menu-item-title {
+  color: #1E2029;
+}
+html[data-theme="dark"] .mmd-menu {
+  background-color: #33363a;
+}
+.mmd-context-menu-overlay {
+  background: rgba(0, 0, 0, 0.56);
+}
+.ClipboardButton {
+  padding: 0;
+  margin: 0.5rem;
+  display: inline-block;
+  cursor: pointer;
+  color: rgb(36, 41, 47);
+  background: rgb(246, 248, 250);
+  border-radius: 6px;
+  border: 1px solid rgba(31, 35, 40, 0.15);
+  box-shadow: rgba(31, 35, 40, 0.04) 0 1px 0 0, rgba(255, 255, 255, 0.25) 0 1px 0 0 inset;
+  position: relative;
+}
+.ClipboardButton:hover {
+  background-color: rgb(243, 244, 246);
+  border-color: rgba(31, 35, 40, 0.15);
+  transition-duration: .1s;
+}
+td .mmd-clipboard-copy-container {
+  line-height: 0;
+}
+td .ClipboardButton {
+  margin: 1px;
+  line-height: 0;
+}
+td .ClipboardButton .mmd-clipboard-icon {
+  margin: 1px !important;
+  transform: scale(0.6);
+}
+.mmd-clipboard-icon {
+  fill: currentColor;
+  vertical-align: text-bottom;
+}
+.mmd-clipboard-copy-icon {
+  color: rgb(101, 109, 118);
+}
+.mmd-clipboard-check-icon {
+  color: rgb(26, 127, 55);
+}
+.mmd-tooltipped-no-delay:hover::before,
+.mmd-tooltipped-no-delay:hover::after {
+  animation-delay: 0s;
+}
+.mmd-tooltipped:hover::before,
+.mmd-tooltipped:hover::after {
+  display: inline-block;
+  text-decoration: none;
+  animation-name: tooltip-appear;
+  animation-duration: .1s;
+  animation-fill-mode: forwards;
+  animation-timing-function: ease-in;
+  animation-delay: .4s;
+}
+.mmd-tooltipped-w::before {
+  top: 50%;
+  bottom: 50%;
+  left: -7px;
+  margin-top: -6px;
+  border-left-color: rgb(36, 41, 47);
+}
+.mmd-tooltipped::before {
+  position: absolute;
+  z-index: 1000001;
+  display: none;
+  width: 0;
+  height: 0;
+  color: rgb(36, 41, 47);
+  pointer-events: none;
+  content: "";
+  border: 6px solid transparent;
+  opacity: 0;
+}
+.mmd-tooltipped-w::after {
+  right: 100%;
+  bottom: 50%;
+  margin-right: 6px;
+  transform: translateY(50%);
+}
+.mmd-tooltipped::after {
+  position: absolute;
+  z-index: 1000000;
+  display: none;
+  padding: 0.5em 0.75em;
+  font: normal normal 11px/1.5 'CMU Serif', 'Georgia', Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: subpixel-antialiased;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  text-shadow: none;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: break-word;
+  white-space: pre;
+  pointer-events: none;
+  content: attr(aria-label);
+  background: rgb(36, 41, 47);
+  border-radius: 6px;
+  opacity: 0;
+}</style>
+</head>
+<body>
+  <div id="preview" class="preview scrollEditor">
+    <div id="container-ruller" />
+    <div id="preview-content">
+      <h1 type="title" class="main-title preview-paragraph-0 preview-line 0 1 2" id="fast-end-to-end-performance-simulation-of-accelerated-hardware-software-stacks" data_line_start="0" data_line_end="2" data_line="0,3" count_line="3">
+Fast End-to-End Performance Simulation of Accelerated Hardware-Software Stacks </h1>
+<div class="preview-paragraph-4 preview-line 4 5 6" data_line_start="4" data_line_end="6" data_line="4,7" count_line="3"><div class="author">
+          <p><span>Jiacheng <span class="math-inline "><math xmlns="http://www.w3.org/1998/Math/MathML">
+  <msup>
+    <mrow data-mjx-texclass="ORD">
+      <mi data-mjx-auto-op="false">Ma</mi>
+    </mrow>
+    <mrow data-mjx-texclass="ORD">
+      <mo>&#x2020;</mo>
+    </mrow>
+  </msup>
+</math></span> Jonas Kaufmann* Emilien Guandalino <span class="math-inline "><math xmlns="http://www.w3.org/1998/Math/MathML">
+  <msup>
+    <mrow data-mjx-texclass="ORD"></mrow>
+    <mrow data-mjx-texclass="ORD">
+      <mo>&#x2020;</mo>
+    </mrow>
+  </msup>
+</math></span></span><span>Rishabh Iyer <span class="math-inline "><math xmlns="http://www.w3.org/1998/Math/MathML">
+  <msup>
+    <mrow data-mjx-texclass="ORD"></mrow>
+    <mrow data-mjx-texclass="ORD">
+      <mo>&#x2020;</mo>
+      <mi mathvariant="normal">&#xA7;</mi>
+    </mrow>
+  </msup>
+</math></span> Thomas Bourgeat <span class="math-inline "><math xmlns="http://www.w3.org/1998/Math/MathML">
+  <msup>
+    <mrow data-mjx-texclass="ORD"></mrow>
+    <mrow data-mjx-texclass="ORD">
+      <mo>&#x2020;</mo>
+    </mrow>
+  </msup>
+</math></span> George Candea <span class="math-inline "><math xmlns="http://www.w3.org/1998/Math/MathML">
+  <msup>
+    <mrow data-mjx-texclass="ORD"></mrow>
+    <mrow data-mjx-texclass="ORD">
+      <mo>&#x2020;</mo>
+    </mrow>
+  </msup>
+</math></span></span></p>
+        </div></div>
+<div class="preview-paragraph-7 preview-line 7" data_line_start="7" data_line_end="7" data_line="7,8" count_line="1"><span class="math-inline "><math xmlns="http://www.w3.org/1998/Math/MathML">
+  <msup>
+    <mrow data-mjx-texclass="ORD"></mrow>
+    <mrow data-mjx-texclass="ORD">
+      <mo>&#x2020;</mo>
+    </mrow>
+  </msup>
+</math></span> EPFL *MPI-SWS <span class="math-inline "><math xmlns="http://www.w3.org/1998/Math/MathML">
+  <msup>
+    <mrow data-mjx-texclass="ORD"></mrow>
+    <mrow data-mjx-texclass="ORD">
+      <mi mathvariant="normal">&#xA7;</mi>
+    </mrow>
+  </msup>
+</math></span> UC Berkeley</div>
+<div class="abstract preview-paragraph-9 preview-line 9 10 11 12 13 14 15" style="width: 80%; margin: 0 auto 1em auto; font-size: .9em;" data_line_start="9" data_line_end="15" data_line="9,16" count_line="7">
+<h4 id="abstract_head" class="abstract_head" style="text-align: center;">
+Abstract</h4>
+<p style="text-indent: 1em;">The increased use of hardware acceleration has created a need for efficient simulators of the end-to-end performance of accelerated hardware-software stacks: both software and hardware developers need to evaluate the impact of their design choices on overall system performance. However, accurate full-stack simulations are extremely slow, taking hours to simulate just 1 second of real execution. As a result, development of accelerated stacks is non-interactive, and this hurts productivity.</p>
+<p style="text-indent: 1em;">We propose a way to simulate end-to-end performance that is orders-of-magnitude faster yet still accurate. The main idea is to take a minimalist approach: We simulate only those components of the system that are not available, and run the rest natively. Even for unavailable components, we simulate cycleaccurately only aspects that are performance-critical. The key challenge is how to correctly and efficiently synchronize the natively executing components with the simulated ones.</p>
+<p style="text-indent: 1em;">Using this approach, we demonstrate <span class="math-inline "><math xmlns="http://www.w3.org/1998/Math/MathML">
+  <mn>6</mn>
+  <mo>&#xD7;</mo>
+</math></span> to <span class="math-inline "><math xmlns="http://www.w3.org/1998/Math/MathML">
+  <mn>879</mn>
+  <mo>&#xD7;</mo>
+</math></span> speedup compared to the state of the art, across three different hardwareaccelerated stacks. The accuracy of simulated time is high: 7% error rate on average and <span class="math-inline "><math xmlns="http://www.w3.org/1998/Math/MathML">
+  <mn>14</mn>
+  <mi mathvariant="normal">%</mi>
+</math></span> in the worst case, assuming CPU cores are not underprovisioned. Reducing simulation time down to seconds enables interactive development of accelerated stacks, which was until now not possible.</p>
+</div>
+<h2 type="section" data-unnumbered="true" class="section-title preview-paragraph-17 preview-line 17" id="1-introduction" data_line_start="17" data_line_end="17" data_line="17,18" count_line="1">
+1 Introduction</h2>
+<div class="preview-paragraph-19 preview-line 19" data_line_start="19" data_line_end="19" data_line="19,20" count_line="1">From datacenters to hand-held devices, modern systems increasingly rely on hardware accelerators to speed up a variety of computations, including machine learning [4, 27, 28, 45], video processing [16,48], compression [53], encryption [12, 25], and system infrastructure tasks [3,24,31].</div>
+<div class="preview-paragraph-29 preview-line 29" data_line_start="29" data_line_end="29" data_line="29,30" count_line="1">Building such accelerated systems requires repeated fullstack simulations, i.e., simulations that model and evaluate the entire computing stack, from the hardware (e.g., processors, memory, accelerators) all the way to the applications (e.g., user programs, libraries), while executing the actual software. For example, systems developers do not always have access to physical accelerators-due to budget constraints, or because the accelerator has not been taped out yet-and thus rely on simulation to develop and optimize the software stack. As another example, increasingly more organizations co-design in-house hardware accelerators together with the software that uses them [4, 5, 24, 27, 31, 40, 41]—both the hardware and software engineers employ full-stack simulation to evaluate the end-to-end benefits of the hardware design choices before committing to silicon fabrication. As a result, full-stack simulators have become day-to-day tools not only for hardware engineers and microarchitects but also for systems developers who build and optimize accelerator-integrated software stacks.</div>
+<div class="preview-paragraph-31 preview-line 31" data_line_start="31" data_line_end="31" data_line="31,32" count_line="1">However, full-stack simulation incurs serious slowdowns, on the order of <span class="math-inline "><math xmlns="http://www.w3.org/1998/Math/MathML">
+  <mn>10</mn>
+  <mo>,</mo>
+  <mn>000</mn>
+  <mo>&#xD7;</mo>
+</math></span> relative to native execution: simulating 1 second of execution time takes hours of wall-clock time [13]. The reason is that every component in the system is simulated with accurate, computationally expensive models. The outcome is that development of accelerated hardware-software stacks is bottlenecked by simulation time. This forces developers into productivity-sapping batch-mode development: they evaluate new changes by grouping microbenchmark simulations and then waiting hours or days for the results. This is reminiscent of programming with punch cards in the 60s.</div>
+<div class="preview-paragraph-33 preview-line 33" data_line_start="33" data_line_end="33" data_line="33,34" count_line="1">Much of this slowdown stems from a design that is historically justified: simulators were originally meant for microarchitects, who relied on cycle-level simulation to inspect microarchitectural state in detail and to experiment with modifications to low-level hardware components. This level of visibility was essential for their needs. For systems developers higher up in the stack, this inherited cycle-level visibility is no longer justified, as it introduces overhead without delivering proportional value for systems developers. Full-stack simulation calls for a different set of trade-offs that better match the shift in needs and how systems are built today-more integrated, spanning many layers, and centered on system-level software-hardware interactions. We therefore ask the question: If a full-stack simulator offered only the visibility needed by systems developers, how much faster could it be?</div>
+<div class="preview-paragraph-35 preview-line 35" data_line_start="35" data_line_end="35" data_line="35,36" count_line="1">To answer this, we propose a design for full-stack simulation based on the following two-part minimality principle: (1) simulate only components that are not available, and run natively whatever is available (unless finer-grained visibility is desired, in which case they should be simulated); and (2) for unavailable components, simulate in a cycle-accurate manner only aspects that are performance-critical, i.e., necessary to answer the desired performance questions with the desired level of granularity-for the rest, simulate just enough for the stack to work correctly. For example, instead of running in a simulator like gem5 [9], software can be executed natively if the system's target CPU is available, provided that microarchitectural visibility of the CPU is unnecessary and the CPU internals are not being modified. Similarly, hardware accelerators can be simulated at the microarchitectural level instead of gate-level, saving the overhead of gate-level simulation if systems developers do not require it. The key challenge in implementing this principle is synchronizing fast, natively executing components with slower, simulated ones, in a way that avoids undue slowdown and preserves overall accuracy.</div>
+<div class="preview-paragraph-37 preview-line 37" data_line_start="37" data_line_end="37" data_line="37,38" count_line="1">Our design has two components: a native-execution orchestrator (NEX) and an accelerator di-simulator (DSim). NEX embodies part (1) of the minimality principle by enabling the co-existence of natively executing software with simulated accelerators, and then synchronizing the native and simulated executions strictly when necessary. The basic idea of simulating only what must be simulated appeared already in the Wisconsin Wind Tunnel [49]. However, doing this for a full system stack running on CPUs alongside hardware accelerators (as opposed to a parallel program running on a shared-memory multiprocessor [49]), and weaving together the resulting components, requires a very different design.</div>
+<div class="preview-paragraph-39 preview-line 39" data_line_start="39" data_line_end="39" data_line="39,40" count_line="1">DSim embodies part (2) of the principle by simulating an accelerator circuit on two decoupled tracks (i.e., di-simulation): the performance track computes the number of cycles needed by the accelerator to process each request it receives, and the functionality track computes the actual response of the accelerator. This split approach is inspired in part by trace-based simulation [42,56,57,62]. The performance track employs the recently proposed Latency Petri Net (LPN) abstraction [37]. An LPN provides a basis for cycle-accurate simulation of only the performance-critical aspects of an accelerator (e.g., microarchitecture-level simulation) while abstracting away the low-level, cycle-by-cycle updates of gates and wires. The functional track employs standard functional simulation.</div>
+<div class="preview-paragraph-41 preview-line 41 42" data_line_start="41" data_line_end="42" data_line="41,43" count_line="2">We evaluate a prototype of NEX+DSim on three hardwareaccelerated stacks: deep learning, RPC message serialization, and JPEG image decoding. We demonstrate that NEX and DSim together are <span class="math-inline "><math xmlns="http://www.w3.org/1998/Math/MathML">
+  <mn>6</mn>
+  <mo>&#xD7;</mo>
+</math></span> to <span class="math-inline "><math xmlns="http://www.w3.org/1998/Math/MathML">
+  <mn>879</mn>
+  <mo>&#xD7;</mo>
+</math></span> faster than state-of-the-art fullstack simulation. Simulation accuracy is high: across all evaluated accelerators, the simulated time is at worst within <span class="math-inline "><math xmlns="http://www.w3.org/1998/Math/MathML">
+  <mn>14</mn>
+  <mi mathvariant="normal">%</mi>
+</math></span> of the baseline, and within 7% on average, unless CPU cores are underprovisioned. For the deep learning stack, we also validate NEX+DSim against FPGA-based testbeds: simulated time is<br>
+within <span class="math-inline "><math xmlns="http://www.w3.org/1998/Math/MathML">
+  <mn>6</mn>
+  <mi mathvariant="normal">%</mi>
+</math></span> of the real system on average, and at worst within <span class="math-inline "><math xmlns="http://www.w3.org/1998/Math/MathML">
+  <mn>12</mn>
+  <mi mathvariant="normal">%</mi>
+</math></span>. Unlike regular system simulators, NEX's native execution enables it to run arbitrary software stacks with very little configuration or cross-compilation. Furthermore, NEX and DSim can be used independently of each other, and can thus be integrated into existing workflows that rely on proprietary RTL or processor simulators. We define general interfaces for such integrations and evaluate the possible combinations for our three accelerated stacks.</div>
+<div class="preview-paragraph-44 preview-line 44" data_line_start="44" data_line_end="44" data_line="44,45" count_line="1">The visibility-vs-speed trade-off inherent in the minimality principle makes the orders-of-magnitude speedup come at the price of reduced visibility: NEX+DSim does not produce detailed hardware-level execution traces. Instead, NEX+DSim only provides coarse-grained traces, reporting how cycles are spent as execution weaves between CPU threads and accelerators. Despite this limitation, we believe that the use cases described above-developing an accelerated stack without the accelerator, and software/hardware co-design-are better served by fast simulation with coarse-grained visibility.</div>
+<div class="preview-paragraph-46 preview-line 46" data_line_start="46" data_line_end="46" data_line="46,47" count_line="1">Using NEX and DSim, developers can interactively simulate a full system stack and quickly iterate over design changes in both the software and accelerators. Coarse-grained traces can help developers locate bottlenecks in the full system stack more easily. And end-to-end full-stack simulation can now be done much earlier in the design process. For final functional and performance verification, slower, fully cycle-accurate simulators can be used just before deployment or tapeout.</div>
+<div class="preview-paragraph-48 preview-line 48" data_line_start="48" data_line_end="48" data_line="48,49" count_line="1">This paper makes two contributions:</div>
+<ul class="preview-paragraph-49 preview-line 49 50 51" data_line_start="49" data_line_end="51" data_line="49,52" count_line="3">
+<li>A practical realization of the minimality principle for full-stack performance simulation of hardware-accelerated systems, demonstrating orders-ofmagnitude speedups while preserving good accuracy.</li>
+<li>A qualitative change for developers of hardwareaccelerated stacks, who can now transition from batch-mode to interactive-mode development. They can interactively experiment with both the software stack and the hardware parameters, in quick iterations.</li>
+</ul>
+<div class="preview-paragraph-52 preview-line 52" data_line_start="52" data_line_end="52" data_line="52,53" count_line="1">In the rest of this paper, we provide background and an overview (§2), describe the design of NEX (§3) and DSim (§4), and show how NEX and DSim can be used both together and individually (§5). We evaluate NEX and DSim (§6), discuss limitations (§7) and related work (§8), and conclude (§9).</div>
+<div class="preview-paragraph-54 preview-line 54" data_line_start="54" data_line_end="54" data_line="54,55" count_line="1">NEX and DSim are open-source and freely available at [47].</div>
+<h2 type="section" data-unnumbered="true" class="section-title preview-paragraph-56 preview-line 56" id="2-background-and-overview" data_line_start="56" data_line_end="56" data_line="56,57" count_line="1">
+2 Background and Overview</h2>
+<div class="preview-paragraph-58 preview-line 58" data_line_start="58" data_line_end="58" data_line="58,59" count_line="1">In this section, we provide an overview of how full-stack simulation is done today by developers engaged in either pure software development or in software/hardware co-design (§2.1), and then describe, at a high level, how our proposed minimalist approach to full-stack simulation works (§2.2).</div>
+<h3 type="subsection" data-unnumbered="true" class="sub_section-title preview-paragraph-60 preview-line 60" id="2.1-state-of-the-art-full-stack-simulation" data_line_start="60" data_line_end="60" data_line="60,61" count_line="1">
+2.1 State-of-the-Art Full-Stack Simulation</h3>
+<div class="preview-paragraph-62 preview-line 62" data_line_start="62" data_line_end="62" data_line="62,63" count_line="1">Developers of a hardware-accelerated software stack who do not have access to all the necessary accelerators would use a full-stack simulator to run their code during development. They want to know, for instance, how the accelerated stack would perform compared to a CPU-only stack. If the accelerated stack is slow, then where is the bottleneck? They would want to tweak the software (or the hardware accelerator, in the case of co-design) and quickly see if performance improves.</div>
+<div class="preview-paragraph-64 preview-line 64" data_line_start="64" data_line_end="64" data_line="64,65" count_line="1">For full-stack simulation, the host processor and memory subsystem are often simulated using system simulators like gem5 [9, 35], illustrated in Fig. 1. The developer runs their unmodified software stack (the application + OS) in gem5, which simulates the target system with cycle-level fidelity. The software runs as if it were on a real machine, with the CPU, memory, and interconnect behavior modeled by gem5.</div>
+<div class="table preview-paragraph-66 preview-line 66 67 68 69 70" number="1" data_line_start="66" data_line_end="70" data_line="66,71" count_line="5">
+<div class="figure_img" style="text-align: center;"><img src="https://cdn.mathpix.com/cropped/ecd0225c-1341-4462-8562-17231a1194ef-04.jpg?height=381&width=860&top_left_y=973&top_left_x=193" alt="" style="max-width: 100%;"/></div><div class="caption_figure">Figure 1. Simplified overview of a general full-stack simulation framework, in the style of Simbricks [33]. Gem5 simulates the host system, while RTL simulators or custom models simulate the accelerators. Accelerators are often simulated as PCIe attached devices, but different placements, such as having the accelerator on-chip, can also be simulated by configuring a faster interconnect. DMA requests emitted by the accelerators are handled by gem5.</div></div>
+<div class="preview-paragraph-72 preview-line 72" data_line_start="72" data_line_end="72" data_line="72,73" count_line="1">Accelerators can be simulated, for example, by passing the accelerator's RTL (e.g., Verilog) to a cycle-accurate RTL simulator like Synopsys VCS [55], Cadence Xcelium [10], or the open-source Verilator [61]. The RTL simulator runs the Verilog model of the accelerator, executing the offloaded computation at the register-transfer level of detail. When available, a gem5 model of the accelerator provides a more efficient alternative to simulating the RTL, though one would have to develop it in-house for all but the most commonly used accelerators. Coarser-grained, analytical models can be even more efficient, but their accuracy is typically low.</div>
+<div class="preview-paragraph-74 preview-line 74" data_line_start="74" data_line_end="74" data_line="74,75" count_line="1">The gem5 system simulator executes the software stack in coordination with the accelerator simulators. When the software stack needs to pass a task to a hardware accelerator, it either writes the task to accelerator control registers through Memory-Mapped IO (MMIO), or puts it in a shared memory buffer and lets the accelerator fetch the task through Direct Memory Access (DMA). Gem5 simulates either of these mechanisms, and then the accelerator simulator starts a new task.</div>
+<div class="preview-paragraph-76 preview-line 76" data_line_start="76" data_line_end="76" data_line="76,77" count_line="1">Gem5 now simulates the host in parallel with the accelerators and synchronizes their timestamps periodically. It listens for DMA requests from the accelerators and simulates them alongside CPU memory accesses. When the accelerator completes the task, the software running in gem5 finds out either by polling the accelerator's control registers through MMIO or because the accelerator sends an interrupt (processed by gem5). Software running in gem5 then reads the accelerator's output. Depending on how an accelerator operates, multiple tasks can be issued to it without waiting for the previous task to finish.</div>
+<div class="preview-paragraph-78 preview-line 78" data_line_start="78" data_line_end="78" data_line="78,79" count_line="1">A full-stack simulator has both upsides and downsides. First, it can provide an accurate estimate of performance, which is a central objective of simulation when developing hardwareaccelerated systems. Second, it can provide a detailed trace of how the simulated hardware executed, thus providing lowlevel data that can lead to insights into what is affecting performance. The key downside is that full-stack simulation is slow: the time to run the simulation is typically 4 orders of magnitude greater than the simulated time [13]. This slowdown makes it impractical to use in full-stack system development, which often requires evaluating activities that execute over long timescales and span the stack, such as OS mechanisms for memory management, page migration, or heap compaction.</div>
+<h3 type="subsection" data-unnumbered="true" class="sub_section-title preview-paragraph-80 preview-line 80" id="2.2-minimalist-full-stack-simulation" data_line_start="80" data_line_end="80" data_line="80,81" count_line="1">
+2.2 Minimalist Full-Stack Simulation</h3>
+<div class="preview-paragraph-82 preview-line 82" data_line_start="82" data_line_end="82" data_line="82,83" count_line="1">Our work addresses use cases where getting fast answers to end-to-end performance questions dominates the need for finegrained simulation traces. Specifically, we exploit the willingness of developers to give up some granularity of the hardware events in the execution trace in exchange for significant reductions in the simulation slowdown factor. We propose a design consisting of a native execution orchestrator (NEX) and an accelerator di-simulator (DSim).</div>
+<div class="preview-paragraph-84 preview-line 84" data_line_start="84" data_line_end="84" data_line="84,85" count_line="1">The NEX orchestrator handles system-wide time synchronization. It relies on the fact that the software running on the CPUs communicates with the accelerators through welldefined interfaces, namely shared memory regions or MMIO operations. NEX runs the software natively, in microsecondscale epochs, controlled by a custom scheduler that pauses only when the software attempts to interact with a simulated component. At this point, the simulated components are allowed to &quot;catch up&quot; in virtual (simulated) time, thus ensuring that interactions happen at the correct virtual time.</div>
+<div class="preview-paragraph-86 preview-line 86" data_line_start="86" data_line_end="86" data_line="86,87" count_line="1">In terms of Fig. 1, we replace the gem5 component (in blue) with NEX. Unlike gem5, NEX runs mostly natively (i.e., does not simulate the CPU microarchitecture) and simulates only accelerator-relevant interactions: MMIO accesses, sharedmemory communication, and accelerator-initiated DMAs.</div>
+<div class="preview-paragraph-88 preview-line 88" data_line_start="88" data_line_end="88" data_line="88,89" count_line="1">DSim decouples the simulation of accelerator performance from accelerator functionality. For performance, DSim builds upon the Latency Petri Net (LPN) abstraction [37]. The LPN of an accelerator is essentially an abstract circuit that is</div>
+<div class="table preview-paragraph-90 preview-line 90 91 92 93 94" number="2" data_line_start="90" data_line_end="94" data_line="90,95" count_line="5">
+<div class="figure_img" style="text-align: center;"><img src="https://cdn.mathpix.com/cropped/ecd0225c-1341-4462-8562-17231a1194ef-05.jpg?height=450&width=887&top_left_y=244&top_left_x=184" alt="" style="max-width: 100%;"/></div><div class="caption_figure">Figure 2. Architecture of the NEX orchestrator. NEX coordinates the execution of both the CPU threads and the accelerator simulators, keeping them synchronized. The NEX runtime (§3.2) simulates interactions with the accelerator (i.e., control-register reads/writes through MMIOs, and shared-memory accesses for task metadata), while advancing the accelerator simulators. The interconnect and memory simulators in the NEX runtime handle DMA operations originating at the accelerator simulators.</div></div>
+<div class="preview-paragraph-95 preview-line 95" data_line_start="95" data_line_end="95" data_line="95,96" count_line="1">&quot;performance-equivalent&quot; to the accelerator, in that it only captures essential performance characteristics (like pipeline stages and resource contention) without modeling every clock cycle and hardware detail or signal transition.</div>
+<div class="preview-paragraph-97 preview-line 97" data_line_start="97" data_line_end="97" data_line="97,98" count_line="1">This makes LPNs an efficient basis for performance simulation that is both accurate and fast. For functionality, DSim reproduces all interactions with the accelerator's external environment (e.g., control-register updates and timings of all DMAs issued from the accelerator), ensuring that the performance effects of these interactions are captured precisely. As a result, an accelerator di-simulated with DSim is externally indistinguishable from the corresponding RTL simulation. So, abstractly speaking, DSim discards from performance simulation all performance-irrelevant functionality and, conversely, discards from functional simulation all performance-specific aspects.</div>
+<div class="preview-paragraph-99 preview-line 99" data_line_start="99" data_line_end="99" data_line="99,100" count_line="1">In our proposed design, developers can mix and match NEX and DSim independently of each other with system simulators like gem5 or with RTL simulators, as shown in Table 1.</div>
+<div class="preview-paragraph-101 preview-line 101" data_line_start="101" data_line_end="101" data_line="101,102" count_line="1">We now describe the NEX orchestrator (§3), the DSim disimulator (§4), and the interfaces that enable the modular composition of these two new elements with other simulators (§5).</div>
+<h2 type="section" data-unnumbered="true" class="section-title preview-paragraph-103 preview-line 103" id="3-the-nex-orchestrator" data_line_start="103" data_line_end="103" data_line="103,104" count_line="1">
+3 The NEX Orchestrator</h2>
+<div class="preview-paragraph-105 preview-line 105" data_line_start="105" data_line_end="105" data_line="105,106" count_line="1">The NEX orchestrator consists of two parts, the NEX scheduler and the NEX runtime (Fig. 2). The NEX scheduler controls all threads in the system and overrides the OS kernel scheduler. It maintains a global virtual (simulated) time. The NEX runtime is in user-space and handles synchronization and interactions between the host CPUs and the accelerator simulators.</div>
+<div class="preview-paragraph-107 preview-line 107 108" data_line_start="107" data_line_end="108" data_line="107,109" count_line="2">NEX builds on the insight that achieving high accuracy in full-stack performance simulation does not strictly require simulating the host CPUs. Careful synchronization between<br>
+the native host CPUs and accelerator simulators can achieve the same level of accuracy, while yielding significant benefits in terms of reduced simulation time.</div>
+<div class="preview-paragraph-110 preview-line 110" data_line_start="110" data_line_end="110" data_line="110,111" count_line="1">The NEX orchestrator manages virtual time (i.e., the simulated system's time progression) distinctly from physical wall-clock time. NEX advances the simulation by discrete virtual-time intervals called epochs, and each epoch increases virtual time by a fixed epoch duration. Application threads run natively on the CPUs, progressing epoch-by-epoch, under the control of the NEX scheduler. Accelerator simulators, controlled by the NEX runtime, proceed differently, depending on the synchronization mode, as described below.</div>
+<div class="preview-paragraph-112 preview-line 112" data_line_start="112" data_line_end="112" data_line="112,113" count_line="1">The NEX orchestrator provides two basic modes: eager synchronization and lazy synchronization. They both serve the purpose of preventing accelerators and native CPUs from advancing past each other across MMIO, shared-memory, or DMA interaction boundaries. Eager synchronization, as seen in typical full-stack simulators [33], advances accelerator simulators in lock-step with the native CPUs, at every epoch boundary. In contrast, lazy synchronization advances the accelerator simulators only when the application attempts to interact with them. To regain control upon such interaction attempts, the NEX runtime uses system hooks to force application threads to trap on MMIOs and on accesses to memory shared between the CPUs and the accelerators.</div>
+<div class="preview-paragraph-114 preview-line 114" data_line_start="114" data_line_end="114" data_line="114,115" count_line="1">An invariant for both modes is that any synchronization event (interaction) in epoch <span class="math-inline "><math xmlns="http://www.w3.org/1998/Math/MathML">
+  <mi>i</mi>
+</math></span> must be fully resolved by the NEX runtime before any application thread proceeds to epoch <span class="math-inline "><math xmlns="http://www.w3.org/1998/Math/MathML">
+  <mi>i</mi>
+  <mo>+</mo>
+  <mn>1</mn>
+</math></span>.</div>
+<h3 type="subsection" data-unnumbered="true" class="sub_section-title preview-paragraph-116 preview-line 116" id="3.1-nex-synchronization" data_line_start="116" data_line_end="116" data_line="116,117" count_line="1">
+3.1 NEX Synchronization</h3>
+<div class="preview-paragraph-118 preview-line 118" data_line_start="118" data_line_end="118" data_line="118,119" count_line="1">Eager synchronization advances both CPUs and accelerator simulators in small locked steps, to ensure that any event sent at time <span class="math-inline "><math xmlns="http://www.w3.org/1998/Math/MathML">
+  <mi>t</mi>
+</math></span> is received at <span class="math-inline "><math xmlns="http://www.w3.org/1998/Math/MathML">
+  <mi>t</mi>
+  <mo>+</mo>
+  <mi>&#x3B4;</mi>
+</math></span>, where <span class="math-inline "><math xmlns="http://www.w3.org/1998/Math/MathML">
+  <mi>&#x3B4;</mi>
+</math></span> is the link delay between the sender and receiver. This has two drawbacks: First, such lock-step synchronization forces the entire system simulation to proceed at the pace of the slowest simulator. Second, every synchronization incurs a fixed cost (including the exchange of messages among simulators and the pausing/resuming of the simulation) and, the more frequently this is done, the greater the overhead and hence slowdown of the simulation.</div>
+<div class="preview-paragraph-120 preview-line 120 121" data_line_start="120" data_line_end="121" data_line="120,122" count_line="2">Lazy synchronization mitigates these drawbacks by partially decoupling how virtual time advances in the CPUs vs. the accelerators: NEX splits the host simulation into a dedicated DMA simulator and a simulator for everything else. The DMA simulator is akin to a clutch in a gearbox: The dedicated DMA simulator receives DMA events from the accelerators and proceeds in lock-step with the accelerator simulators-on the rest of the host, execution advances freely, without synchronization, until the host attempts to communicate with an accelerator (e.g., via MMIO). When that happens, NEX catches up all accelerator simulators and the DMA simulator by taking them through multiple simulation epochs at once. The DMA simulator ensures that all DMAs up to the current epoch are visible in<br>
+the host's memory. A minor drawback of this approach is that it cannot model memory contention between the CPU and the accelerator-doing so would require tracing all CPU memory accesses, not just the ones interacting with the accelerator, and that renders native execution impractical.</div>
+<div class="preview-paragraph-123 preview-line 123" data_line_start="123" data_line_end="123" data_line="123,124" count_line="1">Since lazy synchronization ignores accelerator-initiated interrupts, NEX employs a hybrid synchronization scheme for accelerators that use interrupts. In this scheme (not shown in Fig. 2, to avoid clutter), periodic synchronization every few epochs is layered on top of lazy synchronization. Lazy synchronization still promptly handles all host-to-accelerator interactions within each periodic interval, while accelerator-to-host interrupts are delivered at the interval boundaries. The interval length adapts to the required interrupt frequency: shorter intervals support higher-frequency interrupts but incur larger overhead, whereas longer intervals lower the synchronization cost when interrupts are infrequent.</div>
+<h3 type="subsection" data-unnumbered="true" class="sub_section-title preview-paragraph-125 preview-line 125" id="3.2-nex-runtime" data_line_start="125" data_line_end="125" data_line="125,126" count_line="1">
+3.2 NEX Runtime</h3>
+<div class="preview-paragraph-127 preview-line 127" data_line_start="127" data_line_end="127" data_line="127,128" count_line="1">For lazy synchronization, the NEX runtime performs two functions: (1) trap when application threads interact with accelerators; and (2) resolve the traps, i.e., advance accelerator simulators to the current simulation epoch and handle the event that caused the trap.</div>
+<div class="preview-paragraph-129 preview-line 129" data_line_start="129" data_line_end="129" data_line="129,130" count_line="1">For (1), NEX allocates memory to share with the accelerators and relies on memory protection to intercept accesses to it via ptrace [19]. The accelerator drivers then map this memory and mprotect() it-a minor code addition to the driver. If the driver uses MMIO, it treats the memory as an MMIO region, otherwise it uses it as a task buffer. When a thread accesses the memory, it causes a trap that results in a segmentation fault, which NEX intercepts and recognizes as an event to process. Data buffers passed between the software and the accelerator require no special handling because accessing them should be already synchronized via the corresponding task buffers.</div>
+<div class="preview-paragraph-131 preview-line 131" data_line_start="131" data_line_end="131" data_line="131,132" count_line="1">For (2), when the NEX runtime intercepts a read or write, it first advances the accelerator simulators to the current epoch, i.e., to the latest virtual-time epoch reached by the NEX scheduler. It then checks whether the faulting instruction was a read or a write, gets the target of the access, performs the access to the accelerator's control register or shared-memory region, and completes the instruction. For instance, completing a memory-to-register move instruction entails storing the read data into the target CPU register. In this way, the intended read or write occurs after the accelerator simulators have been synchronized (so the data access is consistent and correct), and occurs transparently to the application thread. The NEX runtime then informs the NEX scheduler that the trap is fully resolved.</div>
+<div class="preview-paragraph-133 preview-line 133 134" data_line_start="133" data_line_end="134" data_line="133,135" count_line="2">Under hybrid synchronization, the NEX runtime may also receive synchronization requests from the NEX scheduler, in which case it advances the accelerator simulators to the current epoch. If the runtime receives an interrupt from an accelerator, it forwards the interrupt as a user-space signal to the driver<br>
+responsible for the accelerator. The NEX runtime then informs the NEX scheduler that the synchronization event completed.</div>
+<div class="preview-paragraph-136 preview-line 136" data_line_start="136" data_line_end="136" data_line="136,137" count_line="1">When a trap occurs or a synchronization request arrives, the NEX scheduler does not allow any application thread to proceed to the next epoch. It allows all threads (except the one that trapped) to complete their epoch, thus avoiding the overhead of interprocessor interrupts. Once the trap is fully resolved or the synchronization is completed, it resumes all threads.</div>
+<div class="preview-paragraph-138 preview-line 138" data_line_start="138" data_line_end="138" data_line="138,139" count_line="1">Finally, the NEX runtime makes gettimeofday() and clock_gettime() return virtual time. We overwrite these functions with custom versions at application load time using LD_PRELOAD [18]. Alternatively, NEX could intercept timerelated system calls using ptrace or seccomp filters.</div>
+<div class="preview-paragraph-140 preview-line 140" data_line_start="140" data_line_end="140" data_line="140,141" count_line="1">Reducing traps with NEX tick mode. Advancing virtual time in fixed epoch increments introduces inaccuracy when threads trap mid-epoch, because these threads resume execution with virtual time corresponding to the end of the epoch rather than the mid-epoch trap point. To reduce the number of traps (and thus inaccuracy), NEX supports a tick mode in which the driver batches multiple accesses and triggers a single trap using a designated illegal instruction. This requires small changes in the accelerator driver, to explicitly tick at certain places.</div>
+<h3 type="subsection" data-unnumbered="true" class="sub_section-title preview-paragraph-142 preview-line 142" id="3.3-nex-scheduler" data_line_start="142" data_line_end="142" data_line="142,143" count_line="1">
+3.3 NEX Scheduler</h3>
+<div class="preview-paragraph-144 preview-line 144" data_line_start="144" data_line_end="144" data_line="144,145" count_line="1">The NEX scheduler is implemented in Linux eBPF, using the sched-ext [51] kernel extension. It implements an epoch-based policy we call EBS, which schedules application threads on epoch boundaries and ensures that threads do not enter epoch <span class="math-inline "><math xmlns="http://www.w3.org/1998/Math/MathML">
+  <mi>i</mi>
+  <mo>+</mo>
+  <mn>1</mn>
+</math></span> until all application threads completed epoch <span class="math-inline "><math xmlns="http://www.w3.org/1998/Math/MathML">
+  <mi>i</mi>
+</math></span>, and all synchronization events and traps of epoch <span class="math-inline "><math xmlns="http://www.w3.org/1998/Math/MathML">
+  <mi>i</mi>
+</math></span> are fully resolved.</div>
+<div class="preview-paragraph-146 preview-line 146" data_line_start="146" data_line_end="146" data_line="146,147" count_line="1">During native execution, virtual time flows at the same rate as physical time. To regain control over an application thread after executing for an epoch's worth <span class="math-inline "><math xmlns="http://www.w3.org/1998/Math/MathML">
+  <mi>e</mi>
+</math></span> of virtual time, NEX must preempt it after an equivalent period of physical time. So, when resuming a thread, the NEX scheduler sets a timer to expire after time <span class="math-inline "><math xmlns="http://www.w3.org/1998/Math/MathML">
+  <mi>e</mi>
+  <mo>+</mo>
+  <mi>&#x3B4;</mi>
+</math></span>, where <span class="math-inline "><math xmlns="http://www.w3.org/1998/Math/MathML">
+  <mi>&#x3B4;</mi>
+</math></span> is a calibration constant that accounts for the time between when the scheduler decides to resume a thread and when the CPU actually starts executing that thread's instructions. In this way, the thread gets to effectively execute for exactly the epoch duration <span class="math-inline "><math xmlns="http://www.w3.org/1998/Math/MathML">
+  <mi>e</mi>
+</math></span>, in both virtual and physical time. We use core-local timer interrupts to control thread execution in a way that is simultaneously precise and has a fixed, low overhead. <span class="math-inline "><math xmlns="http://www.w3.org/1998/Math/MathML">
+  <mi>&#x3B4;</mi>
+</math></span> is specific to the CPU-kernel combination and is obtained automatically on startup-it accounts for the time to restore a thread's context, the microarchitectural disruption induced by thread preemption, etc.</div>
+<div class="preview-paragraph-148 preview-line 148" data_line_start="148" data_line_end="148" data_line="148,149" count_line="1">To reduce overhead of microarchitectural interference, we reserve a set of cores for simulation, and we pin threads to cores for an integer multiple of epochs <span class="math-inline "><math xmlns="http://www.w3.org/1998/Math/MathML">
+  <mi>&#x3C0;</mi>
+  <mo>=</mo>
+  <mi>N</mi>
+  <mo>&#x22C5;</mo>
+  <mi>e</mi>
+</math></span>, which is on par with a normal scheduling slice (e.g., 20 msec ). Threads can only migrate between cores on a time granularity of <span class="math-inline "><math xmlns="http://www.w3.org/1998/Math/MathML">
+  <mi>&#x3C0;</mi>
+</math></span>, not of <span class="math-inline "><math xmlns="http://www.w3.org/1998/Math/MathML">
+  <mi>e</mi>
+</math></span>.</div>
+<div class="preview-paragraph-150 preview-line 150 151" data_line_start="150" data_line_end="151" data_line="150,152" count_line="2">Complementary scheduling on top of EBS: As described thus far, NEX can accurately simulate systems in which the<br>
+number of application threads does not exceed the number of virtual cores, i.e., the number of hardware cores in the simulated system. Under EBS, all runnable threads are assumed to execute in parallel on these virtual cores, which is accurate only when the thread count is less than or equal to the virtual core count. However, in oversubscribed scenarioswhere there are more application threads than available cores-threads must share cores. In such cases, NEX needs to not only enforce EBS but also mimic the kernel's prioritization among competing threads to maintain simulation fidelity.</div>
+<div class="preview-paragraph-153 preview-line 153" data_line_start="153" data_line_end="153" data_line="153,154" count_line="1">To ensure accurate simulation for oversubscribed scenarios, NEX allows developers to specify the thread scheduling policy used in their systems-we call this the complementary scheduling policy, because it operates in conjunction with EBS. When the number of runnable threads exceeds the number of virtual cores, the complementary policy selects which subset of threads should execute during each epoch, thereby simulating the target system's scheduling behavior. NEX's default complementary policy provides fair scheduling and load balancing across virtual cores, similar to Linux. Users can replace it with their own policies. We discuss implementation details in §A. 1 and show how such complementary scheduling policies improve simulation accuracy in §6.6.</div>
+<h3 type="subsection" data-unnumbered="true" class="sub_section-title preview-paragraph-155 preview-line 155" id="3.4-warping-time-with-nex" data_line_start="155" data_line_end="155" data_line="155,156" count_line="1">
+3.4 Warping Time with NEX</h3>
+<div class="preview-paragraph-157 preview-line 157" data_line_start="157" data_line_end="157" data_line="157,158" count_line="1">In addition to normal simulation, the NEX scheduler provides developers with three ways to control the flow of time. To use any of the three features, developers mark the start and end of a code region to which the feature should apply. These annotations then turn into writes to a protected memory region, which causes the executing thread to trap into the NEX scheduler; the writes themselves contain control messages that NEX interprets and acts upon.</div>
+<div class="preview-paragraph-159 preview-line 159" data_line_start="159" data_line_end="159" data_line="159,160" count_line="1">CompressT enables developers to &quot;speed up&quot; a portion of code by a given factor, i.e., to compress time. This feature allows developers to explore the potential benefits of offloading specific code regions to an accelerator. To use it, developers mark the target region and specify the assumed acceleration factor. NEX then applies the hypothetical acceleration and reflects the overall impact on system performance.</div>
+<div class="preview-paragraph-161 preview-line 161" data_line_start="161" data_line_end="161" data_line="161,162" count_line="1">This acceleration is hypothetical on multiple levels: First, developers do not necessarily have (or know of) an accelerator to which that code can be offloaded. Second, even if the accelerator existed, there would be no certainty that the indicated acceleration factor could be achieved. This feature allows developers to do what-if analyses of end-to-end performance without actually implementing the offload. A similar idea appears in Coz [15].</div>
+<div class="preview-paragraph-163 preview-line 163" data_line_start="163" data_line_end="163" data_line="163,164" count_line="1">To implement this, NEX proportionally extends the relevant thread's scheduling slice beyond the epoch duration, allowing it to execute longer in physical time while still consuming only an epoch's worth of virtual time. Multiple threads can use CompressT concurrently.</div>
+<div class="preview-paragraph-165 preview-line 165" data_line_start="165" data_line_end="165" data_line="165,166" count_line="1">SlipStream allows developers to maximally fast-forward a portion of code that is uninteresting, such as setup code that does not interact with accelerators. NEX then simulates that portion as fast as possible while still staying on the virtual timeline. Underneath the covers, NEX sets the epoch duration to a large value (by default 20 msec ), then resets it at the end of the code region, and forces an immediate reschedule of threads. This enables reducing simulation time for segments whose execution time is of no interest.</div>
+<div class="preview-paragraph-167 preview-line 167" data_line_start="167" data_line_end="167" data_line="167,168" count_line="1">JumpT is the most extreme form of time warp: code executes in zero virtual time. In other words, when JumpT starts, the thread exits the virtual timeline entirely, executes outside virtual time, and then re-enters the timeline exactly where it exited. NEX implements this by removing the thread from EBS and running it under the standard scheduler while virtual time is paused. Multiple threads can use JumpT concurrently within the same epoch-the NEX scheduler waits for all of them to finish JumpT-ing before advancing the epoch.</div>
+<div class="preview-paragraph-169 preview-line 169" data_line_start="169" data_line_end="169" data_line="169,170" count_line="1">We demonstrate the use of CompressT and JumpT in §6.4.</div>
+<h2 type="section" data-unnumbered="true" class="section-title preview-paragraph-171 preview-line 171" id="4-the-dsim-di-simulator" data_line_start="171" data_line_end="171" data_line="171,172" count_line="1">
+4 The DSim Di-Simulator</h2>
+<div class="preview-paragraph-173 preview-line 173" data_line_start="173" data_line_end="173" data_line="173,174" count_line="1">DSim simulates the operation of accelerators on two decoupled tracks: The performance track computes the number of cycles taken by each request to the accelerator (§4.1), and the functionality track computes the response of the accelerator (§4.2). The functional simulation of the accelerator includes every interaction with its external environment (e.g., control-register updates and timings of all DMAs issued from the accelerator), ensuring that a DSim-simulated accelerator is indistinguishable from the real accelerator or its corresponding RTL simulation. Even though the two tracks are decoupled, they must synchronize occasionally (§4.3), to correctly timestamp the external memory accesses and/or DMAs issued by the accelerator. These DMAs can then be accurately simulated by host simulators (NEX, gem5, etc.), enabling precise end-to-end cycle counts for the entire hardware-software stack.</div>
+<div class="preview-paragraph-175 preview-line 175" data_line_start="175" data_line_end="175" data_line="175,176" count_line="1">DSim aims to replicate an accelerator's externally observable functionality and timing behavior with perfect fidelity— from a black-box perspective, a DSim model is indistinguishable from the real accelerator it simulates. This enables DSim to omit accelerator-internal details that do not affect external behavior, and to simulate at a higher level of abstraction than RTL simulators. This results in significantly faster simulation.</div>
+<div class="preview-paragraph-177 preview-line 177" data_line_start="177" data_line_end="177" data_line="177,178" count_line="1">While DSim is indistinguishable from the outside, its implementation requires the host simulator to provide zero-cost <span class="math-inline "><math xmlns="http://www.w3.org/1998/Math/MathML">
+  <mi>D</mi>
+  <mi>M</mi>
+  <mi>A</mi>
+</math></span>, i.e., the ability to perform DMAs without affecting virtual time. As explained below, this capability is used to perform functional simulation without affecting overall timing. In any simulation environment that supports this feature, DSim can serve as a drop-in replacement for RTL simulators.</div>
+<div class="preview-paragraph-179 preview-line 179 180" data_line_start="179" data_line_end="180" data_line="179,181" count_line="2">DSim is versatile and can be used to simulate hardware other than accelerators. For instance, we used DSim to construct interconnect simulators (e.g., for a PCIe topology including a<br>
+root complex) as well as cache and memory simulators. Interconnect, cache, and memory simulators expose identical request/response interfaces, so they can be hierarchically composed. For example, an interconnect simulator can be stacked with a cache simulator. Multiple cache simulators can also be stacked, one for each level (e.g., L1, L2, LLC, respectively). Furthermore, by connecting DMA requests to the interface at different layers, we can flexibly model various topologies that connect the host to the accelerators. We integrated these simulators into NEX (Fig. 2).</div>
+<h3 type="subsection" data-unnumbered="true" class="sub_section-title preview-paragraph-182 preview-line 182" id="4.1-computing-performance-with-lpns" data_line_start="182" data_line_end="182" data_line="182,183" count_line="1">
+4.1 Computing Performance with LPNs</h3>
+<div class="preview-paragraph-184 preview-line 184" data_line_start="184" data_line_end="184" data_line="184,185" count_line="1">To efficiently compute cycle count (i.e., virtual time), DSim runs a performance model of the accelerator based on a Latency Petri Net (LPN) [37]. The LPN abstraction models the performance behavior of a circuit without also computing the circuit's functional outputs. At a high level, an LPN is a directed dataflow graph that models how data flows through the hardware circuit, along with the cycles spent in each processing stage. LPNs capture latency, pipelining, parallelism, and backpressure, which together determine the performance behavior. The authors envision that LPNs will either be shipped by vendors with accelerators or written afterward (e.g., by DSim users). Prior work has shown LPNs to be both accurate and orders of magnitude faster than RTL simulators [37].</div>
+<div class="preview-paragraph-186 preview-line 186" data_line_start="186" data_line_end="186" data_line="186,187" count_line="1">LPNs take the same input as the modeled hardware, so they can be easily integrated with existing software drivers and serve as replacements for RTL simulators.</div>
+<div class="preview-paragraph-188 preview-line 188" data_line_start="188" data_line_end="188" data_line="188,189" count_line="1">We use the LPN toolchain-specifically the Ipnlang [36] Python package-to prototype accelerator models and compile them into C++ simulators. In our experience, LPNs are straightforward to write when the accelerator design is available: an LPN directly models the performance-relevant aspects of the microarchitecture, mirrors the accelerator's dataflow, and is assembled module by module, much like RTL. Prior work [37] reports that a hardware engineer can construct an LPN for an accelerator in under three hours. Since hardware engineers already build performance models at various abstraction levels as part of their standard workflow, LPNs can serve as direct replacements, incurring little to no extra effort.</div>
+<h3 type="subsection" data-unnumbered="true" class="sub_section-title preview-paragraph-190 preview-line 190" id="4.2-computing-functionality" data_line_start="190" data_line_end="190" data_line="190,191" count_line="1">
+4.2 Computing Functionality</h3>
+<div class="preview-paragraph-192 preview-line 192" data_line_start="192" data_line_end="192" data_line="192,193" count_line="1">We implement the functionality track in DSim using a functional simulator that computes the accelerator's functional results. While our primary goal is performance simulation, it is essential to compute correct results for every operation, to ensure correct operation of the hardware-software stack.</div>
+<div class="preview-paragraph-194 preview-line 194 195" data_line_start="194" data_line_end="195" data_line="194,196" count_line="2">Developing a functional simulator is normally one of the initial steps in accelerator development. This process typically involves defining custom instructions and the request-response interfaces between the software and the hardware. As a result, most accelerators already have functional simulators that can<br>
+be directly incorporated into DSim, and these simulators are available long before the accelerators are taped out.</div>
+<div class="preview-paragraph-197 preview-line 197" data_line_start="197" data_line_end="197" data_line="197,198" count_line="1">Although a functional simulator focuses solely on functionality, it must still accurately reflect key architectural and implementation details. This includes implementing the accelerator's ISA, ensuring compatibility with software-defined memory layouts shared outside the accelerator, and correctly modeling DMA accesses to host memory. Unlike RTL implementations (or LPNs), where tasks can be pipelined in the accelerator, a functional simulator is simpler and processes one task at a time (e.g., decoding an image, serializing a message, or executing a series of instructions for a convolution). Since they omit low-level microarchitectural details, functional simulators are orders of magnitude faster than RTL simulators.</div>
+<h3 type="subsection" data-unnumbered="true" class="sub_section-title preview-paragraph-199 preview-line 199" id="4.3-synchronizing-performance-with-functionality" data_line_start="199" data_line_end="199" data_line="199,200" count_line="1">
+4.3 Synchronizing Performance with Functionality</h3>
+<div class="preview-paragraph-201 preview-line 201" data_line_start="201" data_line_end="201" data_line="201,202" count_line="1">DSim synchronizes the LPN with the functional simulator to ensure that accelerator reads and writes to host memory occur at the right time (with accurate timestamps) and carry the correct data. The memory requests get their content from the functional simulator's outputs, and their timestamps from the requests issued by the LPN. For PCIe-attached accelerators, all memory accesses take the form of DMA transfers.</div>
+<div class="preview-paragraph-203 preview-line 203" data_line_start="203" data_line_end="203" data_line="203,204" count_line="1">The synchronization proceeds as follows: First, DSim runs the functional simulator for the current accelerator task. During this phase, it reads all relevant data from the host memory using the zero-cost DMAs mentioned earlier. From this execution, DSim obtains a complete trace of all DMA requests that the accelerator would produce. Each request is tagged and stored in FIFO queues. Tags typically exist at the hardware level and are used to differentiate requests issued by different modules or types of requests within the same module. For instance, in the VTA accelerator [6], possible tags include load_input, LOAD_WEIGHT, LOAD_ACC, and STORE_OUTPUT. Requests sharing the same tag are stored in the same queue.</div>
+<div class="preview-paragraph-205 preview-line 205" data_line_start="205" data_line_end="205" data_line="205,206" count_line="1">Next, DSim begins the LPN simulation for the task. As the LPN advances, it emits DMA requests at specific timestamps, each associated with a tag. For every emitted request, DSim dequeues a pre-recorded DMA request from the FIFO queue corresponding to the tag. The DMA request is then sent to the host simulator as a tuple of the timestamp from the LPN and the content from the functional simulator, ensuring accurate simulation of DMA cost. For DMA writes, the DMA could include the correct content, or the functional simulator could use zero-cost DMA to write it directly to memory.</div>
+<div class="preview-paragraph-207 preview-line 207" data_line_start="207" data_line_end="207" data_line="207,208" count_line="1">It is important to note that the timing of these DMAs is determined not by the LPN alone but in conjunction with the host simulator. The LPN cannot predict the timing of later DMAs that depend on responses to earlier ones. However, as the simulation progresses with the host simulator, the LPN accurately replicates the accelerator's behavior, ensuring DMAs are issued at the correct times and from the appropriate modules.</div>
+<h2 type="section" data-unnumbered="true" class="section-title preview-paragraph-209 preview-line 209" id="5-interfaces-for-modular-composition" data_line_start="209" data_line_end="209" data_line="209,210" count_line="1">
+5 Interfaces for Modular Composition</h2>
+<div class="preview-paragraph-211 preview-line 211" data_line_start="211" data_line_end="211" data_line="211,212" count_line="1">In addition to the NEX+DSim use case presented so far, it is meaningful to also combine NEX or DSim independently with alternate host or accelerator simulators. Such composition lowers the adoption barrier for practitioners who are restricted to specific processor or accelerator simulators. For instance, companies like Intel have spent years tuning their proprietary processor simulators, while others, like Google, have developed their own accelerator performance models akin to LPNs.</div>
+<div class="table preview-paragraph-213 preview-line 213 214 215 216 217 218 219 220 221 222 223 224 225" number="1" data_line_start="213" data_line_end="225" data_line="213,226" count_line="13">
+<div class="table_tabular" style="text-align: center">
+<div class="inline-tabular"><table class="tabular">
+<tbody>
+<tr style="border-top: none !important; border-bottom: none !important;">
+<td style="text-align: left; border-left-style: solid !important; border-left-width: 1px !important; border-right-style: solid !important; border-right-width: 1px !important; border-bottom-style: solid !important; border-bottom-width: 1px !important; border-top-style: solid !important; border-top-width: 1px !important; width: auto; vertical-align: middle; ">Composition →</td>
+<td style="text-align: left; border-right-style: solid !important; border-right-width: 1px !important; border-bottom-style: solid !important; border-bottom-width: 1px !important; border-top-style: solid !important; border-top-width: 1px !important; width: auto; vertical-align: middle; ">gem5 + RTL</td>
+<td style="text-align: left; border-right-style: solid !important; border-right-width: 1px !important; border-bottom-style: solid !important; border-bottom-width: 1px !important; border-top-style: solid !important; border-top-width: 1px !important; width: auto; vertical-align: middle; ">gem5 + DSim</td>
+<td style="text-align: left; border-right-style: solid !important; border-right-width: 1px !important; border-bottom-style: solid !important; border-bottom-width: 1px !important; border-top-style: solid !important; border-top-width: 1px !important; width: auto; vertical-align: middle; ">NEX + RTL</td>
+<td style="text-align: left; border-right-style: solid !important; border-right-width: 1px !important; border-bottom-style: solid !important; border-bottom-width: 1px !important; border-top-style: solid !important; border-top-width: 1px !important; width: auto; vertical-align: middle; ">NEX + DSim</td>
+</tr>
+<tr style="border-top: none !important; border-bottom: none !important;">
+<td style="text-align: left; border-left-style: solid !important; border-left-width: 1px !important; border-right-style: solid !important; border-right-width: 1px !important; border-bottom-style: solid !important; border-bottom-width: 1px !important; border-top: none !important; width: auto; vertical-align: middle; ">Our contribution ?</td>
+<td style="text-align: left; border-right-style: solid !important; border-right-width: 1px !important; border-bottom-style: solid !important; border-bottom-width: 1px !important; border-top: none !important; width: auto; vertical-align: middle; ">x</td>
+<td style="text-align: left; border-right-style: solid !important; border-right-width: 1px !important; border-bottom-style: solid !important; border-bottom-width: 1px !important; border-top: none !important; width: auto; vertical-align: middle; ">✓</td>
+<td style="text-align: left; border-right-style: solid !important; border-right-width: 1px !important; border-bottom-style: solid !important; border-bottom-width: 1px !important; border-top: none !important; width: auto; vertical-align: middle; ">✓</td>
+<td style="text-align: left; border-right-style: solid !important; border-right-width: 1px !important; border-bottom-style: solid !important; border-bottom-width: 1px !important; border-top: none !important; width: auto; vertical-align: middle; ">✓</td>
+</tr>
+<tr style="border-top: none !important; border-bottom: none !important;">
+<td style="text-align: left; border-left-style: solid !important; border-left-width: 1px !important; border-right-style: solid !important; border-right-width: 1px !important; border-bottom-style: solid !important; border-bottom-width: 1px !important; border-top: none !important; width: auto; vertical-align: middle; ">Use in CPU design exploration ?</td>
+<td style="text-align: left; border-right-style: solid !important; border-right-width: 1px !important; border-bottom-style: solid !important; border-bottom-width: 1px !important; border-top: none !important; width: auto; vertical-align: middle; ">✓</td>
+<td style="text-align: left; border-right-style: solid !important; border-right-width: 1px !important; border-bottom-style: solid !important; border-bottom-width: 1px !important; border-top: none !important; width: auto; vertical-align: middle; ">✓</td>
+<td style="text-align: left; border-right-style: solid !important; border-right-width: 1px !important; border-bottom-style: solid !important; border-bottom-width: 1px !important; border-top: none !important; width: auto; vertical-align: middle; ">×</td>
+<td style="text-align: left; border-right-style: solid !important; border-right-width: 1px !important; border-bottom-style: solid !important; border-bottom-width: 1px !important; border-top: none !important; width: auto; vertical-align: middle; ">×</td>
+</tr>
+<tr style="border-top: none !important; border-bottom: none !important;">
+<td style="text-align: left; border-left-style: solid !important; border-left-width: 1px !important; border-right-style: solid !important; border-right-width: 1px !important; border-bottom-style: solid !important; border-bottom-width: 1px !important; border-top: none !important; width: auto; vertical-align: middle; ">Use in accelerator design exploration?</td>
+<td style="text-align: left; border-right-style: solid !important; border-right-width: 1px !important; border-bottom-style: solid !important; border-bottom-width: 1px !important; border-top: none !important; width: auto; vertical-align: middle; ">x</td>
+<td style="text-align: left; border-right-style: solid !important; border-right-width: 1px !important; border-bottom-style: solid !important; border-bottom-width: 1px !important; border-top: none !important; width: auto; vertical-align: middle; ">✓</td>
+<td style="text-align: left; border-right-style: solid !important; border-right-width: 1px !important; border-bottom-style: solid !important; border-bottom-width: 1px !important; border-top: none !important; width: auto; vertical-align: middle; ">x</td>
+<td style="text-align: left; border-right-style: solid !important; border-right-width: 1px !important; border-bottom-style: solid !important; border-bottom-width: 1px !important; border-top: none !important; width: auto; vertical-align: middle; ">✓</td>
+</tr>
+<tr style="border-top: none !important; border-bottom: none !important;">
+<td style="text-align: left; border-left-style: solid !important; border-left-width: 1px !important; border-right-style: solid !important; border-right-width: 1px !important; border-bottom-style: solid !important; border-bottom-width: 1px !important; border-top: none !important; width: auto; vertical-align: middle; ">Range of simulation slowdown</td>
+<td style="text-align: left; border-right-style: solid !important; border-right-width: 1px !important; border-bottom-style: solid !important; border-bottom-width: 1px !important; border-top: none !important; width: auto; vertical-align: middle; "><span class="math-inline "><math xmlns="http://www.w3.org/1998/Math/MathML">
+  <mn>5</mn>
+  <mo>,</mo>
+  <mn>582</mn>
+  <mo>&#xD7;</mo>
+  <mo>&#x2212;</mo>
+</math></span> 23,970×</td>
+<td style="text-align: left; border-right-style: solid !important; border-right-width: 1px !important; border-bottom-style: solid !important; border-bottom-width: 1px !important; border-top: none !important; width: auto; vertical-align: middle; ">2,766×<span class="math-inline "><math xmlns="http://www.w3.org/1998/Math/MathML">
+  <mn>21</mn>
+  <mo>,</mo>
+  <mn>833</mn>
+  <mo>&#xD7;</mo>
+</math></span></td>
+<td style="text-align: left; border-right-style: solid !important; border-right-width: 1px !important; border-bottom-style: solid !important; border-bottom-width: 1px !important; border-top: none !important; width: auto; vertical-align: middle; "><span class="math-inline "><math xmlns="http://www.w3.org/1998/Math/MathML">
+  <mn>630</mn>
+  <mo>&#xD7;</mo>
+  <mo>&#x2212;</mo>
+  <mn>3</mn>
+  <mo>,</mo>
+  <mn>740</mn>
+  <mo>&#xD7;</mo>
+</math></span></td>
+<td style="text-align: left; border-right-style: solid !important; border-right-width: 1px !important; border-bottom-style: solid !important; border-bottom-width: 1px !important; border-top: none !important; width: auto; vertical-align: middle; "><span class="math-inline "><math xmlns="http://www.w3.org/1998/Math/MathML">
+  <mn>36</mn>
+  <mo>&#xD7;</mo>
+  <mo>&#x2212;</mo>
+  <mn>253</mn>
+  <mo>&#xD7;</mo>
+</math></span></td>
+</tr>
+<tr style="border-top: none !important; border-bottom: none !important;">
+<td style="text-align: left; border-left-style: solid !important; border-left-width: 1px !important; border-right-style: solid !important; border-right-width: 1px !important; border-bottom-style: solid !important; border-bottom-width: 1px !important; border-top: none !important; width: auto; vertical-align: middle; ">Visibility through traces</td>
+<td style="text-align: left; border-right-style: solid !important; border-right-width: 1px !important; border-bottom-style: solid !important; border-bottom-width: 1px !important; border-top: none !important; width: auto; vertical-align: middle; ">full</td>
+<td style="text-align: left; border-right-style: solid !important; border-right-width: 1px !important; border-bottom-style: solid !important; border-bottom-width: 1px !important; border-top: none !important; width: auto; vertical-align: middle; ">reduced for accelerator</td>
+<td style="text-align: left; border-right-style: solid !important; border-right-width: 1px !important; border-bottom-style: solid !important; border-bottom-width: 1px !important; border-top: none !important; width: auto; vertical-align: middle; ">reduced for host</td>
+<td style="text-align: left; border-right-style: solid !important; border-right-width: 1px !important; border-bottom-style: solid !important; border-bottom-width: 1px !important; border-top: none !important; width: auto; vertical-align: middle; ">reduced for both</td>
+</tr>
+</tbody>
+</table>
+</div></div>
+<div class="caption_table">Table 1. Comparison of different simulation modes. Except for gem5+RTL, all other simulation modes are new. The simulation speeds increase from left column to right column. Simulation slowdowns are compared to real physical systems and calculated after running real applications using a single JPEG or VTA accelerator (§6).</div></div>
+<div class="preview-paragraph-227 preview-line 227" data_line_start="227" data_line_end="227" data_line="227,228" count_line="1">For simulators to compose, they need a communication channel for exchanging timestamped messages representing simulation events. We reuse the optimized shared-memorybased channel provided by the SimBricks library [33].</div>
+<div class="preview-paragraph-229 preview-line 229 230" data_line_start="229" data_line_end="230" data_line="229,231" count_line="2">Each simulator requires only an adapter to use this channel. We implement adapters for NEX and DSim, and reuse gem5 and RTL adapters provided by SimBricks. We then modularly compose them into full-stack simulators that provide different trade-offs, as illustrated in Table 1. Simulating multiple accelerators can be supported using this modular design as well. We describe some aspects for each combination below, and provide further details in §A.2.<br>
+gem5 + DSim. The DSim adapter provides a base class that DSim models override. This base class handles MMIO from the host and provides primitives for DSim to issue DMAs and interrupts. As discussed in §4.3, DSim requires access to host memory via zero-cost DMA. We provide a separate channel for communicating such DMAs, and we handle them using gem5's functional memory accesses [35], which do not impact the simulated cycles. NEX also supports zero-cost DMA.</div>
+<div class="preview-paragraph-232 preview-line 232" data_line_start="232" data_line_end="232" data_line="232,233" count_line="1">NEX + RTL. Any RTL simulator that composes with gem5 can be used with NEX too, without any modifications. Additionally, NEX simulates the latency of DMAs from the RTL simulator using its built-in memory simulator.</div>
+<div class="preview-paragraph-234 preview-line 234" data_line_start="234" data_line_end="234" data_line="234,235" count_line="1">NEX + DSim. To fully leverage the speed of DSim, we augmented the SimBricks protocol to reduce unnecessary inter-simulator synchronization messages (see §A.2).</div>
+<div class="preview-paragraph-236 preview-line 236" data_line_start="236" data_line_end="236" data_line="236,237" count_line="1">We also offer a tighter integration method that does not use the SimBricks channel. At the price of giving up modularity, this method avoids exchanging messages over shared memory, and can take full advantage of DSim's speed.</div>
+<h2 type="section" data-unnumbered="true" class="section-title preview-paragraph-238 preview-line 238" id="6-evaluation" data_line_start="238" data_line_end="238" data_line="238,239" count_line="1">
+6 Evaluation</h2>
+<div class="preview-paragraph-240 preview-line 240" data_line_start="240" data_line_end="240" data_line="240,241" count_line="1">In this evaluation section, we answer the following questions:</div>
+<ol class="preview-paragraph-241 preview-line 241 242 243 244 245 246 247 248" data_line_start="241" data_line_end="248" data_line="241,249" count_line="8">
+<li>How does the simulation accuracy of NEX+DSim compare to the state of the art (§6.2)? Quick answer: 7% error on average, max <span class="math-inline "><math xmlns="http://www.w3.org/1998/Math/MathML">
+  <mn>14</mn>
+  <mi mathvariant="normal">%</mi>
+</math></span>, across all our evaluation targets.</li>
+<li>How does the simulation time of NEX+DSim compare to a state-of-the-art full-stack simulator (§6.3)? Quick answer: <span class="math-inline "><math xmlns="http://www.w3.org/1998/Math/MathML">
+  <mn>6</mn>
+  <mo>&#xD7;</mo>
+</math></span> to <span class="math-inline "><math xmlns="http://www.w3.org/1998/Math/MathML">
+  <mn>879</mn>
+  <mo>&#xD7;</mo>
+</math></span> faster.</li>
+<li>Can NEX+DSim change today's &quot;batch-mode&quot; way of developing hardware-accelerated stacks (§6.4)?</li>
+<li>How much do the individual parts of NEX and DSim contribute to the accuracy and speed improvements (§6.5)?</li>
+<li>How do NEX+DSim's configuration options impact overall speed and accuracy (§6.6)?</li>
+<li>What is the impact of hybrid synchronization on NEX+DSim's simulation speed (§6.7)?</li>
+<li>Can NEX+DSim reveal deeper aspects of performance behavior beyond just total execution time (§6.8)?</li>
+</ol>
+<h3 type="subsection" data-unnumbered="true" class="sub_section-title preview-paragraph-249 preview-line 249" id="6.1-methodology" data_line_start="249" data_line_end="249" data_line="249,250" count_line="1">
+6.1 Methodology</h3>
+<div class="preview-paragraph-251 preview-line 251" data_line_start="251" data_line_end="251" data_line="251,252" count_line="1">Accelerators. Our evaluation uses three accelerators, shown in Table 2: a JPEG decoder, a deep-learning accelerator (Apache VTA), and an accelerator for Protobuf serialization and deserialization (Protoacc). VTA and Protoacc come with their software stacks; for the JPEG decoder, we wrote a software driver. Since DSim relies on the accelerator's LPN, which requires access to its implementation internals, our evaluation is limited for now to open-source accelerators.</div>
+<div class="table preview-paragraph-253 preview-line 253 254 255 256 257 258 259 260 261 262 263" number="2" data_line_start="253" data_line_end="263" data_line="253,264" count_line="11">
+<div class="table_tabular" style="text-align: center">
+<div class="inline-tabular"><table class="tabular">
+<tbody>
+<tr style="border-top: none !important; border-bottom: none !important;">
+<td style="text-align: left; border-left-style: solid !important; border-left-width: 1px !important; border-right-style: solid !important; border-right-width: 1px !important; border-bottom-style: solid !important; border-bottom-width: 1px !important; border-top-style: solid !important; border-top-width: 1px !important; width: auto; vertical-align: middle; ">Accelerator</td>
+<td style="text-align: left; border-right-style: solid !important; border-right-width: 1px !important; border-bottom-style: solid !important; border-bottom-width: 1px !important; border-top-style: solid !important; border-top-width: 1px !important; width: auto; vertical-align: middle; ">Domain</td>
+<td style="text-align: left; border-right-style: solid !important; border-right-width: 1px !important; border-bottom-style: solid !important; border-bottom-width: 1px !important; border-top-style: solid !important; border-top-width: 1px !important; width: auto; vertical-align: middle; ">Software Stack</td>
+<td style="text-align: left; border-right-style: solid !important; border-right-width: 1px !important; border-bottom-style: solid !important; border-bottom-width: 1px !important; border-top-style: solid !important; border-top-width: 1px !important; width: auto; vertical-align: middle; ">Workload</td>
+</tr>
+<tr style="border-top: none !important; border-bottom: none !important;">
+<td style="text-align: left; border-left-style: solid !important; border-left-width: 1px !important; border-right-style: solid !important; border-right-width: 1px !important; border-bottom-style: solid !important; border-bottom-width: 1px !important; border-top: none !important; width: auto; vertical-align: middle; ">VTA [6]</td>
+<td style="text-align: left; border-right-style: solid !important; border-right-width: 1px !important; border-bottom-style: solid !important; border-bottom-width: 1px !important; border-top: none !important; width: auto; vertical-align: middle; ">Deep learning</td>
+<td style="text-align: left; border-right-style: solid !important; border-right-width: 1px !important; border-bottom-style: solid !important; border-bottom-width: 1px !important; border-top: none !important; width: auto; vertical-align: middle; ">TVM</td>
+<td style="text-align: left; border-right-style: solid !important; border-right-width: 1px !important; border-bottom-style: solid !important; border-bottom-width: 1px !important; border-top: none !important; width: auto; vertical-align: middle; ">ResNet-18,34,50 [23] and yolo-v3-tiny [1]</td>
+</tr>
+<tr style="border-top: none !important; border-bottom: none !important;">
+<td style="text-align: left; border-left-style: solid !important; border-left-width: 1px !important; border-right-style: solid !important; border-right-width: 1px !important; border-bottom-style: solid !important; border-bottom-width: 1px !important; border-top: none !important; width: auto; vertical-align: middle; ">Protoacc [31]</td>
+<td style="text-align: left; border-right-style: solid !important; border-right-width: 1px !important; border-bottom-style: solid !important; border-bottom-width: 1px !important; border-top: none !important; width: auto; vertical-align: middle; ">RPC message serialization</td>
+<td style="text-align: left; border-right-style: solid !important; border-right-width: 1px !important; border-bottom-style: solid !important; border-bottom-width: 1px !important; border-top: none !important; width: auto; vertical-align: middle; ">Protobuf compiler</td>
+<td style="text-align: left; border-right-style: solid !important; border-right-width: 1px !important; border-bottom-style: solid !important; border-bottom-width: 1px !important; border-top: none !important; width: auto; vertical-align: middle; ">HyperProtoBench [20]</td>
+</tr>
+<tr style="border-top: none !important; border-bottom: none !important;">
+<td style="text-align: left; border-left-style: solid !important; border-left-width: 1px !important; border-right-style: solid !important; border-right-width: 1px !important; border-bottom-style: solid !important; border-bottom-width: 1px !important; border-top: none !important; width: auto; vertical-align: middle; ">JPEG [60]</td>
+<td style="text-align: left; border-right-style: solid !important; border-right-width: 1px !important; border-bottom-style: solid !important; border-bottom-width: 1px !important; border-top: none !important; width: auto; vertical-align: middle; ">Image decoding</td>
+<td style="text-align: left; border-right-style: solid !important; border-right-width: 1px !important; border-bottom-style: solid !important; border-bottom-width: 1px !important; border-top: none !important; width: auto; vertical-align: middle; ">Custom software driver</td>
+<td style="text-align: left; border-right-style: solid !important; border-right-width: 1px !important; border-bottom-style: solid !important; border-bottom-width: 1px !important; border-top: none !important; width: auto; vertical-align: middle; ">Images from Flickr and Div2k datasets</td>
+</tr>
+</tbody>
+</table>
+</div></div>
+<div class="caption_table">Table 2. Accelerators used to evaluate NEX and DSim.</div></div>
+<div class="preview-paragraph-265 preview-line 265" data_line_start="265" data_line_end="265" data_line="265,266" count_line="1">We now provide additional details about each accelerator and the workloads we used when simulating them.</div>
+<div class="preview-paragraph-267 preview-line 267" data_line_start="267" data_line_end="267" data_line="267,268" count_line="1">Apache VTA (Versatile Tensor Accelerator) [6] is a deep-learning accelerator with hardware cores specialized for matrix and vector operations. When simulating VTA, we run inference computations for a number of deep neural networks supported by VTA, including the ResNet-18, ResNet-34,</div>
+<div class="preview-paragraph-269 preview-line 269" data_line_start="269" data_line_end="269" data_line="269,270" count_line="1">ResNet-50 [23], and YOLO-v3-tiny [1] models. We also simulate a multi-process ResNet-18 inference workload using both 4 and 8 VTA accelerators in parallel.</div>
+<div class="preview-paragraph-271 preview-line 271" data_line_start="271" data_line_end="271" data_line="271,272" count_line="1">Protoacc [31] is a co-processor-based accelerator designed by Google for speeding up protocol buffer serialization and de-serialization [21]. We only consider Protoacc's serializer, which is the most interesting part because multiple fields within a message are serialized in parallel-deserialization is sequential and thus not interesting. We had to make two changes to Protoacc before we could use it in our evaluation: First, Protoacc was integrated into a RISC-V SoC, so we eliminated Protoacc's dependencies on the RISC-V SoC and made it possible to integrate it into any CPU via a standard AXI interface [8]. Second, we added a translation layer to the Protoacc software driver that allows Protoacc to operate on physical addresses instead of virtual addresses. This was necessary not due to a limitation of NEX but because the gem5+RTL simulator we compare to does not support simulating RTL with virtual addresses in gem5. Note that neither change affects the accuracy or simulation time relative to the baseline-it's just that each simulator is evaluated on a variant of Protoacc. As in the Protoacc paper [31], we evaluate Protoacc with the HyperProtoBench benchmark suite [20]. Protoacc is used asynchronously with the CPU. The CPU preprocesses and launches a series of tasks to Protoacc, then waits for a batch to finish.</div>
+<div class="preview-paragraph-273 preview-line 273" data_line_start="273" data_line_end="273" data_line="273,274" count_line="1">JPEG [60] is an image decoding accelerator that supports various chroma, fixed and dynamic Huffman tables, and DQT tables for JPEG input streams. We simulate JPEG with a workload that consists of 50 JPEG images randomly sampled from the Flickr [30] and Div2k [29] datasets. After decoding each image, the workload applies a 2D kernel post-processing step. We also simulate a multithreaded version using 2,4 , and 8 JPEG accelerators, with each thread using one accelerator. Threads repeatedly fetch image-decoding and post-processing tasks from a shared queue until completion.</div>
+<div class="preview-paragraph-275 preview-line 275" data_line_start="275" data_line_end="275" data_line="275,276" count_line="1">Baseline real system. The VTA accelerator is already capable of running on FPGAs, so we synthesized it and ran it on two FPGAs, with the software stack running on the host CPU.</div>
+<div class="preview-paragraph-277 preview-line 277 278 279" data_line_start="277" data_line_end="279" data_line="277,280" count_line="3">Baseline simulator. For the simulator baseline, we use the state-of-the-art gem5 + cycle-accurate RTL simulator provided by SimBricks [33]. The RTL simulator we use is Verilator [61], which is the fastest open-source cycle-accurate RTL simulator today. We use SimBricks version v0.2.0, which uses gem5 version v24.0.0.1 and Verilator version v5.010. Since SimBricks is primarily an orchestrator for gem5 and the RTL simulator, we refer to our baseline as gem5+RTL hereafter.<br>
+Experimental setup. We run the VTA stack on two FPGA testbeds at 160 MHz and 201 MHz , respectively. For comparison with gem5+RTL, we ran all experiments on a 2 -socket, 48-core Intel Xeon Gold 6248R processor. Each core was clocked at a fixed frequency of 3 GHz . We configured the gem5 CPU to match the above Xeon using publicly available<br>
+information [63, 64]. The baseline and our three proposed simulation modes (as described in Table 1) use the same hardware setup and configuration. We assume that JPEG and VTA are connected to the CPU via a PCIe channel with a one-way delay of 400 ns . Similarly, Protoacc is assumed to be placed on-chip with an interconnect latency of 4 ns . All accelerators are configured to run at 2 GHz and can directly access the last-level cache (LLC). The interconnect used by the baseline has a constant latency and by default handles a maximum of 16 concurrent read and write requests each, based on a real hardware configuration. We configured NEX's interconnect similarly. NEX uses the default EBS scheduling and lazy synchronization, unless specified otherwise. The epoch duration is set to <span class="math-inline "><math xmlns="http://www.w3.org/1998/Math/MathML">
+  <mn>1</mn>
+  <mi>&#x3BC;</mi>
+  <mrow data-mjx-texclass="ORD">
+    <mtext> </mtext>
+    <mi mathvariant="normal">s</mi>
+  </mrow>
+</math></span>, with the calibration constant set to 850 ns . We use checkpointing in gem5 and similarly SlipStream in NEX to fast-forward the application setup phase.</div>
+<h3 type="subsection" data-unnumbered="true" class="sub_section-title preview-paragraph-281 preview-line 281" id="6.2-simulation-accuracy" data_line_start="281" data_line_end="281" data_line="281,282" count_line="1">
+6.2 Simulation Accuracy</h3>
+<div class="preview-paragraph-283 preview-line 283" data_line_start="283" data_line_end="283" data_line="283,284" count_line="1">To evaluate the simulation accuracy of NEX+DSim, we compare its reported total simulated time to the real execution time on FPGA testbeds for VTA, and to the simulated time of the baseline software-based simulator for all accelerators.</div>
+<div class="preview-paragraph-285 preview-line 285" data_line_start="285" data_line_end="285" data_line="285,286" count_line="1">Table 3 describes the results for comparison with the FPGA testbeds and gem5+RTL. We see that NEX+DSim is accurate and incurs an average error of <span class="math-inline "><math xmlns="http://www.w3.org/1998/Math/MathML">
+  <mn>6</mn>
+  <mi mathvariant="normal">%</mi>
+</math></span> compared to FPGA execution and a maximum error of <span class="math-inline "><math xmlns="http://www.w3.org/1998/Math/MathML">
+  <mn>12</mn>
+  <mi mathvariant="normal">%</mi>
+</math></span> across applications that use a single VTA. Comparing to gem5+RTL, NEX+DSim incurs an average error of <span class="math-inline "><math xmlns="http://www.w3.org/1998/Math/MathML">
+  <mn>7</mn>
+  <mi mathvariant="normal">%</mi>
+</math></span> and a maximum error of <span class="math-inline "><math xmlns="http://www.w3.org/1998/Math/MathML">
+  <mn>14</mn>
+  <mi mathvariant="normal">%</mi>
+</math></span> across all benchmarks and accelerators.</div>
+<div class="preview-paragraph-287 preview-line 287" data_line_start="287" data_line_end="287" data_line="287,288" count_line="1">Our discussions with practitioners indicate that error rates of up to <span class="math-inline "><math xmlns="http://www.w3.org/1998/Math/MathML">
+  <mn>20</mn>
+  <mi mathvariant="normal">%</mi>
+</math></span> are considered acceptable, which leads us to conclude that our tools are accurate enough for developers to use when iterating over designs and code alternatives.</div>
+<div class="table preview-paragraph-289 preview-line 289 290 291 292 293 294 295 296 297 298 299 300 301" number="3" data_line_start="289" data_line_end="301" data_line="289,302" count_line="13">
+<div class="table_tabular" style="text-align: center">
+<div class="inline-tabular"><table class="tabular">
+<tbody>
+<tr style="border-top: none !important; border-bottom: none !important;">
+<td style="text-align: left; border-left-style: solid !important; border-left-width: 1px !important; border-right-style: solid !important; border-right-width: 1px !important; border-bottom-style: solid !important; border-bottom-width: 1px !important; border-top-style: solid !important; border-top-width: 1px !important; width: auto; vertical-align: middle; ">Baseline</td>
+<td style="text-align: left; border-right-style: solid !important; border-right-width: 1px !important; border-bottom-style: solid !important; border-bottom-width: 1px !important; border-top-style: solid !important; border-top-width: 1px !important; width: auto; vertical-align: middle; ">Accelerator</td>
+<td style="text-align: left; border-right-style: solid !important; border-right-width: 1px !important; border-bottom-style: solid !important; border-bottom-width: 1px !important; border-top-style: solid !important; border-top-width: 1px !important; width: auto; vertical-align: middle; ">Avg</td>
+<td style="text-align: left; border-right-style: solid !important; border-right-width: 1px !important; border-bottom-style: solid !important; border-bottom-width: 1px !important; border-top-style: solid !important; border-top-width: 1px !important; width: auto; vertical-align: middle; ">Max</td>
+<td style="text-align: left; border-right-style: solid !important; border-right-width: 1px !important; border-bottom-style: solid !important; border-bottom-width: 1px !important; border-top-style: solid !important; border-top-width: 1px !important; width: auto; vertical-align: middle; ">Min</td>
+<td style="text-align: left; border-right-style: solid !important; border-right-width: 1px !important; border-bottom-style: solid !important; border-bottom-width: 1px !important; border-top-style: solid !important; border-top-width: 1px !important; width: auto; vertical-align: middle; ">E2E Latency</td>
+</tr>
+<tr style="border-top: none !important; border-bottom: none !important;">
+<td style="text-align: left; border-left-style: solid !important; border-left-width: 1px !important; border-right-style: solid !important; border-right-width: 1px !important; border-bottom-style: solid !important; border-bottom-width: 1px !important; border-top: none !important; width: auto; vertical-align: middle; ">FPGA-1</td>
+<td style="text-align: left; border-left-style: solid !important; border-left-width: 1px !important; border-right-style: solid !important; border-right-width: 1px !important; border-bottom: none !important; border-top: none !important; vertical-align: top; width: auto; border-bottom-style: solid !important; border-bottom-width: 1px !important; " rowspan="2">VTA</td>
+<td style="text-align: left; border-right-style: solid !important; border-right-width: 1px !important; border-bottom-style: solid !important; border-bottom-width: 1px !important; border-top: none !important; width: auto; vertical-align: middle; ">4.3%</td>
+<td style="text-align: left; border-right-style: solid !important; border-right-width: 1px !important; border-bottom-style: solid !important; border-bottom-width: 1px !important; border-top: none !important; width: auto; vertical-align: middle; ">9.9%</td>
+<td style="text-align: left; border-right-style: solid !important; border-right-width: 1px !important; border-bottom-style: solid !important; border-bottom-width: 1px !important; border-top: none !important; width: auto; vertical-align: middle; ">1.1%</td>
+<td style="text-align: left; border-right-style: solid !important; border-right-width: 1px !important; border-bottom-style: solid !important; border-bottom-width: 1px !important; border-top: none !important; width: auto; vertical-align: middle; "><span class="math-inline "><math xmlns="http://www.w3.org/1998/Math/MathML">
+  <mn>71</mn>
+  <mrow data-mjx-texclass="ORD">
+    <mtext> </mtext>
+    <mi data-mjx-auto-op="false">ms</mi>
+  </mrow>
+  <mo>&#x2212;</mo>
+  <mn>1822</mn>
+  <mrow data-mjx-texclass="ORD">
+    <mtext> </mtext>
+    <mi data-mjx-auto-op="false">ms</mi>
+  </mrow>
+</math></span></td>
+</tr>
+<tr style="border-top: none !important; border-bottom: none !important;">
+<td style="text-align: left; border-left-style: solid !important; border-left-width: 1px !important; border-right-style: solid !important; border-right-width: 1px !important; border-bottom-style: solid !important; border-bottom-width: 1px !important; border-top: none !important; width: auto; vertical-align: middle; ">FPGA-2</td>
+<td style="text-align: left; border-right-style: solid !important; border-right-width: 1px !important; border-bottom-style: solid !important; border-bottom-width: 1px !important; border-top: none !important; width: auto; vertical-align: middle; ">7.1%</td>
+<td style="text-align: left; border-right-style: solid !important; border-right-width: 1px !important; border-bottom-style: solid !important; border-bottom-width: 1px !important; border-top: none !important; width: auto; vertical-align: middle; ">11.4%</td>
+<td style="text-align: left; border-right-style: solid !important; border-right-width: 1px !important; border-bottom-style: solid !important; border-bottom-width: 1px !important; border-top: none !important; width: auto; vertical-align: middle; ">2.6%</td>
+<td style="text-align: left; border-right-style: solid !important; border-right-width: 1px !important; border-bottom-style: solid !important; border-bottom-width: 1px !important; border-top: none !important; width: auto; vertical-align: middle; "><span class="math-inline "><math xmlns="http://www.w3.org/1998/Math/MathML">
+  <mn>48</mn>
+  <mrow data-mjx-texclass="ORD">
+    <mtext> </mtext>
+    <mi data-mjx-auto-op="false">ms</mi>
+  </mrow>
+  <mo>&#x2212;</mo>
+  <mn>1506</mn>
+  <mrow data-mjx-texclass="ORD">
+    <mtext> </mtext>
+    <mi data-mjx-auto-op="false">ms</mi>
+  </mrow>
+</math></span></td>
+</tr>
+<tr style="border-top: none !important; border-bottom: none !important;">
+<td style="text-align: left; border-left-style: solid !important; border-left-width: 1px !important; border-right-style: solid !important; border-right-width: 1px !important; border-bottom: none !important; border-top: none !important; width: auto; border-bottom-style: solid !important; border-bottom-width: 1px !important; border-bottom-style: solid !important; border-bottom-width: 1px !important; " rowspan="3">gem5+RTL</td>
+<td style="text-align: left; border-right-style: solid !important; border-right-width: 1px !important; border-bottom-style: solid !important; border-bottom-width: 1px !important; border-top: none !important; width: auto; vertical-align: middle; ">VTA</td>
+<td style="text-align: left; border-right-style: solid !important; border-right-width: 1px !important; border-bottom-style: solid !important; border-bottom-width: 1px !important; border-top: none !important; width: auto; vertical-align: middle; ">3.5%</td>
+<td style="text-align: left; border-right-style: solid !important; border-right-width: 1px !important; border-bottom-style: solid !important; border-bottom-width: 1px !important; border-top: none !important; width: auto; vertical-align: middle; ">7.3%</td>
+<td style="text-align: left; border-right-style: solid !important; border-right-width: 1px !important; border-bottom-style: solid !important; border-bottom-width: 1px !important; border-top: none !important; width: auto; vertical-align: middle; ">1.7%</td>
+<td style="text-align: left; border-right-style: solid !important; border-right-width: 1px !important; border-bottom-style: solid !important; border-bottom-width: 1px !important; border-top: none !important; width: auto; vertical-align: middle; "><span class="math-inline "><math xmlns="http://www.w3.org/1998/Math/MathML">
+  <mn>47</mn>
+  <mrow data-mjx-texclass="ORD">
+    <mtext> </mtext>
+    <mi data-mjx-auto-op="false">ms</mi>
+  </mrow>
+  <mo>&#x2212;</mo>
+  <mn>700</mn>
+  <mrow data-mjx-texclass="ORD">
+    <mtext> </mtext>
+    <mi data-mjx-auto-op="false">ms</mi>
+  </mrow>
+</math></span></td>
+</tr>
+<tr style="border-top: none !important; border-bottom: none !important;">
+<td style="text-align: left; border-right-style: solid !important; border-right-width: 1px !important; border-bottom-style: solid !important; border-bottom-width: 1px !important; border-top: none !important; width: auto; vertical-align: middle; ">Protoacc</td>
+<td style="text-align: left; border-right-style: solid !important; border-right-width: 1px !important; border-bottom-style: solid !important; border-bottom-width: 1px !important; border-top: none !important; width: auto; vertical-align: middle; ">9.0%</td>
+<td style="text-align: left; border-right-style: solid !important; border-right-width: 1px !important; border-bottom-style: solid !important; border-bottom-width: 1px !important; border-top: none !important; width: auto; vertical-align: middle; ">13.8%</td>
+<td style="text-align: left; border-right-style: solid !important; border-right-width: 1px !important; border-bottom-style: solid !important; border-bottom-width: 1px !important; border-top: none !important; width: auto; vertical-align: middle; ">1.9%</td>
+<td style="text-align: left; border-right-style: solid !important; border-right-width: 1px !important; border-bottom-style: solid !important; border-bottom-width: 1px !important; border-top: none !important; width: auto; vertical-align: middle; "><span class="math-inline "><math xmlns="http://www.w3.org/1998/Math/MathML">
+  <mn>240</mn>
+  <mi>&#x3BC;</mi>
+  <mrow data-mjx-texclass="ORD">
+    <mtext> </mtext>
+    <mi mathvariant="normal">s</mi>
+  </mrow>
+  <mo>&#x2212;</mo>
+  <mn>21</mn>
+  <mrow data-mjx-texclass="ORD">
+    <mtext> </mtext>
+    <mi data-mjx-auto-op="false">ms</mi>
+  </mrow>
+</math></span></td>
+</tr>
+<tr style="border-top: none !important; border-bottom: none !important;">
+<td style="text-align: left; border-right-style: solid !important; border-right-width: 1px !important; border-bottom-style: solid !important; border-bottom-width: 1px !important; border-top: none !important; width: auto; vertical-align: middle; ">JPEG</td>
+<td style="text-align: left; border-right-style: solid !important; border-right-width: 1px !important; border-bottom-style: solid !important; border-bottom-width: 1px !important; border-top: none !important; width: auto; vertical-align: middle; ">9.5%</td>
+<td style="text-align: left; border-right-style: solid !important; border-right-width: 1px !important; border-bottom-style: solid !important; border-bottom-width: 1px !important; border-top: none !important; width: auto; vertical-align: middle; ">11.5%</td>
+<td style="text-align: left; border-right-style: solid !important; border-right-width: 1px !important; border-bottom-style: solid !important; border-bottom-width: 1px !important; border-top: none !important; width: auto; vertical-align: middle; ">8.3%</td>
+<td style="text-align: left; border-right-style: solid !important; border-right-width: 1px !important; border-bottom-style: solid !important; border-bottom-width: 1px !important; border-top: none !important; width: auto; vertical-align: middle; "><span class="math-inline "><math xmlns="http://www.w3.org/1998/Math/MathML">
+  <mn>527</mn>
+  <mrow data-mjx-texclass="ORD">
+    <mtext> </mtext>
+    <mi data-mjx-auto-op="false">ms</mi>
+  </mrow>
+  <mo>&#x2212;</mo>
+  <mn>1955</mn>
+  <mrow data-mjx-texclass="ORD">
+    <mtext> </mtext>
+    <mi data-mjx-auto-op="false">ms</mi>
+  </mrow>
+</math></span></td>
+</tr>
+</tbody>
+</table>
+</div></div>
+<div class="caption_table">Table 3. Simulation error (absolute) of NEX+DSim compared to both real FPGA testbeds and the gem5+RTL, and the range of the exact simulated time across applications. Statistics and ranges are computed across all corresponding benchmarks.</div></div>
+<h3 type="subsection" data-unnumbered="true" class="sub_section-title preview-paragraph-303 preview-line 303" id="6.3-simulation-speed" data_line_start="303" data_line_end="303" data_line="303,304" count_line="1">
+6.3 Simulation Speed</h3>
+<div class="preview-paragraph-305 preview-line 305" data_line_start="305" data_line_end="305" data_line="305,306" count_line="1">To measure simulation speedup, we compare NEX+DSim's execution time to gem5+RTL's for the various benchmarks.</div>
+<div class="preview-paragraph-307 preview-line 307 308" data_line_start="307" data_line_end="308" data_line="307,309" count_line="2">Fig. 3 shows the results. We see that NEX+DSim provides a <span class="math-inline "><math xmlns="http://www.w3.org/1998/Math/MathML">
+  <mn>6</mn>
+  <mo>&#xD7;</mo>
+</math></span> to <span class="math-inline "><math xmlns="http://www.w3.org/1998/Math/MathML">
+  <mn>879</mn>
+  <mo>&#xD7;</mo>
+</math></span> speedup compared to gem5+RTL-this reduces the simulation time from hours or tens of minutes down to seconds. The speedups provided are greater for compute-intensive benchmarks (e.g., Yolo-v3-tiny and various Resnet models),<br>
+since native execution of the software on the host CPU and the LPN abstraction used by DSim are significantly faster than simulation. For benchmarks where the fraction of time spent transferring data is higher (e.g., those from the HyperProtoBench suite), the speedup provided by NEX is lower since NEX (like gem5) simulates DMA requests and responses.</div>
+<div class="table preview-paragraph-310 preview-line 310 311 312 313 314" number="3" data_line_start="310" data_line_end="314" data_line="310,315" count_line="5">
+<div class="figure_img" style="text-align: center;"><img src="https://cdn.mathpix.com/cropped/ecd0225c-1341-4462-8562-17231a1194ef-11.jpg?height=534&width=830&top_left_y=519&top_left_x=193" alt="" style="max-width: 100%;"/></div><div class="caption_figure">Figure 3. Total time required to complete simulation for different benchmarks that run on the three hardware accelerators. The data label above each yellow bar represents the corresponding relative speedup of NEX+DSim compared to gem5+RTL.</div></div>
+<div class="preview-paragraph-316 preview-line 316" data_line_start="316" data_line_end="316" data_line="316,317" count_line="1">Based on these results, we conclude that developers can indeed use NEX+DSim to interactively simulate the full hardware-software stack and quickly iterate over design changes in both the software and the accelerator. We provide a detailed breakdown of NEX+DSim's speedup in §6.5.</div>
+<h3 type="subsection" data-unnumbered="true" class="sub_section-title preview-paragraph-318 preview-line 318" id="6.4-development-use-cases" data_line_start="318" data_line_end="318" data_line="318,319" count_line="1">
+6.4 Development Use Cases</h3>
+<div class="preview-paragraph-320 preview-line 320 321" data_line_start="320" data_line_end="321" data_line="320,322" count_line="2">As mentioned in §1, NEX+DSim can enable a more interactive way to develop hardware-accelerated software and to co-design hardware-software stacks. We now present different use cases corresponding to three distinct development stages.<br>
+Using NEX for early-stage development of hardwareaccelerated stacks. When optimizing full-stack systems, developers first identify bottlenecks and evaluate the expected performance gains of using an accelerator to address these performance issues before committing to a full implementation. We show how NEX's CompressT and JumpT features described in §3.3 can help.</div>
+<div class="preview-paragraph-323 preview-line 323" data_line_start="323" data_line_end="323" data_line="323,324" count_line="1">For this illustration, we reuse the multi-threaded JPEG application with 8 JPEG decoders reported above, but extend it with more time-consuming post-processing in software, to have a clear bottleneck. We call this code matrix_filter_2d(). From here on, all performance numbers correspond to NEX+DSim simulation. Initially, the application takes <span class="math-inline "><math xmlns="http://www.w3.org/1998/Math/MathML">
+  <mn>3</mn>
+  <mo>,</mo>
+  <mn>233</mn>
+  <mrow data-mjx-texclass="ORD">
+    <mtext> </mtext>
+    <mi data-mjx-auto-op="false">ms</mi>
+  </mrow>
+</math></span>.</div>
+<div class="preview-paragraph-325 preview-line 325 326" data_line_start="325" data_line_end="326" data_line="325,327" count_line="2">Once profiling reveals matrix_filter_2d() to be a bottleneck, developers ask themselves whether speeding up this postprocessing with a custom accelerator would improve end-toend execution time. So they wrap matrix_filter_2d() in a CompressT block, then simulate again with NEX. For example, a<br>
+<span class="math-inline "><math xmlns="http://www.w3.org/1998/Math/MathML">
+  <mn>10</mn>
+  <mo>&#xD7;</mo>
+</math></span> CompressT acceleration results in the application's execution time reducing to 667 ms , i.e., a <span class="math-inline "><math xmlns="http://www.w3.org/1998/Math/MathML">
+  <mn>4.8</mn>
+  <mo>&#xD7;</mo>
+</math></span> overall acceleration.</div>
+<div class="preview-paragraph-328 preview-line 328" data_line_start="328" data_line_end="328" data_line="328,329" count_line="1">However, a <span class="math-inline "><math xmlns="http://www.w3.org/1998/Math/MathML">
+  <mn>10</mn>
+  <mo>&#xD7;</mo>
+</math></span> acceleration of matrix_filter_2d() might be unrealistic, due to memory access latency. To figure out a more realistic speedup, developers can instrument their application and wrap this instrumentation in JumpT, to make it zerooverhead in virtual time. For example, in a JumpT block, the developer adds code that runs matrix_filter_2d(), times its execution, computes how many memory accesses it makes, multiplies them by a constant 1 ns access time, and then computes the ratio of matrix_filter_2d()'s execution time to its estimated memory-access time. It then passes this value to the subsequent CompressT block, in which matrix_filter_2d() is executed again. Running the instrumented application in NEX+DSim obtains an end-to-end execution time that accounts for the dynamically computed acceleration of matrix_filter_2d() but excludes all the instrumentation overhead. In our JPEG example, the new latency is 855 ms , meaning that a tighter, more realistic upper bound on overall acceleration is <span class="math-inline "><math xmlns="http://www.w3.org/1998/Math/MathML">
+  <mn>3.78</mn>
+  <mo>&#xD7;</mo>
+</math></span>.</div>
+<div class="preview-paragraph-330 preview-line 330" data_line_start="330" data_line_end="330" data_line="330,331" count_line="1">If this overall speedup is worth the effort, developers can begin sketching a design for the envisioned custom accelerator. Note that such what-if analyses would be difficult to derive analytically because of the complex interactions between the application's multiple threads and the accelerator.</div>
+<div class="preview-paragraph-332 preview-line 332" data_line_start="332" data_line_end="332" data_line="332,333" count_line="1">Sketching accelerator design with DSim. Developers doing software-hardware co-design can use LPNs in DSim as sketches of the microarchitecture of the desired accelerator. They can then write a separate functional model (unrelated to the microarchitecture) and compose the two using the method described in §4.3. Loose coupling between the performance and functionality track allows developers to explore functionally equivalent microarchitectural designs by merely adjusting the LPN.</div>
+<div class="preview-paragraph-334 preview-line 334" data_line_start="334" data_line_end="334" data_line="334,335" count_line="1">Using NEX+DSim interactively. If developers are considering using accelerator <span class="math-inline "><math xmlns="http://www.w3.org/1998/Math/MathML">
+  <mi mathvariant="normal">&#x3A6;</mi>
+</math></span>, and they have an LPN and functional simulator for it, then they can use NEX+DSim to simulate <span class="math-inline "><math xmlns="http://www.w3.org/1998/Math/MathML">
+  <mi mathvariant="normal">&#x3A6;</mi>
+</math></span>-accelerated stacks interactively. In so doing, they can interactively answer questions like Q1: What would the end-to-end latency be if I used <span class="math-inline "><math xmlns="http://www.w3.org/1998/Math/MathML">
+  <mi mathvariant="normal">&#x3A6;</mi>
+</math></span> ? Q2: How much would <span class="math-inline "><math xmlns="http://www.w3.org/1998/Math/MathML">
+  <mi mathvariant="normal">&#x3A6;</mi>
+</math></span> speed up my software? Q3: What would the performance bottlenecks in my system be once I integrated <span class="math-inline "><math xmlns="http://www.w3.org/1998/Math/MathML">
+  <mi mathvariant="normal">&#x3A6;</mi>
+</math></span> into it? and <span class="math-inline "><math xmlns="http://www.w3.org/1998/Math/MathML">
+  <mi>Q</mi>
+  <mn>4</mn>
+</math></span> : Can I further optimize <span class="math-inline "><math xmlns="http://www.w3.org/1998/Math/MathML">
+  <mi mathvariant="normal">&#x3A6;</mi>
+</math></span> 's design for my use case? We use the VTA accelerator as an example of how developers could do this.</div>
+<div class="preview-paragraph-336 preview-line 336" data_line_start="336" data_line_end="336" data_line="336,337" count_line="1">We assume an initial design of VTA that is attached via PCIe to the host CPU, with DMAs served by the host's LLC. The application of interest is Resnet50 inference.</div>
+<div class="preview-paragraph-338 preview-line 338" data_line_start="338" data_line_end="338" data_line="338,339" count_line="1">For Q1 and Q2, NEX+DSim can show within seconds that Resnet50 inference takes 677 ms when using VTA but takes 537 ms when running exclusively on the CPU. Thus, the current design of VTA actually increases application latency by <span class="math-inline "><math xmlns="http://www.w3.org/1998/Math/MathML">
+  <mn>26</mn>
+  <mi mathvariant="normal">%</mi>
+</math></span>.</div>
+<div class="preview-paragraph-340 preview-line 340" data_line_start="340" data_line_end="340" data_line="340,341" count_line="1">To identify bottlenecks ( <span class="math-inline "><math xmlns="http://www.w3.org/1998/Math/MathML">
+  <mi>Q</mi>
+  <mn>3</mn>
+</math></span> ) and optimize the accelerator design ( <span class="math-inline "><math xmlns="http://www.w3.org/1998/Math/MathML">
+  <mi>Q</mi>
+  <mn>4</mn>
+</math></span> ), developers can begin by testing different interconnect latencies. For instance, reducing the interconnect latency</div>
+<hr class="footnotes-sep">
+<section class="footnotes" style="margin-bottom: 1em;">
+<ol class="footnotes-list" style="padding-left: 20px; margin-bottom: 0;">
+<li id="fn1" class="footnote-item" style="list-style-type: none;"><div>Permission to make digital or hard copies of all or part of this work for personal or classroom use is granted without fee provided that copies are not made or distributed for profit or commercial advantage and that copies bear this notice and the full citation on the first page. Copyrights for components of this work owned by others than the author(s) must be honored. Abstracting with credit is permitted. To copy otherwise, or republish, to post on servers or to redistribute to lists, requires prior specific permission and/or a fee. Request permissions from <a href="mailto:permissions@acm.org" target="_blank" rel="noopener" style="display: inline-block">permissions@acm.org</a>.<br>
+SOSP '25, Seoul, Republic of Korea<br>
+© 2025 Copyright held by the owner/author(s). Publication rights licensed to ACM.<br>
+ACM ISBN 979-8-4007-1870-0/2025/10<br>
+<a href="https://doi.org/10.1145/3731569.3764825" target="_blank" rel="noopener" style="display: inline-block">https://doi.org/10.1145/3731569.3764825</a></div>
+</li>
+</ol>
+</section>
+
+    </div>
+  </div>
+  <script>
+(() => {
+  window.MathpixRenderConfig = {"width":1200,"outMath":{"output_format":"svg","include_svg":true,"include_asciimath":true,"include_latex":true,"include_mathml":true,"include_mathml_word":true,"include_tsv":true,"include_table_markdown":true,"include_smiles":true},"accessibility":{"assistive_mml":true,"include_speech":false}};
+  const autoScript = document.createElement('script');
+  autoScript.src = "https://cdn.jsdelivr.net/npm/mathpix-markdown-it@2.0.37/es5/browser/auto-render.js";
+  autoScript.onload = () => {
+    console.log("[Mathpix] auto-render loaded");
+  };
+  autoScript.onerror = () => {
+    console.error("[Mathpix] Failed to load auto-render script:", autoScript.src);
+  };
+  document.head.append(autoScript);
+})();
+</script>
+    <script>
+(() => {
+  const ctxScript = document.createElement('script');
+  ctxScript.src = "https://cdn.jsdelivr.net/npm/mathpix-markdown-it@2.0.37/es5/context-menu.js";
+  ctxScript.onload = () => {
+    const init = () => {
+      window.addListenerContextMenuEvents?.();
+    };
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", init, { once: true });
+    } else {
+      init();
+    }
+    if (!window.__mathpixContextMenuKeyHandlerInstalled) {
+      window.__mathpixContextMenuKeyHandlerInstalled = true;
+      document.addEventListener("keydown", (e) => {
+        if (e.key !== "ArrowUp" && e.key !== "ArrowDown") return;
+        const el = document.querySelector(".mmd-menu");
+        if (el) e.preventDefault();
+      });
+    }
+  };
+  ctxScript.onerror = () => {
+    console.error("[Mathpix] Failed to load context-menu script:", ctxScript.src);
+  };
+  document.head.appendChild(ctxScript);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,146 @@
+{
+  "paper_title": "Demo Paper Implementation",
+  "arxiv_id": "",
+  "collection_name": "comprehesion_paperreading_20260313_023146_e6b1932a",
+  "architecture_plan": {
+    "title": "Fast End-to-End Performance Simulation Architecture for Accelerated Hardware-Software Stacks",
+    "overview": "This architecture implements a minimalist full-stack simulation framework inspired by NEX and DSim, designed to achieve orders-of-magnitude faster performance simulation while maintaining accuracy. The system separates native execution components from simulated ones, with precise synchronization mechanisms to ensure correctness. The core idea is to simulate only unavailable components and run the rest natively, with cycle-accurate simulation of performance-critical aspects of simulated components.",
+    "modules": [
+      {
+        "module_name": "NEX Orchestrator",
+        "purpose": "Manages the overall simulation workflow, including synchronization, runtime execution, scheduling, and time warping for seamless integration of native and simulated components.",
+        "complexity": "high"
+      },
+      {
+        "module_name": "NEX Synchronization",
+        "purpose": "Handles the precise synchronization between natively executing components and simulated components, ensuring correct timing and data flow across the hybrid execution environment.",
+        "complexity": "high"
+      },
+      {
+        "module_name": "NEX Runtime",
+        "purpose": "Provides the runtime environment for executing native components and managing the interface with simulated components, including memory management and component lifecycle control.",
+        "complexity": "medium"
+      },
+      {
+        "module_name": "NEX Scheduler",
+        "purpose": "Determines which components to simulate versus execute natively, based on availability and performance-criticality, and manages the scheduling of simulation tasks.",
+        "complexity": "medium"
+      },
+      {
+        "module_name": "DSim Di-Simulator",
+        "purpose": "Simulates performance-critical aspects of unavailable components with cycle accuracy, computing both performance and functionality while maintaining synchronization with native execution.",
+        "complexity": "high"
+      },
+      {
+        "module_name": "DSim LPN Engine",
+        "purpose": "Computes performance using Labelled Petri Nets (LPNs), enabling accurate modeling of complex system behaviors and timing relationships in simulated components.",
+        "complexity": "high"
+      },
+      {
+        "module_name": "DSim Functionality Engine",
+        "purpose": "Handles the functional simulation of components, ensuring that simulated behavior matches the expected operational characteristics of the hardware/software being modeled.",
+        "complexity": "medium"
+      },
+      {
+        "module_name": "DSim Synchronization Manager",
+        "purpose": "Ensures that performance and functionality simulation are properly synchronized with native execution, maintaining consistency across all components.",
+        "complexity": "high"
+      },
+      {
+        "module_name": "Interface Layer",
+        "purpose": "Provides modular composition interfaces between native and simulated components, enabling flexible integration and configuration of different system stacks.",
+        "complexity": "medium"
+      }
+    ],
+    "dependencies": [
+      {
+        "from": "NEX Synchronization",
+        "to": "NEX Runtime"
+      },
+      {
+        "from": "NEX Scheduler",
+        "to": "NEX Orchestrator"
+      },
+      {
+        "from": "DSim Di-Simulator",
+        "to": "NEX Orchestrator"
+      },
+      {
+        "from": "DSim LPN Engine",
+        "to": "DSim Di-Simulator"
+      },
+      {
+        "from": "DSim Functionality Engine",
+        "to": "DSim Di-Simulator"
+      },
+      {
+        "from": "DSim Synchronization Manager",
+        "to": "DSim Di-Simulator"
+      },
+      {
+        "from": "Interface Layer",
+        "to": "NEX Runtime"
+      },
+      {
+        "from": "Interface Layer",
+        "to": "DSim Di-Simulator"
+      }
+    ],
+    "language": "python",
+    "framework_suggestions": [
+      "PyPy or CPython with Cython for performance-critical native execution",
+      "Event-driven simulation framework like SimPy for managing simulation events",
+      "Petri net libraries such as PyPES or custom LPN implementation for performance modeling",
+      "Multi-threading or async frameworks like asyncio for concurrent execution of native and simulated components",
+      "Mocking and testing frameworks like pytest for validating simulation accuracy and performance"
+    ]
+  },
+  "generated_at": "2026-03-13T03:09:59.323021+00:00",
+  "modules": [
+    {
+      "filename": "NEX Orchestrator.py",
+      "purpose": "Manages the overall simulation workflow, including synchronization, runtime execution, scheduling, and time warping for seamless integration of native and simulated components.",
+      "complexity": "high"
+    },
+    {
+      "filename": "NEX Synchronization.py",
+      "purpose": "Handles the precise synchronization between natively executing components and simulated components, ensuring correct timing and data flow across the hybrid execution environment.",
+      "complexity": "high"
+    },
+    {
+      "filename": "NEX Runtime.py",
+      "purpose": "Provides the runtime environment for executing native components and managing the interface with simulated components, including memory management and component lifecycle control.",
+      "complexity": "medium"
+    },
+    {
+      "filename": "NEX Scheduler.py",
+      "purpose": "Determines which components to simulate versus execute natively, based on availability and performance-criticality, and manages the scheduling of simulation tasks.",
+      "complexity": "medium"
+    },
+    {
+      "filename": "DSim Di-Simulator.py",
+      "purpose": "Simulates performance-critical aspects of unavailable components with cycle accuracy, computing both performance and functionality while maintaining synchronization with native execution.",
+      "complexity": "high"
+    },
+    {
+      "filename": "DSim LPN Engine.py",
+      "purpose": "Computes performance using Labelled Petri Nets (LPNs), enabling accurate modeling of complex system behaviors and timing relationships in simulated components.",
+      "complexity": "high"
+    },
+    {
+      "filename": "DSim Functionality Engine.py",
+      "purpose": "Handles the functional simulation of components, ensuring that simulated behavior matches the expected operational characteristics of the hardware/software being modeled.",
+      "complexity": "medium"
+    },
+    {
+      "filename": "DSim Synchronization Manager.py",
+      "purpose": "Ensures that performance and functionality simulation are properly synchronized with native execution, maintaining consistency across all components.",
+      "complexity": "high"
+    },
+    {
+      "filename": "Interface Layer.py",
+      "purpose": "Provides modular composition interfaces between native and simulated components, enabling flexible integration and configuration of different system stacks.",
+      "complexity": "medium"
+    }
+  ]
+}

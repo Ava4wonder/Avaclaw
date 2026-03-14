@@ -5,8 +5,8 @@ from apps.backend.app.tools.academic_search import academic_search, read_bulk_ab
 async def main():
     print("Testing academic_search + read_bulk_abstract pipeline...\n")
 
-    cur_query = "Convert academic research papers into HTML content"
-    cur_limit = 10
+    cur_query = "parsing pdf and converting to html format"
+    cur_limit = 20
     
     # Step 1: Search for papers
     print("=" * 80)
@@ -16,7 +16,7 @@ async def main():
         search_result = await academic_search({
             "query": cur_query,
             "limit": cur_limit,
-            "from_year": 2024,
+            "from_year": 2022,
             "to_year": 2026,
         })
         

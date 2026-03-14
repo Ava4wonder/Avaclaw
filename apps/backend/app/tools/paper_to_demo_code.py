@@ -62,11 +62,24 @@ def _qdrant_search(collection_name: str, vector: list[float], limit: int = 5) ->
 def _retrieve_chunks(
     collection_name: str,
     query: str,
-    top_k: int = 5
+    top_k: int = 5,
+    search_k: int = 20,
+    filter_headings: list[str] | None = None
 ) -> list[dict[str, Any]]:
     """Retrieve relevant chunks from vector store."""
     vector = _ollama_embed(query)
-    hits = _qdrant_search(collection_name, vector, limit=top_k)
+    hits = _qdrant_search(collection_name, vector, limit=search_k)
+    if filter_headings:
+        lowered = [heading.lower() for heading in filter_headings if heading]
+        filtered = [
+            hit for hit in hits
+            if any(
+                heading in str((hit.get("payload") or {}).get("headings_info", "")).lower()
+                for heading in lowered
+            )
+        ]
+        if filtered:
+            hits = filtered
     return hits[:top_k]
 
 
@@ -130,6 +143,99 @@ def _extract_code_blocks(text: str) -> list[dict[str, str]]:
     return blocks
 
 
+def _coerce_str_list(value: Any) -> list[str]:
+    """Normalize a value into a list of non-empty strings."""
+    if isinstance(value, list):
+        return [str(item).strip() for item in value if str(item).strip()]
+    if isinstance(value, str) and value.strip():
+        return [value.strip()]
+    return []
+
+
+def _normalize_plan_item(item: Any, fallback_id: str) -> dict[str, Any] | None:
+    """Normalize a planner item into the module retrieval shape."""
+    if not isinstance(item, dict):
+        return None
+    question = str(item.get("question", "")).strip()
+    if not question:
+        return None
+    return {
+        "question_id": str(item.get("question_id") or fallback_id).strip(),
+        "question": question,
+        "question_type": str(item.get("question_type") or "implementation").strip(),
+        "toc_page_index": _coerce_str_list(item.get("toc_page_index")),
+        "why_this_matters": str(item.get("why_this_matters") or "").strip(),
+    }
+
+
+def _parse_root_plan(raw: str) -> list[dict[str, Any]]:
+    """Parse strict JSON planner output into normalized plan items."""
+    obj = _extract_json_from_text(raw)
+    if isinstance(obj, dict) and isinstance(obj.get("plan"), list):
+        plan_items = []
+        for idx, item in enumerate(obj["plan"], start=1):
+            normalized = _normalize_plan_item(item, f"q_root_{idx}")
+            if normalized:
+                plan_items.append(normalized)
+        return plan_items
+    return []
+
+
+async def _plan_module_retrieval(
+    client: httpx.AsyncClient,
+    module_info: dict[str, Any],
+    architecture_plan: dict[str, Any],
+    text_toc: str,
+    model: str | None = None
+) -> dict[str, Any]:
+    """Create a planner question and TOC filter for module-specific retrieval."""
+    module_name = str(module_info.get("module_name", "module")).strip() or "module"
+    purpose = str(module_info.get("purpose", "")).strip()
+    complexity = str(module_info.get("complexity", "medium")).strip()
+
+    planner_messages = [
+        {
+            "role": "system",
+            "content": (
+                "You are an expert computer science researcher and software architect. "
+                "Generate one retrieval planning item for implementing a module from a paper. "
+                "Output strict JSON with shape: {\"plan\": ["
+                "{\"question_id\":\"q_root_1\",\"question\":\"...\",\"question_type\":\"implementation\","
+                "\"toc_page_index\":[\"Heading\"],\"why_this_matters\":\"...\"}]}"
+            )
+        },
+        {
+            "role": "user",
+            "content": (
+                f"Generate one implementation-focused retrieval question for the module '{module_name}'.\n\n"
+                f"Purpose: {purpose}\n"
+                f"Complexity: {complexity}\n\n"
+                f"Overall architecture:\n{json.dumps(architecture_plan, indent=2)}\n\n"
+                f"TOC:\n{text_toc}\n\n"
+                "The question should target the paper sections most useful for faithful code generation. "
+                "toc_page_index must match relevant TOC headings."
+            )
+        }
+    ]
+    planner_raw = await _ollama_chat(client, planner_messages, model)
+    plan_items = _parse_root_plan(planner_raw)
+
+    if plan_items:
+        return plan_items[0]
+
+    fallback_question = (
+        f"What implementation details, algorithms, inputs, outputs, and constraints are described for the "
+        f"'{module_name}' module used for {purpose or module_name}?"
+    )
+    return {
+        "question_id": "q_root_1",
+        "question": fallback_question,
+        "question_type": "implementation",
+        "toc_page_index": [],
+        "why_this_matters": f"Ground the {module_name} module in the paper's described method.",
+    }
+
+
 async def _generate_architecture_plan(
     client: httpx.AsyncClient,
     paper_context: str,
@@ -157,7 +263,7 @@ async def _generate_architecture_plan(
                 f"Paper context:\n{paper_context}\n\n"
                 f"Table of Contents:\n{toc}\n\n"
                 f"Create a modular architecture with clear separation of concerns. "
-                f"Identify 3-7 key modules needed to demonstrate the core concepts."
+                f"Identify all key modules needed to demonstrate the core concepts faithfully to the paper and use the same terminology as much as possible. "
             )
         }
     ]
@@ -187,7 +293,8 @@ async def _generate_module_code(
     client: httpx.AsyncClient,
     module_info: dict[str, Any],
     architecture_plan: dict[str, Any],
-    relevant_chunks: list[dict[str, Any]],
+    collection_name: str,
+    text_toc: str,
     model: str | None = None
 ) -> dict[str, Any]:
     """Generate code for a specific module."""
@@ -195,10 +302,35 @@ async def _generate_module_code(
     purpose = module_info.get("purpose", "")
     complexity = module_info.get("complexity", "medium")
     language = architecture_plan.get("language", "python")
-    
-    # Build context from relevant chunks
+
+    retrieval_plan = await _plan_module_retrieval(
+        client,
+        module_info,
+        architecture_plan,
+        text_toc,
+        model
+    )
+    planned_question = retrieval_plan.get("question") or (
+        f"{purpose or module_name} implementation details algorithm"
+    )
+    toc_page_index = retrieval_plan.get("toc_page_index", [])
+    filtered_hits = _retrieve_chunks(
+        collection_name,
+        planned_question,
+        top_k=5,
+        search_k=25,
+        filter_headings=toc_page_index
+    )
+    if not filtered_hits:
+        filtered_hits = _retrieve_chunks(
+            collection_name,
+            planned_question,
+            top_k=5
+        )
+
+    # Build context from filtered hits
     context_parts = []
-    for hit in relevant_chunks[:5]:
+    for hit in filtered_hits[:5]:
         payload = hit.get("payload") or {}
         chunk_text = payload.get("chunk_text", "")
         headings_info = payload.get("headings_info", "")
@@ -228,7 +360,8 @@ async def _generate_module_code(
             "content": (
                 f"You are an expert {language} developer. Generate clean, well-documented code "
                 f"for a demo implementation. Use appropriate design patterns and best practices. "
-                f"For complex parts, use placeholders with TODO comments explaining what needs to be implemented. "
+                f"For parts which have unspecified details, use placeholders with TODO comments explaining what needs to be implemented. "
+                f"For all specified algorithms or methods, provide a faithful implementation according to the following provided paper context. Do not omit any technical details that are present in the paper. Use the same terminology as the paper. "
                 f"Output the code in a markdown code block with language tag."
             )
         },
@@ -240,6 +373,9 @@ async def _generate_module_code(
                 f"Complexity: {complexity}\n"
                 f"Language: {language}\n\n"
                 f"{complexity_instruction}\n\n"
+                f"Planner question: {planned_question}\n"
+                f"Planner toc_page_index: {json.dumps(toc_page_index)}\n"
+                f"Why this matters: {retrieval_plan.get('why_this_matters', '')}\n\n"
                 f"Paper context:\n{context}\n\n"
                 f"Overall architecture:\n{json.dumps(architecture_plan, indent=2)}\n\n"
                 f"Generate complete, runnable {language} code with appropriate imports, "
@@ -288,7 +424,9 @@ if __name__ == "__main__":
         "filename": f"{module_name}.py" if language == "python" else f"{module_name}.{language}",
         "code": main_code,
         "purpose": purpose,
-        "complexity": complexity
+        "complexity": complexity,
+        "planner_question": planned_question,
+        "toc_page_index": toc_page_index
     }
 
 
@@ -448,14 +586,15 @@ async def paper_to_demo_code(args: dict[str, Any]) -> dict[str, Any]:
         for module_info in modules_to_generate:
             module_name = module_info.get("module_name", "module")
             print(f"Generating code for module: {module_name}")
-            
-            # Retrieve relevant chunks for this module
-            module_query = f"{module_info.get('purpose', module_name)} implementation details algorithm"
-            relevant_chunks = _retrieve_chunks(collection_name, module_query, top_k=5)
-            
+
             # Generate module code
             module_code = await _generate_module_code(
-                client, module_info, architecture_plan, relevant_chunks, model
+                client,
+                module_info,
+                architecture_plan,
+                collection_name,
+                text_toc,
+                model
             )
             generated_modules.append(module_code)
             print(f"  Generated {module_code['filename']} ({len(module_code['code'])} chars)")

@@ -1,0 +1,43 @@
+{
+  "question_id": "Q-0003",
+  "module_slug": "data_flow",
+  "target_language": "python",
+  "adapter_id": "python_project_adapter",
+  "edit_points": [],
+  "working_set": {
+    "repository_map": [],
+    "subsystem_map": {
+      "subsystem_id": "data_flow",
+      "repo_paths": [],
+      "module_candidates": [],
+      "graph_neighbors_count": 0
+    },
+    "candidate_file_set": [],
+    "candidate_symbol_set": [],
+    "bounded_edit_set": [],
+    "metadata": {
+      "file_budget": 80,
+      "symbol_budget": 200
+    }
+  },
+  "traceability": [
+    {
+      "chunk_id": "chunk-0024",
+      "source_type": "paper",
+      "headings_info": "MAHL: Multi-Agent LLM-Guided Hierarchical Chiplet Design with Adaptive Debugging > II Background > II-B Chiplet Design Flow",
+      "score": 3.50833
+    },
+    {
+      "chunk_id": "chunk-0100",
+      "source_type": "paper",
+      "headings_info": "MAHL: Multi-Agent LLM-Guided Hierarchical Chiplet Design with Adaptive Debugging > II Background > II-B Chiplet Design Flow",
+      "score": 3.32167
+    },
+    {
+      "chunk_id": "chunk-0032",
+      "source_type": "paper",
+      "headings_info": "MAHL: Multi-Agent LLM-Guided Hierarchical Chiplet Design with Adaptive Debugging > II Background > II-B Chiplet Design Flow",
+      "score": 3.1325
+    }
+  ]
+}

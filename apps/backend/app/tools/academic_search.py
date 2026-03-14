@@ -43,8 +43,10 @@ async def academic_search(args: dict[str, Any]) -> dict:
     url = f"{settings.openalex_base}/works"
     params = {
         "search.semantic": query,
+        # "search.title_and_abstract": query,
         "sort": "relevance_score:desc",
         "per-page": str(limit),
+        "include_xpac": "true",
     }
     if filters:
         params["filter"] = ",".join(filters)
@@ -445,7 +447,7 @@ def html_parsing_chunking_upsert(
     html_content: str,
     paper_title: str,
     arxiv_id: str,
-    chunk_size: int = 1200,
+    chunk_size: int = 2200,
     chunk_overlap: int = 200
 ) -> dict[str, Any]:
     parser = _ArxivHtmlParser()

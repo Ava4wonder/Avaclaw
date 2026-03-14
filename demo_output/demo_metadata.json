@@ -1,120 +1,131 @@
 {
   "paper_title": "Demo Paper Implementation",
-  "arxiv_id": "2508.14053",
-  "collection_name": "comprehesion_paperreading_20260312_120626_171c0568",
+  "arxiv_id": "",
+  "collection_name": "comprehesion_paperreading_20260314_155805_14da1ad9",
   "architecture_plan": {
-    "title": "MAHL: Multi-Agent LLM-Guided Hierarchical Chiplet Design Demo Implementation",
-    "overview": "A modular demonstration architecture for Multi-Agent LLM-Guided Hierarchical Chiplet Design with Adaptive Debugging. This implementation simulates the core concepts of hierarchical chiplet design generation using LLM agents, including design description generation, RTL implementation, validation, and design space exploration. The system demonstrates how multiple specialized agents collaborate to generate chiplet designs from high-level specifications.",
+    "title": "AlphaEvolve: A Coding Agent for Scientific and Algorithmic Discovery - Demo Implementation",
+    "overview": "A modular implementation architecture for demonstrating AlphaEvolve, a coding agent that discovers scientific and algorithmic solutions through evolutionary programming. The system implements core components including task specification, prompt sampling, creative generation, evaluation, and evolution mechanisms using JAX/Flax for efficient computation.",
     "modules": [
       {
-        "module_name": "LLM Agent Manager",
-        "purpose": "Coordinates multiple specialized LLM agents for different design tasks including hierarchical description generation, RTL code generation, and debugging assistance",
+        "module_name": "TaskSpecification",
+        "purpose": "Defines the problem space and constraints for scientific discovery tasks, including mathematical problems and algorithmic challenges",
         "complexity": "medium"
       },
       {
-        "module_name": "Hierarchical Design Generator",
-        "purpose": "Generates hierarchical chiplet designs by breaking down high-level specifications into modular components and defining their interconnections",
+        "module_name": "PromptSampling",
+        "purpose": "Generates diverse prompts for creative code generation using various sampling strategies and heuristics",
+        "complexity": "medium"
+      },
+      {
+        "module_name": "CreativeGeneration",
+        "purpose": "Implements the core evolutionary algorithm that generates, mutates, and evolves code solutions",
         "complexity": "high"
       },
       {
-        "module_name": "RTL Implementation Engine",
-        "purpose": "Converts hierarchical design descriptions into Register Transfer Level (RTL) code using LLM-guided synthesis techniques",
+        "module_name": "EvaluationEngine",
+        "purpose": "Evaluates generated code solutions against scientific benchmarks and mathematical correctness criteria",
+        "complexity": "medium"
+      },
+      {
+        "module_name": "EvolutionPipeline",
+        "purpose": "Coordinates the end-to-end evolutionary process including selection, crossover, mutation, and fitness evaluation",
         "complexity": "high"
       },
       {
-        "module_name": "Design Space Explorer",
-        "purpose": "Performs automated exploration of design alternatives and optimization of chiplet configurations based on performance metrics",
+        "module_name": "ResNetArchitecture",
+        "purpose": "Implements ResNet-based neural network models for image classification tasks as demonstrated in the paper",
         "complexity": "medium"
       },
       {
-        "module_name": "Validation and Debugging System",
-        "purpose": "Validates generated RTL implementations and provides adaptive debugging assistance through LLM agents",
+        "module_name": "OptimizerConfig",
+        "purpose": "Manages optimization configurations including AdamW with weight decay regularization",
+        "complexity": "low"
+      },
+      {
+        "module_name": "HyperparameterSweep",
+        "purpose": "Performs automated hyperparameter tuning using zipit for efficient exploration of parameter space",
         "complexity": "medium"
-      },
-      {
-        "module_name": "Specification Parser",
-        "purpose": "Interprets high-level design specifications and translates them into structured inputs for the LLM agents",
-        "complexity": "low"
-      },
-      {
-        "module_name": "Output Formatter",
-        "purpose": "Formats and presents generated chiplet designs, RTL code, and validation results in standardized formats",
-        "complexity": "low"
       }
     ],
     "dependencies": [
       {
-        "from": "LLM Agent Manager",
-        "to": "Hierarchical Design Generator"
+        "from": "CreativeGeneration",
+        "to": "PromptSampling"
       },
       {
-        "from": "LLM Agent Manager",
-        "to": "RTL Implementation Engine"
+        "from": "CreativeGeneration",
+        "to": "EvaluationEngine"
       },
       {
-        "from": "LLM Agent Manager",
-        "to": "Design Space Explorer"
+        "from": "EvolutionPipeline",
+        "to": "CreativeGeneration"
       },
       {
-        "from": "LLM Agent Manager",
-        "to": "Validation and Debugging System"
+        "from": "EvolutionPipeline",
+        "to": "EvaluationEngine"
       },
       {
-        "from": "Hierarchical Design Generator",
-        "to": "RTL Implementation Engine"
+        "from": "ResNetArchitecture",
+        "to": "OptimizerConfig"
       },
       {
-        "from": "RTL Implementation Engine",
-        "to": "Validation and Debugging System"
+        "from": "HyperparameterSweep",
+        "to": "CreativeGeneration"
       },
       {
-        "from": "Design Space Explorer",
-        "to": "Hierarchical Design Generator"
-      },
-      {
-        "from": "Specification Parser",
-        "to": "LLM Agent Manager"
-      },
-      {
-        "from": "Validation and Debugging System",
-        "to": "Output Formatter"
+        "from": "EvaluationEngine",
+        "to": "ResNetArchitecture"
       }
     ],
     "language": "python",
     "framework_suggestions": [
-      "LangChain or LlamaIndex for LLM integration and agent management",
-      "PyTorch or TensorFlow for any ML components",
-      "FastAPI or Flask for REST API endpoints",
-      "Docker for containerization of modules",
-      "pytest for testing framework",
-      "Git for version control and CI/CD pipeline"
+      "JAX/Flax for numerical computing and neural network implementation",
+      "Haiku (JAX library) for module-based neural network construction",
+      "Optax for optimizer configuration and training utilities",
+      "Pytree for functional data structures",
+      "TensorFlow Datasets or similar for data loading"
     ]
   },
-  "generated_at": "2026-03-12T12:30:24.731813+00:00",
+  "generated_at": "2026-03-14T17:04:25.836278+00:00",
   "modules": [
     {
-      "filename": "LLM Agent Manager.py",
-      "purpose": "Coordinates multiple specialized LLM agents for different design tasks including hierarchical description generation, RTL code generation, and debugging assistance",
+      "filename": "TaskSpecification.py",
+      "purpose": "Defines the problem space and constraints for scientific discovery tasks, including mathematical problems and algorithmic challenges",
       "complexity": "medium"
     },
     {
-      "filename": "Hierarchical Design Generator.py",
-      "purpose": "Generates hierarchical chiplet designs by breaking down high-level specifications into modular components and defining their interconnections",
-      "complexity": "high"
-    },
-    {
-      "filename": "RTL Implementation Engine.py",
-      "purpose": "Converts hierarchical design descriptions into Register Transfer Level (RTL) code using LLM-guided synthesis techniques",
-      "complexity": "high"
-    },
-    {
-      "filename": "Design Space Explorer.py",
-      "purpose": "Performs automated exploration of design alternatives and optimization of chiplet configurations based on performance metrics",
+      "filename": "PromptSampling.py",
+      "purpose": "Generates diverse prompts for creative code generation using various sampling strategies and heuristics",
       "complexity": "medium"
     },
     {
-      "filename": "Validation and Debugging System.py",
-      "purpose": "Validates generated RTL implementations and provides adaptive debugging assistance through LLM agents",
+      "filename": "CreativeGeneration.py",
+      "purpose": "Implements the core evolutionary algorithm that generates, mutates, and evolves code solutions",
+      "complexity": "high"
+    },
+    {
+      "filename": "EvaluationEngine.py",
+      "purpose": "Evaluates generated code solutions against scientific benchmarks and mathematical correctness criteria",
+      "complexity": "medium"
+    },
+    {
+      "filename": "EvolutionPipeline.py",
+      "purpose": "Coordinates the end-to-end evolutionary process including selection, crossover, mutation, and fitness evaluation",
+      "complexity": "high"
+    },
+    {
+      "filename": "ResNetArchitecture.py",
+      "purpose": "Implements ResNet-based neural network models for image classification tasks as demonstrated in the paper",
+      "complexity": "medium"
+    },
+    {
+      "filename": "OptimizerConfig.py",
+      "purpose": "Manages optimization configurations including AdamW with weight decay regularization",
+      "complexity": "low"
+    },
+    {
+      "filename": "HyperparameterSweep.py",
+      "purpose": "Performs automated hyperparameter tuning using zipit for efficient exploration of parameter space",
       "complexity": "medium"
     }
   ]

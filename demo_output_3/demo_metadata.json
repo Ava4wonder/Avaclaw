@@ -1,0 +1,130 @@
+{
+  "paper_title": "Demo Paper Implementation",
+  "arxiv_id": "2508.14053",
+  "collection_name": "comprehesion_paperreading_20260312_154043_dfc6af65",
+  "architecture_plan": {
+    "title": "MAHL: Multi-Agent LLM-Guided Hierarchical Chiplet Design with Adaptive Debugging - Demo Implementation Architecture",
+    "overview": "A modular architecture for demonstrating the MAHL framework that enables multi-agent LLM-guided hierarchical chiplet design with adaptive debugging. The system implements hierarchical description generation, RTL implementation and validation, and design space exploration using LLMs to guide chiplet design processes.",
+    "modules": [
+      {
+        "module_name": "MultiAgentLLMCoordinator",
+        "purpose": "Coordinates multiple LLM agents to guide the chiplet design process, managing agent interactions and task distribution for hierarchical design generation",
+        "complexity": "high"
+      },
+      {
+        "module_name": "HierarchicalDescriptionGenerator",
+        "purpose": "Generates hierarchical chiplet descriptions using LLMs, implementing the hierarchical description generation mechanism described in the paper",
+        "complexity": "high"
+      },
+      {
+        "module_name": "RTLImplementationEngine",
+        "purpose": "Handles RTL code generation and implementation based on hierarchical descriptions, integrating with validation components",
+        "complexity": "medium"
+      },
+      {
+        "module_name": "DesignSpaceExplorer",
+        "purpose": "Performs design space exploration to find optimal chiplet configurations, utilizing LLM guidance for efficient search",
+        "complexity": "high"
+      },
+      {
+        "module_name": "AdaptiveDebugger",
+        "purpose": "Implements adaptive debugging mechanisms that work alongside LLMs to identify and resolve design issues in real-time",
+        "complexity": "medium"
+      },
+      {
+        "module_name": "ValidationFramework",
+        "purpose": "Provides RTL validation and verification capabilities for generated chiplet designs",
+        "complexity": "medium"
+      },
+      {
+        "module_name": "LLMInterfaceManager",
+        "purpose": "Manages communication with LLM services, handling prompts, responses, and agent coordination for design guidance",
+        "complexity": "medium"
+      },
+      {
+        "module_name": "ChipletRepository",
+        "purpose": "Stores and manages chiplet IP libraries, design templates, and reusable components for the design process",
+        "complexity": "low"
+      }
+    ],
+    "dependencies": [
+      {
+        "from": "MultiAgentLLMCoordinator",
+        "to": "HierarchicalDescriptionGenerator"
+      },
+      {
+        "from": "MultiAgentLLMCoordinator",
+        "to": "DesignSpaceExplorer"
+      },
+      {
+        "from": "MultiAgentLLMCoordinator",
+        "to": "RTLImplementationEngine"
+      },
+      {
+        "from": "MultiAgentLLMCoordinator",
+        "to": "AdaptiveDebugger"
+      },
+      {
+        "from": "HierarchicalDescriptionGenerator",
+        "to": "LLMInterfaceManager"
+      },
+      {
+        "from": "DesignSpaceExplorer",
+        "to": "LLMInterfaceManager"
+      },
+      {
+        "from": "RTLImplementationEngine",
+        "to": "HierarchicalDescriptionGenerator"
+      },
+      {
+        "from": "RTLImplementationEngine",
+        "to": "ValidationFramework"
+      },
+      {
+        "from": "AdaptiveDebugger",
+        "to": "ValidationFramework"
+      },
+      {
+        "from": "LLMInterfaceManager",
+        "to": "ChipletRepository"
+      }
+    ],
+    "language": "python",
+    "framework_suggestions": [
+      "Pydantic for data validation and configuration management",
+      "LangChain for LLM integration and agent management",
+      "FastAPI for REST API endpoints for system interaction",
+      "Docker for containerization of LLM services and components",
+      "Celery for distributed task execution across agents",
+      "SQLAlchemy for database management of chiplet designs and repositories"
+    ]
+  },
+  "generated_at": "2026-03-12T16:03:49.040064+00:00",
+  "modules": [
+    {
+      "filename": "MultiAgentLLMCoordinator.py",
+      "purpose": "Coordinates multiple LLM agents to guide the chiplet design process, managing agent interactions and task distribution for hierarchical design generation",
+      "complexity": "high"
+    },
+    {
+      "filename": "HierarchicalDescriptionGenerator.py",
+      "purpose": "Generates hierarchical chiplet descriptions using LLMs, implementing the hierarchical description generation mechanism described in the paper",
+      "complexity": "high"
+    },
+    {
+      "filename": "RTLImplementationEngine.py",
+      "purpose": "Handles RTL code generation and implementation based on hierarchical descriptions, integrating with validation components",
+      "complexity": "medium"
+    },
+    {
+      "filename": "DesignSpaceExplorer.py",
+      "purpose": "Performs design space exploration to find optimal chiplet configurations, utilizing LLM guidance for efficient search",
+      "complexity": "high"
+    },
+    {
+      "filename": "AdaptiveDebugger.py",
+      "purpose": "Implements adaptive debugging mechanisms that work alongside LLMs to identify and resolve design issues in real-time",
+      "complexity": "medium"
+    }
+  ]
+}

@@ -1,0 +1,61 @@
+{
+  "question_id": "Q-0001",
+  "module_slug": "repository",
+  "target_language": "python",
+  "adapter_id": "python_project_adapter",
+  "edit_points": [],
+  "working_set": {
+    "repository_map": [],
+    "subsystem_map": {
+      "subsystem_id": "repository",
+      "repo_paths": [],
+      "module_candidates": [],
+      "graph_neighbors_count": 0
+    },
+    "candidate_file_set": [],
+    "candidate_symbol_set": [],
+    "bounded_edit_set": [],
+    "metadata": {
+      "file_budget": 80,
+      "symbol_budget": 200
+    }
+  },
+  "traceability": [
+    {
+      "chunk_id": "chunk-0106",
+      "source_type": "paper",
+      "headings_info": "MAHL: Multi-Agent LLM-Guided Hierarchical Chiplet Design with Adaptive Debugging > III Framework > III-A Overview",
+      "score": 8.52833
+    },
+    {
+      "chunk_id": "chunk-0038",
+      "source_type": "paper",
+      "headings_info": "MAHL: Multi-Agent LLM-Guided Hierarchical Chiplet Design with Adaptive Debugging > III Framework > III-A Overview",
+      "score": 8.33417
+    },
+    {
+      "chunk_id": "chunk-0003",
+      "source_type": "paper",
+      "headings_info": "MAHL: Multi-Agent LLM-Guided Hierarchical Chiplet Design with Adaptive Debugging > III Framework > III-A Overview",
+      "score": 7.38583
+    },
+    {
+      "chunk_id": "chunk-0116",
+      "source_type": "paper",
+      "headings_info": "MAHL: Multi-Agent LLM-Guided Hierarchical Chiplet Design with Adaptive Debugging > III Framework > III-A Overview",
+      "score": 7.32333
+    },
+    {
+      "chunk_id": "chunk-0046",
+      "source_type": "paper",
+      "headings_info": "MAHL: Multi-Agent LLM-Guided Hierarchical Chiplet Design with Adaptive Debugging > III Framework > III-A Overview",
+      "score": 6.31583
+    },
+    {
+      "chunk_id": "chunk-0012",
+      "source_type": "paper",
+      "headings_info": "MAHL: Multi-Agent LLM-Guided Hierarchical Chiplet Design with Adaptive Debugging > III Framework > III-A Overview",
+      "score": 5.22917
+    }
+  ]
+}

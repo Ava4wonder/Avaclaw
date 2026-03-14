@@ -1,0 +1,131 @@
+{
+  "paper_title": "Demo Paper Implementation",
+  "arxiv_id": "",
+  "collection_name": "comprehesion_paperreading_20260313_011603_8c6b5d1f",
+  "architecture_plan": {
+    "title": "NEX-DSim Fast End-to-End Performance Simulation Architecture",
+    "overview": "An implementation architecture for fast end-to-end performance simulation of accelerated hardware-software stacks, based on the NEX orchestrator and DSim di-simulator concepts. The system adopts a minimalist approach by simulating only unavailable components while running the rest natively, with precise synchronization between native and simulated execution. The architecture supports modular composition and provides accurate, high-speed simulation for accelerated systems.",
+    "modules": [
+      {
+        "module_name": "NEX_Orchestrator",
+        "purpose": "Manages the overall simulation workflow, including synchronization, runtime execution, scheduling, and time warping for native and simulated components.",
+        "complexity": "high"
+      },
+      {
+        "module_name": "NEX_Synchronization",
+        "purpose": "Handles the correct and efficient synchronization between natively executing components and simulated components to maintain system coherence.",
+        "complexity": "high"
+      },
+      {
+        "module_name": "NEX_Runtime",
+        "purpose": "Provides the runtime environment for executing native components and managing their interaction with simulated components.",
+        "complexity": "medium"
+      },
+      {
+        "module_name": "NEX_Scheduler",
+        "purpose": "Schedules execution of native and simulated components, optimizing for performance and ensuring correct temporal ordering.",
+        "complexity": "medium"
+      },
+      {
+        "module_name": "NEX_Time_Warping",
+        "purpose": "Implements time warping mechanisms to align simulation time with real-time or accelerated execution time.",
+        "complexity": "high"
+      },
+      {
+        "module_name": "DSim_DiSimulator",
+        "purpose": "Simulates performance-critical aspects of unavailable hardware/software components using Linear Process Networks (LPNs) and maintains functionality consistency.",
+        "complexity": "high"
+      },
+      {
+        "module_name": "DSim_Performance_Computation",
+        "purpose": "Computes performance metrics for simulated components using LPNs and integrates them with native execution.",
+        "complexity": "medium"
+      },
+      {
+        "module_name": "DSim_Functionality_Computation",
+        "purpose": "Ensures functional correctness of simulated components by modeling their behavior accurately.",
+        "complexity": "medium"
+      },
+      {
+        "module_name": "DSim_Synchronization_Manager",
+        "purpose": "Coordinates synchronization between performance and functionality computations in the DSim component.",
+        "complexity": "high"
+      },
+      {
+        "module_name": "Interface_Composer",
+        "purpose": "Provides modular interfaces for composing different simulation components and enabling interoperability between NEX and DSim.",
+        "complexity": "medium"
+      }
+    ],
+    "dependencies": [
+      {
+        "from": "NEX_Synchronization",
+        "to": "NEX_Runtime"
+      },
+      {
+        "from": "NEX_Scheduler",
+        "to": "NEX_Orchestrator"
+      },
+      {
+        "from": "NEX_Time_Warping",
+        "to": "NEX_Orchestrator"
+      },
+      {
+        "from": "DSim_Performance_Computation",
+        "to": "DSim_DiSimulator"
+      },
+      {
+        "from": "DSim_Functionality_Computation",
+        "to": "DSim_DiSimulator"
+      },
+      {
+        "from": "DSim_Synchronization_Manager",
+        "to": "DSim_DiSimulator"
+      },
+      {
+        "from": "Interface_Composer",
+        "to": "NEX_Orchestrator"
+      },
+      {
+        "from": "Interface_Composer",
+        "to": "DSim_DiSimulator"
+      }
+    ],
+    "language": "python",
+    "framework_suggestions": [
+      "SimPy for discrete event simulation and time management",
+      "NumPy for numerical computations and performance modeling",
+      "Pybind11 for C++ integration if needed for performance-critical native components",
+      "PyQt or Tkinter for visualization of simulation progress and results",
+      "pytest for unit testing of simulation modules"
+    ]
+  },
+  "generated_at": "2026-03-13T01:38:12.983086+00:00",
+  "modules": [
+    {
+      "filename": "NEX_Orchestrator.py",
+      "purpose": "Manages the overall simulation workflow, including synchronization, runtime execution, scheduling, and time warping for native and simulated components.",
+      "complexity": "high"
+    },
+    {
+      "filename": "NEX_Synchronization.py",
+      "purpose": "Handles the correct and efficient synchronization between natively executing components and simulated components to maintain system coherence.",
+      "complexity": "high"
+    },
+    {
+      "filename": "NEX_Runtime.py",
+      "purpose": "Provides the runtime environment for executing native components and managing their interaction with simulated components.",
+      "complexity": "medium"
+    },
+    {
+      "filename": "NEX_Scheduler.py",
+      "purpose": "Schedules execution of native and simulated components, optimizing for performance and ensuring correct temporal ordering.",
+      "complexity": "medium"
+    },
+    {
+      "filename": "NEX_Time_Warping.py",
+      "purpose": "Implements time warping mechanisms to align simulation time with real-time or accelerated execution time.",
+      "complexity": "high"
+    }
+  ]
+}

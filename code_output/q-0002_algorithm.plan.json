@@ -1,0 +1,61 @@
+{
+  "question_id": "Q-0002",
+  "module_slug": "algorithm",
+  "target_language": "python",
+  "adapter_id": "python_project_adapter",
+  "edit_points": [],
+  "working_set": {
+    "repository_map": [],
+    "subsystem_map": {
+      "subsystem_id": "algorithm",
+      "repo_paths": [],
+      "module_candidates": [],
+      "graph_neighbors_count": 0
+    },
+    "candidate_file_set": [],
+    "candidate_symbol_set": [],
+    "bounded_edit_set": [],
+    "metadata": {
+      "file_budget": 80,
+      "symbol_budget": 200
+    }
+  },
+  "traceability": [
+    {
+      "chunk_id": "chunk-0033",
+      "source_type": "paper",
+      "headings_info": "MAHL: Multi-Agent LLM-Guided Hierarchical Chiplet Design with Adaptive Debugging > III Framework > III-C RTL Implementation and Validation",
+      "score": 6.60917
+    },
+    {
+      "chunk_id": "chunk-0023",
+      "source_type": "paper",
+      "headings_info": "MAHL: Multi-Agent LLM-Guided Hierarchical Chiplet Design with Adaptive Debugging > III Framework > III-C RTL Implementation and Validation",
+      "score": 6.52417
+    },
+    {
+      "chunk_id": "chunk-0031",
+      "source_type": "paper",
+      "headings_info": "MAHL: Multi-Agent LLM-Guided Hierarchical Chiplet Design with Adaptive Debugging > III Framework > III-C RTL Implementation and Validation",
+      "score": 6.40833
+    },
+    {
+      "chunk_id": "chunk-0059",
+      "source_type": "paper",
+      "headings_info": "MAHL: Multi-Agent LLM-Guided Hierarchical Chiplet Design with Adaptive Debugging > I Introduction",
+      "score": 5.8
+    },
+    {
+      "chunk_id": "chunk-0060",
+      "source_type": "paper",
+      "headings_info": "MAHL: Multi-Agent LLM-Guided Hierarchical Chiplet Design with Adaptive Debugging > IV Evaluation > IV-C Chiplet IP Generation with MAHL",
+      "score": 5.8
+    },
+    {
+      "chunk_id": "chunk-0076",
+      "source_type": "paper",
+      "headings_info": "MAHL: Multi-Agent LLM-Guided Hierarchical Chiplet Design with Adaptive Debugging > Abstract",
+      "score": 5.8
+    }
+  ]
+}

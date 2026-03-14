@@ -1293,8 +1293,10 @@ def prepare_codebase_collection(
     max_file_bytes: int = 600_000,
 ) -> dict[str, Any]:
     root = Path(repo_root).resolve()
-    if not root.exists() or not root.is_dir():
-        raise FileNotFoundError(f"repo_root not found: {root}")
+    if not root.exists():
+        root.mkdir(parents=True, exist_ok=True)
+    elif not root.is_dir():
+        raise FileNotFoundError(f"repo_root exists but is not a directory: {root}")
 
     include_paths = include_paths or []
     exclude_paths = exclude_paths or []

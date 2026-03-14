@@ -1,0 +1,61 @@
+{
+  "question_id": "Q-0007",
+  "module_slug": "algorithm",
+  "target_language": "python",
+  "adapter_id": "python_project_adapter",
+  "edit_points": [],
+  "working_set": {
+    "repository_map": [],
+    "subsystem_map": {
+      "subsystem_id": "algorithm",
+      "repo_paths": [],
+      "module_candidates": [],
+      "graph_neighbors_count": 0
+    },
+    "candidate_file_set": [],
+    "candidate_symbol_set": [],
+    "bounded_edit_set": [],
+    "metadata": {
+      "file_budget": 80,
+      "symbol_budget": 200
+    }
+  },
+  "traceability": [
+    {
+      "chunk_id": "chunk-0059",
+      "source_type": "paper",
+      "headings_info": "MAHL: Multi-Agent LLM-Guided Hierarchical Chiplet Design with Adaptive Debugging > I Introduction",
+      "score": 7.8
+    },
+    {
+      "chunk_id": "chunk-0076",
+      "source_type": "paper",
+      "headings_info": "MAHL: Multi-Agent LLM-Guided Hierarchical Chiplet Design with Adaptive Debugging > Abstract",
+      "score": 6.8
+    },
+    {
+      "chunk_id": "chunk-0036",
+      "source_type": "paper",
+      "headings_info": "MAHL: Multi-Agent LLM-Guided Hierarchical Chiplet Design with Adaptive Debugging > IV Evaluation > IV-A Experimental Setup",
+      "score": 6.78333
+    },
+    {
+      "chunk_id": "chunk-0045",
+      "source_type": "paper",
+      "headings_info": "MAHL: Multi-Agent LLM-Guided Hierarchical Chiplet Design with Adaptive Debugging > III Framework > III-B Hierarchical Description Generation",
+      "score": 6.68
+    },
+    {
+      "chunk_id": "chunk-0021",
+      "source_type": "paper",
+      "headings_info": "MAHL: Multi-Agent LLM-Guided Hierarchical Chiplet Design with Adaptive Debugging > IV Evaluation > IV-C Chiplet IP Generation with MAHL",
+      "score": 5.8
+    },
+    {
+      "chunk_id": "chunk-0060",
+      "source_type": "paper",
+      "headings_info": "MAHL: Multi-Agent LLM-Guided Hierarchical Chiplet Design with Adaptive Debugging > IV Evaluation > IV-C Chiplet IP Generation with MAHL",
+      "score": 5.8
+    }
+  ]
+}
