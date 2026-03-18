@@ -5,4 +5,5 @@ __all__ = [
     "progressive_paper_to_code",
     "paper_to_code",
     "paper_to_demo_code",
+    "paper_to_demo_code_new",
 ]

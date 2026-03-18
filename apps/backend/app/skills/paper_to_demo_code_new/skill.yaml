@@ -1,0 +1,36 @@
+id: paper_to_demo_code_new
+name: Paper to Demo Code New
+description: Generate demo code implementation from a research paper with overall framework and modules.
+tool:
+  handler: app.tools.paper_to_demo_code_new:paper_to_demo_code_new
+  parameters:
+    type: object
+    properties:
+      arxiv_id:
+        type: string
+        description: ArXiv ID of the paper
+      paper_html:
+        type: string
+        description: HTML content of the paper (optional if arxiv_id provided)
+      paper_title:
+        type: string
+        description: Title of the paper
+      output_dir:
+        type: string
+        description: Directory to save generated code (optional)
+      model:
+        type: string
+        description: LLM model to use (optional)
+      max_modules:
+        type: integer
+        description: Maximum number of modules to generate
+        minimum: 1
+        maximum: 15
+    required:
+      - paper_title
+    additionalProperties: true
+  policy:
+    timeout_ms: 600000
+    max_retries: 1
+    rate_limit_per_min: 10
+

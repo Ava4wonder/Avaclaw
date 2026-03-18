@@ -455,14 +455,105 @@ def html_parsing_chunking_upsert(
     text_toc = _build_text_toc(parser.toc_paths)
 
     chunks: list[dict[str, str]] = []
+    print(f"Total sections parsed: {len(parser.sections)}")  # Debug print for number of sections
+    print(f"Sample section headings info: {[s['headings_info'] for s in parser.sections]}")  # Debug print for sample headings
     for section in parser.sections:
         for chunk_text in _chunk_text(section["text"], chunk_size, chunk_overlap):
+            print(f"Chunking section '{section['headings_info']}' into chunk starting with: {chunk_text[:50]}...")  # Debug print for chunking
             chunks.append(
                 {
                     "headings_info": section.get("headings_info", ""),
                     "chunk_text": chunk_text
                 }
             )
+
+    if not chunks:
+        return {
+            "collection_name": "",
+            "text_toc": text_toc,
+            "chunks_upserted": 0
+        }
+
+    timestamp = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
+    collection_name = f"comprehesion_paperreading_{timestamp}_{uuid.uuid4().hex[:8]}"
+    first_vector = _ollama_embed(
+        f"{chunks[0]['headings_info']}\n{chunks[0]['chunk_text']}".strip()
+    )
+    _qdrant_create_collection(collection_name, len(first_vector))
+
+    points: list[dict[str, Any]] = []
+    for chunk in chunks:
+        text_for_embedding = f"{chunk['headings_info']}\n{chunk['chunk_text']}".strip()
+        vector = _ollama_embed(text_for_embedding)
+        points.append(
+            {
+                "id": uuid.uuid4().hex,
+                "vector": vector,
+                "payload": {
+                    "chunk_text": chunk["chunk_text"],
+                    "headings_info": chunk["headings_info"],
+                    "paper_title": paper_title,
+                    "arxiv_id": arxiv_id
+                }
+            }
+        )
+
+    _qdrant_upsert_points(collection_name, points)
+
+    return {
+        "collection_name": collection_name,
+        "text_toc": text_toc,
+        "chunks_upserted": len(points)
+    }
+
+
+def markdown_parsing_chunking_upsert(
+    paper_md: str,
+    paper_title: str,
+    arxiv_id: str
+) -> dict[str, Any]:
+    """Parse markdown into one chunk per heading-defined section and upsert to Qdrant."""
+    lines = paper_md.splitlines()
+    chunks: list[dict[str, str]] = []
+    toc_paths: list[str] = []
+    heading_stack: list[str] = []
+    current_heading_path = ""
+    current_text_lines: list[str] = []
+
+    def flush_chunk() -> None:
+        nonlocal current_text_lines
+        chunk_text = "\n".join(current_text_lines).strip()
+        if chunk_text:
+            chunks.append(
+                {
+                    "headings_info": current_heading_path,
+                    "chunk_text": chunk_text
+                }
+            )
+        current_text_lines = []
+
+    for raw_line in lines:
+        line = raw_line.rstrip()
+        match = re.match(r"^(#{1,6})\s+(.+?)\s*$", line)
+        if match:
+            flush_chunk()
+            level = len(match.group(1))
+            heading_text = re.sub(r"\s+", " ", match.group(2)).strip()
+            if not heading_text:
+                current_heading_path = ""
+                continue
+            heading_stack = heading_stack[:level - 1]
+            heading_stack.append(heading_text)
+            current_heading_path = ">".join(heading_stack)
+            toc_paths.append(current_heading_path)
+            continue
+
+        if line.strip() or current_text_lines:
+            current_text_lines.append(line)
+
+    flush_chunk()
+
+    text_toc = _build_text_toc(toc_paths)
 
     if not chunks:
         return {
